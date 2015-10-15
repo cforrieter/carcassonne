@@ -18,7 +18,11 @@ window.onload = function() {
 
   function create () {
 
-    button = game.add.button(700, 500, 'tiles', createTiles, this, 24, 24, 24);
+    button = game.add.button(650, 450, 'tiles', createTiles, this, 24, 24, 24);
+    button.fixedToCamera = true;
+
+    tileSpawnSpot = new Phaser.Rectangle(90, 90, 100, 100);
+    // tileSpawnSpot.fixedToCamera = true;
 
     camera = new Phaser.Camera(game, 0 , game.world.centerX, game.world.centerY, 800, 600);
 
@@ -47,21 +51,21 @@ window.onload = function() {
 
     key = Math.floor((Math.random() * 18) + 1);
 
-    shadow = game.add.sprite(47, 47, 'tiles', key);
-    shadow.anchor.setTo(0.5)
-    shadow.tint = 0x000000;
-    shadow.alpha = 0.6;
 
-    tile = game.add.sprite(45, 45, 'tiles', key);
+    // shadow = game.add.sprite(47, 47, 'tiles', key);
+    // shadow.anchor.setTo(0.5)
+    // shadow.tint = 0x000000;
+    // shadow.alpha = 0.6;
+    tile = game.add.sprite(50, 50, 'tiles', key);
     tile.anchor.setTo(0.5);
 
     game.stage.backgroundColor = "#FFFFFF"
     tile.inputEnabled = true;
     // tile.input.enableDrag(false, true);
     tile.events.onInputDown.add(onClickAttach, this, tile);
-    tile.input.enableSnap(90, 90, false, true)
+    // tile.input.enableSnap(90, 90, false, true)
     // tile.events.onDragStop.add(onDragStop, this);
-
+    tile.fixedToCamera = true;
   }
 
   function onDragStop(sprite) {
@@ -85,6 +89,7 @@ window.onload = function() {
       tile.position.y = Math.floor((tile.position.y + 45) / 90) * 90
     } else {
       attachedToPointer = true;
+      tile.fixedToCamera = false;
     }
 
   }
@@ -137,11 +142,12 @@ window.onload = function() {
 
     game.debug.cameraInfo(game.camera, 32, 32, 'rgb(150, 0, 0)');
 
-    game.context.fillStyle = 'rgba(255, 0, 0, 0.6)';
-    game.context.fillRect(topCameraPan.x, topCameraPan.y, topCameraPan.width, topCameraPan.height);
-    game.context.fillRect(leftCameraPan.x, leftCameraPan.y, leftCameraPan.width, leftCameraPan.height);
-    game.context.fillRect(rightCameraPan.x, rightCameraPan.y, rightCameraPan.width, rightCameraPan.height);
-    game.context.fillRect(bottomCameraPan.x, bottomCameraPan.y, bottomCameraPan.width, bottomCameraPan.height);
+    // game.context.fillStyle = 'rgba(255, 0, 0, 0.6)';
+    // game.context.fillRect(tileSpawnSpot.x, tileSpawnSpot.y, tileSpawnSpot.width, tileSpawnSpot.height);
+    // game.context.fillRect(topCameraPan.x, topCameraPan.y, topCameraPan.width, topCameraPan.height);
+    // game.context.fillRect(leftCameraPan.x, leftCameraPan.y, leftCameraPan.width, leftCameraPan.height);
+    // game.context.fillRect(rightCameraPan.x, rightCameraPan.y, rightCameraPan.width, rightCameraPan.height);
+    // game.context.fillRect(bottomCameraPan.x, bottomCameraPan.y, bottomCameraPan.width, bottomCameraPan.height);
     // game.debug.pointer(game.input.activePointer, 32, 32);
   }
 
