@@ -1,0 +1,26 @@
+{
+  "name": "carcassonne",
+  "version": "1.0.0",
+  "description": "A board game in your browser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cforrieter/carcassonne.git"
+  },
+  "author": "Corey, Jason, Matt, Warren",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cforrieter/carcassonne/issues"
+  },
+  "homepage": "https://github.com/cforrieter/carcassonne#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "http": "0.0.0",
+    "mongodb": "^2.0.45",
+    "phaser": "^2.4.3",
+    "socket.io": "^1.3.7"
+  }
+}
