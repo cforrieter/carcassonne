@@ -26,16 +26,6 @@ window.onload = function() {
 
     camera = new Phaser.Camera(game, 0 , game.world.centerX, game.world.centerY, 800, 600);
 
-    topCameraPan = new Phaser.Rectangle(0, 0, 800, 50);
-    rightCameraPan = new Phaser.Rectangle(750, 0, 50, 600);
-    bottomCameraPan = new Phaser.Rectangle(0, 550, 800, 50);
-    leftCameraPan = new Phaser.Rectangle(0, 0, 50, 600);
-
-    topCameraPan.inputEnabled = true;
-    rightCameraPan.inputEnabled = true;
-    bottomCameraPan.inputEnabled = true;
-    leftCameraPan.inputEnabled = true;
-
     // game.input.addMoveCallback(p, this);
 
     game.world.setBounds(0, 0, 1920, 1920);
