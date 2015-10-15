@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/cforrieter/carcassonne#readme",
   "dependencies": {
+    "mongodb": "^2.0.45",
     "phaser": "^2.4.3"
   }
 }
