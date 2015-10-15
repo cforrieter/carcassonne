@@ -16,9 +16,10 @@ app.get('/', function(req, res){
       console.log('Connection established to', url);
       collection = db.collection('users');
 
-      // collection.find({name: 'Guy'}).toArray(function(err, result){
-      //   console.log(result);
-      //   db.close();
+      collection.find({name: 'Guy'}).toArray(function(err, result){
+        console.log(result);
+        db.close();
+      })
     }
   })
 });
