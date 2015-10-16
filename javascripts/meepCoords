@@ -1,19 +1,26 @@
-meepCoords = {
-  tile1: {p4: [45, 45, true], p0: [70, 70, false]},
-  tile2: {p4: [45, 45, true], p0: [70, 70, false], p7: [37, 70, true]},
-  tile3: {p4: [45, 45, true]},
-  tile4: {p0: [45, 30, true], p6: [45, 70, false]},
-  tile5: {p0: [45, 30, true], p6: [45, 70, false]},
-  tile6: {p0: [45, 30, true], p6: [30, 70, false], p7: [45, 70, true], p8: [60, 70, false]},
-  tile7: {p0: [45, 30, true], p6: [30, 70, false], p7: [45, 70, true], p8: [60, 70, false]},
-  tile8: {p1: [25, 25, true], p4: [55, 70, false]},
-  tile9: {p1: [25, 25, true], p4: [55, 70, false]},
-  tile10: {p1: [25, 25, true], p4: [45, 45, false], p5: [45, 70, true], p8: [60, 70, false]},
-  tile11: {p1: [25, 25, true], p4: [45, 45, false], p5: [45, 70, true], p8: [60, 70, false]},
-  tile12: {p0: [45, 25, false], p3: [45, 45, true], p6: [45, 65, false]},
-  tile13: {p0: [45, 25, false], p3: [45, 45, true], p6: [45, 65, false]},
-  tile14: {p1: [45, 25, true], p3: [25, 45, true], p4: [45, 45, false]},
-  tile15: {p1: [45, 25, true], p4: [45, 45, false],  p7: [25, 45, true]},
-
-
-}
+meepCoords = [
+  {p4: [45, 45, true], p0: [70, 70, false]},
+  {p4: [45, 45, true], p0: [70, 70, false], p7: [37, 70, true]},
+  {p4: [45, 45, true]},
+  {p0: [45, 30, true], p6: [45, 70, false]},
+  {p0: [45, 30, true], p6: [45, 70, false]},
+  {p0: [45, 30, true], p6: [30, 70, false], p7: [45, 70, true], p8: [60, 70, false]},
+  {p0: [45, 30, true], p6: [30, 70, false], p7: [45, 70, true], p8: [60, 70, false]},
+  {p1: [25, 25, true], p4: [55, 70, false]},
+  {p1: [25, 25, true], p4: [55, 70, false]},
+  {p1: [25, 25, true], p4: [45, 45, false], p5: [45, 70, true], p8: [60, 70, false]},
+  {p1: [25, 25, true], p4: [45, 45, false], p5: [45, 70, true], p8: [60, 70, false]},
+  {p0: [45, 25, false], p3: [45, 45, true], p6: [45, 65, false]},
+  {p0: [45, 25, false], p3: [45, 45, true], p6: [45, 65, false]},
+  {p1: [45, 25, true], p3: [25, 45, true], p4: [45, 45, false]},
+  t{p1: [45, 25, true], p4: [45, 45, false],  p7: [25, 45, true]},
+  {p1: [45, 25, true], p4: [45, 60, false]}
+  {p1: [45, 45, true], p3: [25, 45, true], p6: [25, 65, false], p8: [60, 45, false]}
+  {p1: [45, 45, true], p5: [25, 45, true], p6: [25, 65, false], p8: [60, 45, false]}
+  {p0: [45, 36, false], p1: [45, 25, true], p3: [25, 45, true], p5: [65, 45, true], p6: [25, 75, false], p7: [45, 75, true], p8: [65, 75, false]}
+  {p0: [25, 45, false], p2: [65, 45, false], p4: [45, 45, true]}
+  {p0: [65, 25, false], p4: [45, 45, true], p6: [25, 65, false]}
+  {p0: [45, 25, false], p3: [25, 45, true], p5: [65, 45, true], p6: [65, 65, false], p7: [45, 65, true], p8: [65, 65, false]}
+  {p0: [25, 25, false], p1: [45, 25, true], p2: [65, 25, false], p3: [25, 45, true], p5: [65, 45, true], p6: [65, 65, false], p7: [45, 65, true], p8: [65, 65, false]}
+  {p0: [20, 30, false], p1: [45, 25, true], p4: [45, 45, true], p6: [45, 65, false]}
+]
