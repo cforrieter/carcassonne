@@ -14,21 +14,43 @@ MongoClient.connect(url, function (err, db) {
   } else {
     //HURRAY!! We are connected. :)
     console.log('Connection established to', url);
-    loadTiles(db);
+    dropCollection(db);
+    insertTiles(db);
   }
 });
+
+function dropCollection(db){
+  collection = db.collection('tiles');
+  collection.remove({});
+}
 
 function insertTiles(db){
   // Get the documents collection
   var collection = db.collection('tiles');
 
   //Create some tiles
-  var tile1 = {top: "road", right: "field", bottom: "road", left: "field", center: "road", banner: false, meeple: false};
-  var tile2 = {top: "city", right: "field", bottom: "road", left: "city", center: "road", banner: false, meeple: true};
-  var tile3 = {top: "city", right: "field", bottom: "road", left: "city", center: "road", banner: false, meeple: false};
-
+  var tile1 = {
+     'type':'1',
+     'top':{'condition':'road','meeple':'player1'},
+     'right':'city',
+     'bottom':'road',
+     'left':'road',
+     'center': {'condition': 'terminus'},
+     'banner':false,
+     'position':{'x':0,'y':0}
+   };
+   var tile2 = {
+     'type':'2',
+     'top':{'condition':'road'},
+     'right':'city',
+     'bottom':{'condition':'road'},
+     'left':'road',
+     'center':{'condition': 'terminus'},
+     'banner':false,
+     'position':{'x':0,'y':1},
+   }
   // Insert some users
-  collection.insert([tile1, tile2, tile3], function (err, result) {
+  collection.insert([tile1, tile2], function (err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -39,7 +61,7 @@ function insertTiles(db){
 }
 
 function loadDeck(db){
-  var collection = db.collection('tiles');  
+  var collection = db.collection('tiles');
 
   collection.find(  ).each(function(err, doc){
     if (err) {
