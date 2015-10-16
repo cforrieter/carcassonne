@@ -1,6 +1,6 @@
 window.onload = function() {
 
-  var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
+  var game = window.game = new Phaser.Game(800, 600, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
   var validCoords = [
     [3, 4, [0, 1, 2]],
     [4, 4, [1, 2, 3, 4]],
@@ -10,6 +10,7 @@ window.onload = function() {
   function preload () {
 
     game.load.spritesheet('tiles', 'assets/tiles_sprite.png', 88, 88, 24);
+    game.load.image('meeple', 'assets/MEEPLE.png')
 
   }
 
@@ -17,9 +18,14 @@ window.onload = function() {
   var rightKey;
 
   function create () {
-
+    
+    game.stage.backgroundColor = "#FFFFFF"
     button = game.add.button(650, 450, 'tiles', createTiles, this, 24, 24, 24);
     button.fixedToCamera = true;
+
+    meepleButton = game.add.button(660, 380, 'meeple', createMeeple, this, 24, 24, 24);
+    meepleButton.fixedToCamera = true;
+    meepleButton.scale.setTo(0.1);
 
     tileSpawnSpot = new Phaser.Rectangle(90, 90, 100, 100);
     // tileSpawnSpot.fixedToCamera = true;
@@ -37,25 +43,39 @@ window.onload = function() {
 
   }
 
+  function createMeeple() {
+
+    meeple = game.add.sprite(50, 130, 'meeple');
+    meeple.anchor.setTo(0.5);
+    meeple.scale.setTo(0.1);
+
+    meeple.inputEnabled = true;
+    meeple.events.onInputDown.add(onClickAttach, this, 0, meeple);
+    meeple.fixedToCamera = true;
+  }
+
   function createTiles() {
+    console.log('CreateTiles', arguments);
 
     key = Math.floor((Math.random() * 18) + 1);
+    tile = new Tile(game, 50, 50,  key);
+    this.game.add.existing(tile);
 
 
     // shadow = game.add.sprite(47, 47, 'tiles', key);
     // shadow.anchor.setTo(0.5)
     // shadow.tint = 0x000000;
     // shadow.alpha = 0.6;
-    tile = game.add.sprite(50, 50, 'tiles', key);
-    tile.anchor.setTo(0.5);
+    // tile = game.add.sprite(50, 50, 'tiles', key);
+    // tile.anchor.setTo(0.5);
 
-    game.stage.backgroundColor = "#FFFFFF"
-    tile.inputEnabled = true;
-    // tile.input.enableDrag(false, true);
-    tile.events.onInputDown.add(onClickAttach, this, tile);
-    // tile.input.enableSnap(90, 90, false, true)
-    // tile.events.onDragStop.add(onDragStop, this);
-    tile.fixedToCamera = true;
+    
+    // tile.inputEnabled = true;
+    // // tile.input.enableDrag(false, true);
+    // tile.events.onInputDown.add(onClickAttach, this, 0, tile);
+    // // tile.input.enableSnap(90, 90, false, true)
+    // // tile.events.onDragStop.add(onDragStop, this);
+    // tile.fixedToCamera = true;
   }
 
   function onDragStop(sprite) {
@@ -71,15 +91,15 @@ window.onload = function() {
     tile.angle += 90;
   }
 
-  function onClickAttach() {
+  function onClickAttach(item) {
     if(attachedToPointer) {
       attachedToPointer = false;
-      tile.inputEnabled = false;
-      tile.position.x = Math.floor((tile.position.x + 45) / 90) * 90
-      tile.position.y = Math.floor((tile.position.y + 45) / 90) * 90
+      item.inputEnabled = false;
+      item.position.x = Math.floor((item.position.x + 45) / 90) * 90
+      item.position.y = Math.floor((item.position.y + 45) / 90) * 90
     } else {
       attachedToPointer = true;
-      tile.fixedToCamera = false;
+      item.fixedToCamera = false;
     }
 
   }
@@ -130,7 +150,7 @@ window.onload = function() {
 
   function render() {
 
-    game.debug.cameraInfo(game.camera, 32, 32, 'rgb(150, 0, 0)');
+    // game.debug.cameraInfo(game.camera, 32, 32, 'rgb(150, 0, 0)');
 
     // game.context.fillStyle = 'rgba(255, 0, 0, 0.6)';
     // game.context.fillRect(tileSpawnSpot.x, tileSpawnSpot.y, tileSpawnSpot.width, tileSpawnSpot.height);
