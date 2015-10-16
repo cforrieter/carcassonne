@@ -9,13 +9,14 @@ function Tile(type) {
   this.right = null;
   this.top = null;
   this.bottom = null;
+  this.center = null;
   this.neighbours = {
     left: null,
     right: null,
     top: null,
     bottom: null
   };
-  this.occupant  = null;
+  this.occupant = null;
   var kind = Tile.KINDS[type];
   if(!kind){
     throw new Error("Invalid tile type: %s", type);
@@ -46,38 +47,40 @@ Tile.prototype.hasNeighbours = function() { return !!(this.neighbours.left || th
 Tile.TYPES = {
   ROAD: Symbol("ROAD"),
   CITY: Symbol("CITY"),
-  TERMINATOR: Symbol("TERMINATOR"),
+  TERMINUS: Symbol("TERMINUS"),
   CLOISTER: Symbol("CLOISTER"),
   FIELD: Symbol("FIELD")
 };
 
 Tile.KINDS = {
-  1: {
-    top: Tile.TYPES.CITY,
+  J: {
+    top: Tile.TYPES.CITY, 
     bottom: Tile.TYPES.ROAD,
     left: Tile.TYPES.FIELD,
-    right: Tile.TYPES.ROAD
+    right: Tile.TYPES.ROAD,
+    center: Tile.TYPES.ROAD
   },
-  2: {
+  L: {
     top: Tile.TYPES.ROAD,
     bottom: Tile.TYPES.ROAD,
     left: Tile.TYPES.ROAD,
-    right: Tile.TYPES.CITY
+    right: Tile.TYPES.CITY,
+    center: Tile.TYPES.TERMINUS
   }
 };
 
 var tiles = [];
-var playableTiles = "LJLJLJ".split('').map(c => new Tile(c))
+var playableTiles = "LJLJLJ".split('').map(function(c){
+  return new Tile(c);
+})
 
 function makeGrid(){
   const grid = [];
   tiles.forEach(tile => {
-    if(!grid[tile.x])
-    {
+    if(!grid[tile.x]){
       grid[tile.x] = [];
     }
-    if(!grid[tile.x][tile.y])
-    {
+    if(!grid[tile.x][tile.y]){
       grid[tile.x][tile.y] = []
     }
     grid[tile.x][tile.y] = tile;
@@ -86,8 +89,7 @@ function makeGrid(){
 }
 
 function playTile(x, y){
-  if(playableTiles.length === 0)
-  {
+  if(playableTiles.length === 0){
     throw new Error("Out of moves");
   }
   var newTile = playableTiles.pop();
@@ -170,4 +172,4 @@ console.log(tile1.neighbours.bottom.neighbours.left === tile3);
 
 
 
-inspect(makeGrid());
+// inspect(makeGrid());
