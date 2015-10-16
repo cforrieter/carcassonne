@@ -11,28 +11,28 @@ MongoClient.connect(url, function (err, db) {
     collection.remove({});
     var tile1 = {
       'type':'L',
-      'top':{'conditon':'road','meeple':'player1'}, 
-      'right':{'condition':'city'}, 
+      'top':{'conditon':'road','meeple':'player1'},
+      'right':{'condition':'city'},
       'bottom':{'condition':'road'},
       'left':{'condition':'road'},
-      'center'{'condition':'terminus'},
+      'center': {'condition':'terminus'},
       'banner':false,
       'position':{'x':0,'y':0}
     };
     var tile2 = {
       'type':'L',
-      'top':{'conditon':'road'}, 
-      'right':{'condition':'city'}, 
+      'top':{'conditon':'road'},
+      'right':{'condition':'city'},
       'bottom':{'condition':'road'},
       'left':{'condition':'road'},
-      'center'{'condition':'terminus'},
+      'center':{'condition':'terminus'},
       'banner':false,
       'position':{'x':0,'y':1},
     };
     // var tile2 = {
     //   'type':'V',
-    //   'top':'field', 
-    //   'right':'field', 
+    //   'top':'field',
+    //   'right':'field',
     //   'bottom':'road',
     //   'left':'road',
     //   'center':'road',
@@ -41,8 +41,8 @@ MongoClient.connect(url, function (err, db) {
     // };
     // var tile3 = {
     //   'type':'E',
-    //   'top':'city', 
-    //   'right':'field', 
+    //   'top':'city',
+    //   'right':'field',
     //   'bottom':'field',
     //   'left':'field',
     //   'center':'field',
@@ -52,8 +52,8 @@ MongoClient.connect(url, function (err, db) {
     // };
     // var tile5 = {
     //   'type':'V',
-    //   'top':'field', 
-    //   'right':'field', 
+    //   'top':'field',
+    //   'right':'field',
     //   'bottom':'road',
     //   'left':'road',
     //   'center':'road',
@@ -63,8 +63,8 @@ MongoClient.connect(url, function (err, db) {
     // };
     // var tile6 = {
     //   'type':'E',
-    //   'top':'city', 
-    //   'right':'field', 
+    //   'top':'city',
+    //   'right':'field',
     //   'bottom':'field',
     //   'left':'field',
     //   'center':'field',
@@ -79,12 +79,11 @@ MongoClient.connect(url, function (err, db) {
         console.log('Inserted %d tiles into the "tiles" collection.' +
         ' The documents inserted with "_id" are:', result.length, result);
       }
-    })
+    });
 
     var cursor = collection.find();
     cursor.toArray(function(err, tiles){
       console.log(tiles);
-    })
+    });
   }
-})
-
+});

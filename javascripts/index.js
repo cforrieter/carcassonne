@@ -35,7 +35,7 @@ function translations(side, position) {
                     left: { x: position.x - 1, y: position.y }
                   };
   return translate[side];
-};
+}
 var gameState;
 var collection;
 
@@ -49,14 +49,14 @@ var collection;
 
       collection = db.collection('tiles');
       collection.find({}).toArray(function(err, items){
-          gameState = items
+          gameState = items;
           collection.findOne(function(err, item){
             var firstTile = item;
             console.log("Tile from DB:", firstTile);
-            var terminusResults = checkForTerminus(firstTile, true);
+            var terminusResults = checkForTerminus(firstTile, true, 'top');
             var terminus = terminusResults[0].position;
             var direction = terminusResults[1];
-            console.log("terminus is:", terminus)
+
             switch(direction){
               case 'top':
                 direction = "bottom";
@@ -66,10 +66,10 @@ var collection;
             }
             var road = completeRoad(terminus, direction, [], {});
             console.log("road", road);
-          })
+          });
       });
     }
-  })
+  });
 //});
 
 
@@ -86,13 +86,13 @@ function checkForTerminus(placedTile, firstTile, direction) {
   }
 
   //check up for road
-  return checkDirection('top');
-  //check right for road
-  return checkDirection('right');
-  //check down for road
-  return checkDirection('bottom');
-  //check left for road
-  return checkDirection('left');
+  return checkDirection(direction);
+  // //check right for road
+  // return checkDirection('right');
+  // //check down for road
+  // return checkDirection('bottom');
+  // //check left for road
+  // return checkDirection('left');
 
   function checkDirection(side){
     if(placedTile[side].condition == "road" && direction != backwards[side]){
@@ -123,8 +123,8 @@ function completeRoad(position, direction, currentPath, meeples){
   }
 
   if(placedTile.center.condition == "terminus"){
-    var terminus = true
-    console.log("terminus is true")
+    var terminus = true;
+    console.log("terminus is true");
     if(currentPath.length > 0){
       findMeeples(placedTile, backwards[direction], 'road');
       //TODO return meeples
@@ -139,7 +139,7 @@ function completeRoad(position, direction, currentPath, meeples){
 
       function checkDirection(side) {
         if(placedTile[side].condition == "road" && direction != backwards[side] ){
-          console.log(side + ' is a road')
+          console.log(side + ' is a road');
           //remove meeple if present
           if(terminus){
             findMeeples(placedTile, backwards[direction], 'road');
@@ -180,7 +180,7 @@ io.on('connection', function(socket){
         if (result) {
           io.emit('chat message', result.name);
         }
-      })
+      });
     } else {
       io.emit('chat message', msg);
     }
@@ -195,7 +195,7 @@ io.on('connection', function(socket){
       score(road);
     }
 
-  })
+  });
 });
 
 http.listen(3000, function(){
