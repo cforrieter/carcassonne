@@ -46,8 +46,6 @@ Draggable.prototype.update = function update()
 }
 
 
-
-
 function Tile(game, x, y, frame)
 {
   console.log('Tile ctor', arguments);
@@ -58,9 +56,3 @@ function Tile(game, x, y, frame)
 Tile.constructor = Tile;
 Tile.prototype = Object.create(Draggable.prototype);
 
-function Meatball(game, x, y)
-{
-  Draggable.call(this, game, x, y, 'meeple', 0);
-}
-Meatball.constructor = Meatball;
-Meatball.prototype = Object.create(Draggable.prototype);
