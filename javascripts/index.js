@@ -166,7 +166,6 @@ function completeRoad(position, direction, currentPath, meeples){
 }
 
 function score(road){
-
   // var winner = Object.keys(meeples).reduce(function(maxValue, currentValue));
   //compare meeples for winner
   // addScore(road.length, winner);
