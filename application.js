@@ -1,12 +1,12 @@
 window.onload = function() {
 
   var game = window.game = new Phaser.Game(800, 600, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
-  var validCoords = [
-    [3, 4, [0, 1, 2]],
-    [4, 4, [1, 2, 3, 4]],
+
+  var meepleCoords = [
 
   ]
-  var attachedToPointer = false;
+
+  // var attachedToPointer = false;
   function preload () {
 
     game.load.image('background', './assets/background.png');
@@ -24,15 +24,15 @@ window.onload = function() {
 
     game.world.setBounds(0, 0, 13000, 13000);
     game.add.tileSprite(0,0, 13000, 13000, 'background');
-    game.stage.backgroundColor = "#FFFFFF"
-    button = game.add.button(650, 450, 'tiles', createTiles, this, 24, 24, 24);
+    // game.stage.backgroundColor = "#FFFFFF"
+    button = game.add.button(650, 450, 'tiles', createTile, this, 24, 24, 24);
     button.fixedToCamera = true;
 
     camera = new Phaser.Camera(game, 0 , 0, 0, 800, 600);
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
 
-    createTiles();
+    createTile();
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
@@ -42,22 +42,24 @@ window.onload = function() {
 
   }
 
-  function createMeeple() {
+  // function createMeeple() {
 
-    meeple = game.add.sprite(50, 130, 'meeple');
-    meeple.anchor.setTo(0.5);
-    meeple.scale.setTo(0.1);
+  //   meeple = game.add.sprite(50, 130, 'meeple');
+  //   meeple.anchor.setTo(0.5);
+  //   meeple.scale.setTo(0.1);
 
-    meeple.inputEnabled = true;
-    meeple.events.onInputDown.add(onClickAttach, this, 0, meeple);
-    meeple.fixedToCamera = true;
-  }
+  //   meeple.inputEnabled = true;
+  //   meeple.events.onInputDown.add(onClickAttach, this, 0, meeple);
+  //   meeple.fixedToCamera = true;
+  // }
 
-  function createTiles() {
-    console.log('CreateTiles', arguments);
+  function createTile() {
+    var type = (('LJD').split('')).pop();
+    console.log(type);
+    // console.log('CreateTiles', arguments);
 
-    key = Math.floor((Math.random() * 18) + 1);
-    tile = new Tile(game, 50, 50,  key);
+    // frame = Math.floor((Math.random() * 18) + 1);
+    tile = new Tile(game, 50, 50,  type);
     this.game.add.existing(tile);
 
   }
@@ -109,9 +111,6 @@ window.onload = function() {
   //     if
   //   })
   // }
-
-
-
 
 
 };
