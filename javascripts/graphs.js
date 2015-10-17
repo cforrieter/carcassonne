@@ -67,7 +67,7 @@ Tile.KINDS = {
 };
 
 var tiles = [];
-var playableTiles = "LJLJLJ".split('').map(c => new Tile(c))
+var playableTiles = "LJLJLJ".split('').map(function(c) { return new Tile(c); });
 
 function makeGrid(){
   const grid = [];
