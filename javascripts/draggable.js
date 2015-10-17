@@ -16,6 +16,12 @@ function Tile(game, x, y, type)
   console.log('Tile ctor', arguments);
   Draggable.call(this, game, x, y, 'tiles', Tile.FRAMES[type]);
 
+  leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+  rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+
+  leftKey.onDown.add(this.leftKeyDown, this, 0)
+  rightKey.onDown.add(this.rightKeyDown, this, 0)
+
   this.tileType = type;
   this.typeLeft = null;
   this.typeRight = null;
@@ -103,6 +109,48 @@ Tile.prototype = Object.create(Draggable.prototype);
 
 // Tile.prototype.hasNeighbours = function hasNeighbours() { return !!(this.neighbours.left || this.neighbours.right || this.neighbours.top || this.neighbours.bottom); };
 
+Tile.prototype.rotateRight = function rotateRight(){
+  switch(this.type){
+    case 'B':
+    case 'C':
+    case 'X':
+      return;
+  }
+
+  var x = this.typeBottom, y = this.typeLeft, z = this.typeTop, w = this.typeRight;
+  this.typeLeft = x;
+  this.typeTop = y;
+  this.typeRight = z;
+  this.typeBottom = w;
+};
+
+Tile.prototype.rotateLeft = function rotateLeft(){
+  switch(this.type){
+    case 'B':
+    case 'C':
+    case 'X':
+      return;
+  }
+
+  var x = this.typeBottom, y = this.typeLeft, z = this.typeTop, w = this.typeRight;
+  this.typeLeft = z;
+  this.typeTop = w;
+  this.typeRight = x;
+  this.typeBottom = y;
+};
+
+Tile.prototype.leftKeyDown = function leftKeyDown() {
+  this.angle -= 90;
+  this.rotateLeft();
+}
+
+Tile.prototype.rightKeyDown = function rightKeyDown() {
+  this.angle += 90;
+  this.rotateRight();
+}
+
+
+
 Tile.prototype.placeTile = function placeTile(newTile, x, y) {
 
 
@@ -115,13 +163,13 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
          return false;
       }
       console.log(oldTile.x, oldTile.y, newTile.x, newTile.y);
-      //Old tile is the Top Neighbour
+      //Bottom Neighbour
       if(oldTile.x == newTile.x && oldTile.y + 90 == newTile.y) {
-        oldTile.neighbours.bottom = newTile;
-        newTile.neighbours.top = oldTile;
+        oldTile.neighbours.top = newTile;
+        newTile.neighbours.bottom = oldTile;
 
         if(oldTile.typeBottom != newTile.typeTop){
-           console.log(`Invalid move. ${oldTile.typeBottom.toString()} does not connect with ${newTile.typeTop.toString()}`);
+           console.log(`Invalid move. ${oldTile.typeTop.toString()} does not connect with ${newTile.typeBottom.toString()}`);
            return false;
         }
 
@@ -130,16 +178,16 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
       //Right Neighbour
       if(oldTile.y == newTile.y && oldTile.x + 90 == newTile.x){
         console.log("Checking for right neighbour");
-        oldTile.neighbours.left = newTile;
-        newTile.neighbours.right = oldTile;
+        oldTile.neighbours.right = newTile;
+        newTile.neighbours.left = oldTile;
 
-        if(oldTile.typeLeft != newTile.typeRight){
-           console.log(`Invalid move. ${oldTile.typeLeft.toString()} does not connect with ${newTile.typeRight.toString()}`);
+        if(oldTile.typeRight != newTile.typeLeft){
+           console.log(`Invalid move. ${oldTile.typeRight.toString()} does not connect with ${newTile.typeLeft.toString()}`);
            return false;
         }
         console.log("Has right neighbour");
       }
-      //Bottom Neighbour
+      //Top Neighbour
       if(oldTile.x == newTile.x && oldTile.y - 90 == newTile.y) {
         oldTile.neighbours.top = newTile;
         newTile.neighbours.bottom = oldTile;
@@ -153,11 +201,11 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
 
       //Left Neighbour
       if(oldTile.y == newTile.y && oldTile.x - 90 == newTile.x){
-        oldTile.neighbours.right = newTile;
-        newTile.neighbours.left = oldTile;
+        oldTile.neighbours.left = newTile;
+        newTile.neighbours.right = oldTile;
 
-        if(oldTile.typeRight != newTile.typeLeft) {
-           console.log(`Invalid move. ${oldTile.typeRight.toString()} does not connect with ${newTile.typeLeft.toString()}`);
+        if(oldTile.typeLeft != newTile.typeRight) {
+           console.log(`Invalid move. ${oldTile.typeLeft.toString()} does not connect with ${newTile.typeRight.toString()}`);
            return false;
         }
         console.log("Has left neighbour");
@@ -177,7 +225,7 @@ Tile.prototype.placementValid = function placementValid(newTile, x, y){
   newTile.x = x;
   newTile.y = y;
 
-  console.log(`Playing tile ${newTile.type} on ${newTile.x}, ${newTile.y}`);
+  console.log(`Playing tile ${newTile.tileType} on ${newTile.x}, ${newTile.y}`);
   var hasNeighbour = false;
   var valid = true;
 
@@ -189,12 +237,12 @@ Tile.prototype.placementValid = function placementValid(newTile, x, y){
     }
     console.log(oldTile.x, oldTile.y, newTile.x, newTile.y);
 
-    //Top Neighbour
+    //Bottom Neighbour
     if(oldTile.x == newTile.x && oldTile.y + 90 == newTile.y){
       hasNeighbour = true;
 
       if(oldTile.typeBottom != newTile.typeTop){
-         console.log(`Invalid move. ${oldTile.typeBottom.toString()} does not connect with ${newTile.typeTop.toString()}`);
+         console.log(`Invalid move. ${oldTile.typeTop.toString()} does not connect with ${newTile.typeBottom.toString()}`);
          valid = false;
          return false;
       }
@@ -206,14 +254,14 @@ Tile.prototype.placementValid = function placementValid(newTile, x, y){
       hasNeighbour = true;
       console.log("Checking for right neighbour");
 
-      if(oldTile.typeLeft != newTile.typeRight){
-         console.log(`Invalid move. ${oldTile.typeLeft.toString()} does not connect with ${newTile.typeRight.toString()}`);
+      if(oldTile.typeRight != newTile.typeLeft){
+         console.log(`Invalid move. ${oldTile.typeRight.toString()} does not connect with ${newTile.typeLeft.toString()}`);
          valid = false;
          return false;
       }
       console.log("Has right neighbour");
     }
-    //Bottom Neighbour
+    //Top Neighbour
     if(oldTile.x == newTile.x && oldTile.y - 90 == newTile.y){
       hasNeighbour = true;
 
@@ -229,8 +277,8 @@ Tile.prototype.placementValid = function placementValid(newTile, x, y){
     if(oldTile.y == newTile.y && oldTile.x - 90 == newTile.x){
       hasNeighbour = true;
 
-      if(oldTile.typeRight != newTile.typeLeft){
-         console.log(`Invalid move. ${oldTile.typeRight.toString()} does not connect with ${newTile.typeLeft.toString()}`);
+      if(oldTile.typeLeft != newTile.typeRight){
+         console.log(`Invalid move. ${oldTile.typeLeft.toString()} does not connect with ${newTile.typeRight.toString()}`);
          valid = false;
          return false;
       }
@@ -268,8 +316,9 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
           tile.placeTile(tile, target.x, target.y)
           console.log("Dropped", tile);
           tile.inputEnabled = false;
+          game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+          game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
         }
-        //TODO; check valid
 
       } 
     }, this);

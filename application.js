@@ -24,7 +24,10 @@ window.onload = function() {
 
     game.world.setBounds(0, 0, 13000, 13000);
     game.add.tileSprite(0,0, 13000, 13000, 'background');
+    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     // game.stage.backgroundColor = "#FFFFFF"
+
     button = game.add.button(650, 450, 'tiles', createTile, this, 24, 24, 24);
     button.fixedToCamera = true;
 
@@ -35,10 +38,7 @@ window.onload = function() {
     createTile();
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
-    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-    leftKey.onDown.add(leftKeyDown, this, 0, tile)
-    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-    rightKey.onDown.add(rightKeyDown, this, 0, tile)
+
 
   }
 
@@ -54,7 +54,7 @@ window.onload = function() {
   // }
 
   function createTile() {
-    var type = (('LJD').split('')).pop();
+    var type = this.game.rnd.pick(('LJD').split(''));
     console.log(type);
     // console.log('CreateTiles', arguments);
 
@@ -64,13 +64,6 @@ window.onload = function() {
 
   }
 
-  function leftKeyDown() {
-    tile.angle -= 90;
-  }
-
-  function rightKeyDown() {
-    tile.angle += 90;
-  }
 
   function spaceKeyDown() {
     this.game.camera.x = game.world.centerX;
