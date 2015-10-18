@@ -54,6 +54,33 @@ Tile.TYPES = {
   FIELD: Symbol("FIELD")
 };
 
+Tile.MEEPLECOORDS = {
+ B: {p4: [0, 0, true], p0: [-20, -20, false]},
+ A: {p4: [0, 0, true], p0: [-20, -20, false], p7: [-8, -20, true]},
+ C: {p4: [0, 0, true]},
+ R: {p0: [0, -15, true], p6: [0, -20, false]},
+ Q: {p0: [0, -15, true], p6: [0, -20, false]},
+ T: {p0: [0, -15, true], p6: [-15, -20, false], p7: [0, -20, true], p8: [60, -20, false]},
+ S: {p0: [0, -15, true], p6: [-15, -20, false], p7: [0, -20, true], p8: [60, -20, false]},
+ N: {p1: [-20, -20, true], p4: [10, -20, false]},
+ M: {p1: [-20, -20, true], p4: [10, -20, false]},
+ P: {p1: [-20, -20, true], p4: [0, 0, false], p5: [0, -20, true], p8: [60, -20, false]},
+ O: {p1: [-20, -20, true], p4: [0, 0, false], p5: [0, -20, true], p8: [60, -20, false]},
+ G: {p0: [0, -20, false], p3: [0, 0, true], p6: [0, 20, false]},
+ F: {p0: [0, -20, false], p3: [0, 0, true], p6: [0, 20, false]},
+ I: {p1: [0, -20, true], p3: [-20, 0, true], p4: [0, 0, false]},
+ H: {p1: [0, -20, true], p4: [0, 0, false],  p7: [-20, 0, true]},
+ E: {p1: [0, -20, true], p4: [0, 60, false]},
+ K: {p1: [0, 0, true], p3: [-20, 0, true], p6: [-20, 20, false], p8: [60, 0, false]},
+ J: {p1: [0, 0, true], p5: [-20, 0, true], p6: [-20, 20, false], p8: [60, 0, false]},
+ L: {p0: [0, 36, false], p1: [0, -20, true], p3: [-20, 0, true], p5: [20, 0, true], p6: [-20, 75, false], p7: [0, 75, true], p8: [20, 75, false]},
+ U: {p0: [-20, 0, false], p2: [20, 0, false], p4: [0, 0, true]},
+ V: {p0: [20, -20, false], p4: [0, 0, true], p6: [-20, 20, false]},
+ W: {p0: [0, -20, false], p3: [-20, 0, true], p5: [20, 0, true], p6: [20, 20, false], p7: [0, 20, true], p8: [20, 20, false]},
+ X: {p0: [-20, -20, false], p1: [0, -20, true], p2: [20, -20, false], p3: [-20, 0, true], p5: [20, 0, true], p6: [20, 20, false], p7: [0, 20, true], p8: [20, 20, false]},
+ D: {p0: [20, -15, false], p1: [0, -20, true], p4: [0, 0, true], p6: [0, 20, false]}
+};
+
 Tile.FRAMES = {
   A: 1,
   B: 0,
@@ -77,7 +104,7 @@ Tile.FRAMES = {
   T: 5,
   U: 19, 
   V: 20,
-  w: 21,
+  W: 21,
   X: 22
 }
 
@@ -377,6 +404,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+              tile.showMeepleSpots(tile);
             // }
           }
         }, this);
@@ -410,8 +438,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
   }
 }
 
-Tile.prototype.update = function update()
-{
+Tile.prototype.update = function update() {
   if(this.dragged && this.currentPointer)
   {
     // console.log(this.currentPointer.worldX, this.currentPointer.worldY);
@@ -421,5 +448,26 @@ Tile.prototype.update = function update()
 
   }
 }
+
+Tile.prototype.addMeeple = function addMeeple() {
+
+  console.log('You clicked on position' + this)
+}
+
+Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
+  // debugger;
+  var coords = Tile.MEEPLECOORDS[tile.tileType]
+  for (var key in coords) {
+    var position = key;
+    var xCoord = coords[key][0] + tile.x;
+    var yCoord = coords[key][1] + tile.y;
+    var farmer = coords[key][2];
+    console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
+    tile.game.add.button(xCoord, yCoord, 'meepleGhost', tile.addMeeple, position);
+
+  }
+
+}
+
 
 

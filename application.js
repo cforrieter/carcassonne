@@ -1,6 +1,9 @@
 window.onload = function() {
 
-  var game = window.game = new Phaser.Game(800, 600, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
+  var screenWidth = 1024;
+  var screenHeight = 768
+
+  var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
 
   var meepleCoords = [
 
@@ -30,10 +33,10 @@ window.onload = function() {
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     // game.stage.backgroundColor = "#FFFFFF"
 
-    button = game.add.button(650, 450, 'tiles', createTile, this, 24, 24, 24);
+    button = game.add.button(screenWidth - 100, screenHeight - 100, 'tiles', createTile, this, 24, 24, 24);
     button.fixedToCamera = true;
 
-    camera = new Phaser.Camera(game, 0 , 0, 0, 800, 600);
+    camera = new Phaser.Camera(game, 0 , 0, 0, screenWidth, screenHeight);
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
 
@@ -75,7 +78,7 @@ window.onload = function() {
 
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
-      if(this.game.input.activePointer.position.x > 775) {
+      if(this.game.input.activePointer.position.x > screenWidth - 25) {
         this.game.camera.x += 8;
       }
 
@@ -87,7 +90,7 @@ window.onload = function() {
         this.game.camera.y -= 8;
       }
 
-      if(this.game.input.activePointer.position.y > 575) {
+      if(this.game.input.activePointer.position.y > screenHeight - 25) {
         this.game.camera.y += 8;
       }
     }
