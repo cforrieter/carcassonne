@@ -28,11 +28,20 @@ function updateEdgeCount(road, count){
   }
 }
 
+function mergeRoads(road1, road2) {
+  var newRoad = new Road();
+  newRoad.tiles = road1.tiles.concat(road2.tiles);
+  newRoad.meeples = road1.meeples.concat(road2.meeples);
+  newRoad.edgeCount = road1.edgeCount + road2.edgeCount;
+  return newRoad;
+}
+
+
 function checkRoadPosition(placedTile, position, single, allPos){
   var roadToAdd = '';
   var added = false;
   if(placedTile[position] == "ROAD"){
-    roads.forEach(function(road){
+    roads.forEach(function(road, firstIndex, roadsArray){
       road.tiles.forEach(function(tile){
         if(!added){
           if(placedTile.neighbours[position] == tile.tile && tile.pos.indexOf(backwards[position]) != -1 && placedTile.neighbours[position][backwards[position]] ){
@@ -43,6 +52,23 @@ function checkRoadPosition(placedTile, position, single, allPos){
             }else{
               var counter = getEdges(placedTile, allPos);
               updateEdgeCount(road, counter);
+              if(placedTile.numNeighbours("ROAD") > 1 && road.edgeCount !== 0){
+                  console.log("should merge roads");
+                  var index = allPos.indexOf(position);
+                  allPos.splice(index, 1);
+                  otherPos = allPos.join('');
+                  roads.forEach(function(road2, index){
+                    road2.tiles.forEach(function(tile){
+                      if(placedTile.neighbours[otherPos] == tile.tile && tile.pos.indexOf(backwards[otherPos]) != -1 && placedTile.neighbours[otherPos][backwards[otherPos]] ){
+                          var newRoad = mergeRoads(road, road2);
+                          newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
+                          roadsArray.push(newRoad);
+                          roadsArray.splice(index, 1);
+                          roadsArray.splice(roadsArray.indexOf(road), 1);
+                      }
+                    });
+                  });
+              }
               allPos = allPos.join('');
             }
             road.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
@@ -75,7 +101,7 @@ function addToRoad(placedTile){
     var returned = [];
     var done = false;
 
-    if(placedTile.centerCity){
+    if(placedTile.centerRoad){
       single = true;
     }
 
@@ -141,27 +167,30 @@ Tile.TYPES = {
 Tile.KINDS = {
   1: {
     top: Tile.TYPES.CITY,
-    bottom: Tile.TYPES.ROAD,
+    bottom: Tile.TYPES.FIELD,
     left: Tile.TYPES.FIELD,
     right: Tile.TYPES.ROAD,
     centerTerminus: true,
-    centerRoad: true,
+    centerRoad: false,
     centerCity: false,
   },
   2: {
-    top: Tile.TYPES.ROAD,
-    bottom: Tile.TYPES.ROAD,
+    top: Tile.TYPES.FIELD,
+    bottom: Tile.TYPES.FIELD,
     left: Tile.TYPES.ROAD,
-    right: Tile.TYPES.CITY,
-    centerTerminus: true
+    right: Tile.TYPES.ROAD,
+    centerTerminus: true,
+    centerCity: false,
+    centerRoad: true
   },
   3: {
     top: Tile.TYPES.FIELD,
-    bottom: Tile.TYPES.ROAD,
-    left: Tile.TYPES.FIELD,
-    right: Tile.TYPES.ROAD,
+    bottom: Tile.TYPES.FIELD,
+    left: Tile.TYPES.ROAD,
+    right: Tile.TYPES.FIELD,
     centerTerminus: false,
-    centerCity: true
+    centerCity: false,
+    centerRoad: false
   },
   4: {
     top: Tile.TYPES.ROAD,
@@ -169,7 +198,8 @@ Tile.KINDS = {
     left: Tile.TYPES.FIELD,
     right: Tile.TYPES.ROAD,
     centerTerminus: false,
-    centerCity: true
+    centerCity: false,
+    centerRoad: true
   },
   5: {
     top: Tile.TYPES.ROAD,
@@ -177,7 +207,8 @@ Tile.KINDS = {
     left: Tile.TYPES.ROAD,
     right: Tile.TYPES.FIELD,
     centerTerminus: false,
-    centerCity: true
+    centerCity: false,
+    centerRoad: true
   },
   6: {
     top: Tile.TYPES.FIELD,
@@ -185,7 +216,8 @@ Tile.KINDS = {
     left: Tile.TYPES.ROAD,
     right: Tile.TYPES.FIELD,
     centerTerminus: false,
-    centerCity: true
+    centerCity: false,
+    centerRoad: true
   }
 };
 
@@ -231,9 +263,18 @@ Tile.prototype.rotate = function(){
 
 Tile.prototype.hasNeighbours = function() { return !!(this.neighbours.left || this.neighbours.right || this.neighbours.top || this.neighbours.bottom); };
 
+Tile.prototype.numNeighbours = function(type) {
+  var count = 0;
+  for(var key in this.neighbours){
+    if(this.neighbours[key] && this[key] == type){
+      count += 1;
+    }
+  }
+  return count;
+};
 
 var tiles = [];
-var playableTiles = "21".split('').map(function(c) { return new Tile(c); });
+var playableTiles = "231".split('').map(function(c) { return new Tile(c); });
 
 function makeGrid(){
   const grid = [];
@@ -305,7 +346,7 @@ function playTile(x, y){
     if(oldTile.y == newTile.y && oldTile.x - 1 == newTile.x){
       console.log("Checking for right neighbour");
       oldTile.neighbours.left = newTile;
-      newTile.neighbours.bottom = oldTile;
+      newTile.neighbours.right = oldTile;
 
       if(oldTile.left != newTile.right){
         throw new Error(`Invalid move. ${oldTile.left} does not connect with ${newTile.right}`);
@@ -315,23 +356,24 @@ function playTile(x, y){
 
   });
 
-  if(!newTile.hasNeighbours() && tiles.length > 0){
-    inspect(newTile);
-    throw new Error(`Must be adjacent to another tile. Were playing ${newTile.type} on ${newTile.x}, ${newTile.y}`);
-  }
+  // if(!newTile.hasNeighbours() && tiles.length > 0){
+  //   inspect(newTile);
+  //   throw new Error(`Must be adjacent to another tile. Were playing ${newTile.type} on ${newTile.x}, ${newTile.y}`);
+  // }
   tiles.push(newTile);
   return newTile;
 }
 
-var tile1 = playTile(0,1);
+var tile1 = playTile(0,0);
 addToRoad(tile1);
 
-var tile2 = playTile(0,0);
+
+var tile3 = playTile(2,0);
+addToRoad(tile3);
+
+var tile2 = playTile(1,0);
 addToRoad(tile2);
 
-// var tile3 = playTile(1,0);
-// addToRoad(tile3);
-//
 // var tile4 = playTile(1,1);
 // addToRoad(tile4);
 
