@@ -108,6 +108,55 @@ Tile.KINDS = {
   D: { typeTop: Tile.TYPES.CITY,  typeRight: Tile.TYPES.ROAD,  typeBottom: Tile.TYPES.FIELD, typeLeft: Tile.TYPES.ROAD  }
 };
 
+
+// // TILE COORD POINTS
+// // xA   xB   xC
+// // xD   xE   xF
+// // xG   xH   xI
+// // -------------------
+
+// Tile.PTS = {
+//   xA: [0 + 90 * sin(degToRad(this.angle)), 90 - 90 * cos(degToRad(this.angle))],
+//   xB: [45 + 45 * sin(degToRad(this.angle)), 45 - 45 * cos(degToRad(this.angle))],
+//   xC: [0 + 90 * sin(degToRad(this.angle + 90)), 90 - 90 * cos(degToRad(this.angle + 90))],
+     
+//   xD: [45 + 45 * sin(degToRad(this.angle + 270)), 45 - 45 * cos(degToRad(this.angle + 270))],
+//   xE: [45, 45], 
+//   xF: [45 + 45 * sin(degToRad(this.angle + 90)), 45 - 45 * cos(degToRad(this.angle + 90))],
+    
+//   xG: [0 + 90 * sin(degToRad(this.angle + 270)), 90 - 90 * cos(degToRad(this.angle + 270))],
+//   xH: [45 + 45 * sin(degToRad(this.angle + 180)), 45 - 45 * cos(degToRad(this.angle + 180))],
+//   xI: [0 + 90 * sin(degToRad(this.angle + 180)), 90 - 90 * cos(degToRad(this.angle + 180))]   
+//   };                                         
+
+// Tile.ROADS = {
+//   B: [],
+//   A: [[xE, xH]],
+//   C: [],
+//   R: [],
+//   Q: [],
+//   T: [[xE, xH]],
+//   S: [[xE, xH]],
+//   N: [],
+//   M: [],
+//   P: [[xH, xF]],
+//   O: [[xH, xF]],
+//   G: [],
+//   F: [],
+//   I: [],
+//   H: [],
+//   E: [],
+//   K: [[xD, xH]],
+//   J: [[xH, xF]],
+//   L: [[xD, xE], [xE, xF], [xE, xH]],
+//   U: [[xB, xH]],
+//   V: [[xD, xH]],
+//   W: [[xD, xE], [xE, xF], [xE, xH]],
+//   X: [[xD, xE], [xB, xE], [xF, xE], [xH, xE]],
+//   D: [[xD, xF]]
+
+// };
+
 var playedTiles = []
 
 Tile.constructor = Tile;
@@ -222,29 +271,29 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
 }
 
 
-Tile.prototype.placementValid = function placementValid(newTile, x, y){
+Tile.prototype.placementValid = function placementValid(newTile, target){
   // if(playableTiles.length === 0)
   // {
   //   throw new Error("Out of moves");
   // }
   // var newTile = playableTiles.pop();
-  newTile.x = x;
-  newTile.y = y;
+  // newTile.x = x;
+  // newTile.y = y;
 
-  console.log(`Playing tile ${newTile.tileType} on ${newTile.x}, ${newTile.y}`);
+  console.log(`Playing tile ${newTile.tileType} on ${target.x}, ${target.y}`);
   var hasNeighbour = false;
   var valid = true;
 
   playedTiles.forEach(function(oldTile) {
-    if(oldTile.x == newTile.x && oldTile.y == newTile.y){
+    if(oldTile.x == target.x && oldTile.y == target.y){
        console.log("Space occupied");
        valid = false;
        return false;
     }
-    console.log(oldTile.x, oldTile.y, newTile.x, newTile.y);
+    console.log(oldTile.x, oldTile.y, target.x, target.y);
 
     //Bottom Neighbour
-    if(oldTile.x == newTile.x && oldTile.y + 90 == newTile.y){
+    if(oldTile.x == target.x && oldTile.y + 90 == target.y){
       hasNeighbour = true;
 
       if(oldTile.typeBottom != newTile.typeTop){
@@ -256,7 +305,7 @@ Tile.prototype.placementValid = function placementValid(newTile, x, y){
       console.log("Has top neighbour");
     }
     //Right Neighbour
-    if(oldTile.y == newTile.y && oldTile.x + 90 == newTile.x){
+    if(oldTile.y == target.y && oldTile.x + 90 == target.x){
       hasNeighbour = true;
       console.log("Checking for right neighbour");
 
@@ -268,7 +317,7 @@ Tile.prototype.placementValid = function placementValid(newTile, x, y){
       console.log("Has right neighbour");
     }
     //Top Neighbour
-    if(oldTile.x == newTile.x && oldTile.y - 90 == newTile.y){
+    if(oldTile.x == target.x && oldTile.y - 90 == target.y){
       hasNeighbour = true;
 
       if(oldTile.typeTop != newTile.typeBottom){
@@ -280,7 +329,7 @@ Tile.prototype.placementValid = function placementValid(newTile, x, y){
     }
 
     //Left Neighbour
-    if(oldTile.y == newTile.y && oldTile.x - 90 == newTile.x){
+    if(oldTile.y == target.y && oldTile.x - 90 == target.x){
       hasNeighbour = true;
 
       if(oldTile.typeLeft != newTile.typeRight){
@@ -306,43 +355,45 @@ Tile.prototype.placementValid = function placementValid(newTile, x, y){
 
 Tile.prototype.onClick = function onClick(draggable, pointer){
   this.currentPointer = pointer;
-  if(this.dragged)
-  {
+
+  var target = { x: Math.floor((this.x + 45) / 90) * 90,
+                 y: Math.floor((this.y + 45) / 90) * 90
+                 };
+  
+  if(this.dragged){
+
+    if (tile.placementValid(tile, target)) {
     // Stop dragging
+      this.game.add.tween(this).to(target, 250).start().onComplete.add(addButtons, this);
 
-    var target = { x: Math.floor((this.x + 45) / 90) * 90,
-                   y: Math.floor((this.y + 45) / 90) * 90
-                   };
-    this.game.add.tween(this).to(target, 250).start();
+      function addButtons() {
+        tile.dragged = !tile.dragged;
+        confirmDrop(target, function(confirmed){
+          if (confirmed) {
 
-    confirmDrop(target, function(confirmed){
-      if (confirmed) {
-
-        if (tile.placementValid (tile, target.x, target.y)){
-          tile.placeTile(tile, target.x, target.y)
-          console.log("Dropped", tile);
-          tile.inputEnabled = false;
-          game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
-          game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-        }
-
-      } 
-    }, this);
-
-
-  }
-  else
-  {
+            // if (tile.placementValid (tile, target.x, target.y)){
+              tile.placeTile(tile, tile.x, tile.y)
+              console.log("Dropped", tile);
+              tile.inputEnabled = false;
+              game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+              game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+            // }
+          }
+        }, this);
+      }
+    }
+  } else {
     // Start dragging
     console.log("Grabbed", this);
     this.fixedToCamera = false;
+    this.dragged = !this.dragged;
   }
-  this.dragged = !this.dragged;
 
-  function confirmDrop(target, callback) {
+  function confirmDrop(target, callback, tile) {
 
-    var confirm = tile.game.add.button(target.x + 45, target.y - 45, 'tiles', confirm, this, 23, 23, 23);
-    var decline = tile.game.add.button(target.x - 135, target.y - 45, 'tiles', decline, this, 22, 22, 22);
+    var confirm = tile.game.add.button(target.x + 60, target.y - 30, 'check', confirm, this, 23, 23, 23);
+    confirm.scale.setTo(0.3);
+    var decline = tile.game.add.button(target.x - 45, target.y - 45, 'tileBorder', decline, this);
 
     function confirm() {
       confirm.destroy();
@@ -353,6 +404,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
     function decline() {
       confirm.destroy();
       decline.destroy();
+      tile.dragged = !tile.dragged;
       callback(false);
     }
   }

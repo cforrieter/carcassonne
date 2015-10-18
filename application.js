@@ -13,6 +13,8 @@ window.onload = function() {
     game.load.spritesheet('tiles', 'assets/tiles_sprite.png', 88, 88, 24);
     game.load.image('meeple', 'assets/MEEPLE.png')
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
+    game.load.image('check', 'assets/check.png')
+    game.load.image('tileBorder', 'assets/border.png')
 
   }
 
@@ -64,7 +66,6 @@ window.onload = function() {
 
   }
 
-
   function spaceKeyDown() {
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
@@ -94,7 +95,7 @@ window.onload = function() {
 
   function render() {
 
-    game.debug.cameraInfo(game.camera, 32, 32, 'rgb(150, 0, 0)');
+    // game.debug.cameraInfo(game.camera, 32, 32, 'rgb(150, 0, 0)');
     // game.debug.pointer(game.input.activePointer, 32, 32);
   }
   //TODO: coord validation
