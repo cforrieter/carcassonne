@@ -30,7 +30,7 @@ function Tile(type) {
 Tile.prototype.rotate = function(){
   switch(this.type){
     case 'B':
-    case 'U':
+    case 'C':
     case 'X':
       return;
   }
@@ -55,18 +55,13 @@ Tile.TYPES = {
 Tile.KINDS = {
   J: {
     top: Tile.TYPES.CITY, 
+  L: {
+    top: Tile.TYPES.CITY,
     bottom: Tile.TYPES.ROAD,
     left: Tile.TYPES.FIELD,
     right: Tile.TYPES.ROAD,
     center: Tile.TYPES.ROAD
   },
-  L: {
-    top: Tile.TYPES.ROAD,
-    bottom: Tile.TYPES.ROAD,
-    left: Tile.TYPES.ROAD,
-    right: Tile.TYPES.CITY,
-    center: Tile.TYPES.TERMINUS
-  }
 };
 
 var tiles = [];
