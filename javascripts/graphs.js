@@ -29,7 +29,7 @@ function Tile(type) {
 Tile.prototype.rotate = function(){
   switch(this.type){
     case 'B':
-    case 'U':
+    case 'C':
     case 'X':
       return;
   }
@@ -52,13 +52,13 @@ Tile.TYPES = {
 };
 
 Tile.KINDS = {
-  1: {
+  L: {
     top: Tile.TYPES.CITY,
     bottom: Tile.TYPES.ROAD,
     left: Tile.TYPES.FIELD,
     right: Tile.TYPES.ROAD
   },
-  2: {
+  J: {
     top: Tile.TYPES.ROAD,
     bottom: Tile.TYPES.ROAD,
     left: Tile.TYPES.ROAD,
