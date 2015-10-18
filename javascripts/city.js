@@ -1,3 +1,129 @@
+var cities = [];
+
+var backwards = {
+  top: "bottom",
+  right: "left",
+  bottom: "top",
+  left: "right"
+};
+
+function getAllCityPositions(placedTile){
+  var positions = ['top', 'right', 'bottom', 'left'];
+  var allPos = [];
+  positions.forEach(function(position){
+    if(placedTile[position] == "CITY"){
+      allPos.push(position);
+    }
+  });
+  return allPos;
+}
+
+function updateEdgeCount(city, count){
+  city.edgeCount -= count;
+  if(count == 1){
+    city.edgeCount += 1;
+  }
+}
+
+function checkCityPosition(placedTile, position, single, allPos){
+  var cityToAdd = '';
+  var added = false;
+  if(placedTile[position] == "CITY"){
+    cities.forEach(function(city){
+      city.tiles.forEach(function(tile){
+        if(!added){
+          if(placedTile.neighbours[position] == tile.tile && tile.pos.indexOf(backwards[position]) != -1 && placedTile.neighbours[position][backwards[position]] ){
+            console.log("existing " + position + " city");
+            if(!single){
+              city.edgeCount -= 1;
+              allPos = position;
+            }else{
+              var counter = getEdges(placedTile, allPos);
+              updateEdgeCount(city, counter);
+              allPos = allPos.join('');
+            }
+            city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
+            added = true;
+          }
+        }
+      });
+    });
+    if(!added){
+      if(!single){
+        console.log("new " + position + " city");
+        newCity = new City();
+        newCity.edgeCount = 1;
+        allPos = position;
+        newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
+        cities.push(newCity);
+        added = true;
+      }else{
+        cityToAdd = position;
+      }
+    }
+  }
+  return [added, cityToAdd];
+}
+
+function addToCity(placedTile){
+    var positions = ['top', 'right', 'bottom', 'left'];
+    var added = false, newCity, single = false, counter;
+    var cityToAdd = '';
+    var returned = [];
+    var done = false;
+
+    if(placedTile.centerCity){
+      single = true;
+    }
+
+   var allPos = getAllCityPositions(placedTile);
+
+    positions.forEach(function(pos){
+      if(!done){
+        returned = checkCityPosition(placedTile, pos, single, allPos);
+        added = returned[0];
+        cityToAdd += returned[1];
+        if(added && single){
+          done = true;
+        }
+      }
+    });
+
+
+    if(!added && cityToAdd){
+      console.log("new " + cityToAdd + " city");
+      newCity = new City();
+      newCity.edgeCount = 2;
+      newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
+      cities.push(newCity);
+    }
+}
+
+function getEdges(tile, allPos){
+  counter = 0;
+  allPos.forEach(function(pos){
+    if(tile.neighbours[pos]){
+      counter += 1;
+    }
+  });
+  return counter;
+}
+
+function checkFinishedCities(){
+  var terminusCount, key;
+  cities.forEach(function(city, index){
+    if(city.edgeCount === 0){
+      console.log("Closed city!");
+      cities.splice(index, 1);
+    }
+  });
+}
+
+function City(){
+  this.tiles = [];
+  this.meeples = [];
+}
+
 // const util = require('util');
 // const inspect = (o, d) => console.log(util.inspect(o, { colors: true, depth: d || 1 }));
 //array of roads
@@ -51,18 +177,16 @@ function checkRoadPosition(placedTile, position, single, allPos){
         }
       });
     });
-    if(!added){
-      if(!single){
-        console.log("new " + position + " road");
-        newRoad = new Road();
-        newRoad.edgeCount = 1;
-        allPos = position;
-        newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
-        roads.push(newRoad);
-        added = true;
-      }else{
-          roadToAdd = position;
-      }
+    if(!added && !single){
+      console.log("new " + position + " road");
+      newRoad = new Road();
+      newRoad.edgeCount = 1;
+      allPos = position;
+      newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
+      roads.push(newRoad);
+      added = true;
+    }else{
+      roadToAdd = position;
     }
   }
   return [added, roadToAdd];
@@ -127,10 +251,6 @@ function Road(){
   this.edgeCount = 0;
 }
 
-function City(){
-  this.tiles = [];
-  this.meeples = [];
-}
 
 Tile.TYPES = {
   ROAD: "ROAD",
@@ -141,7 +261,7 @@ Tile.TYPES = {
 Tile.KINDS = {
   1: {
     top: Tile.TYPES.CITY,
-    bottom: Tile.TYPES.ROAD,
+    bottom: Tile.TYPES.CITY,
     left: Tile.TYPES.FIELD,
     right: Tile.TYPES.ROAD,
     centerTerminus: true,
@@ -149,11 +269,12 @@ Tile.KINDS = {
     centerCity: false,
   },
   2: {
-    top: Tile.TYPES.ROAD,
-    bottom: Tile.TYPES.ROAD,
+    top: Tile.TYPES.CITY,
+    bottom: Tile.TYPES.CITY,
     left: Tile.TYPES.ROAD,
     right: Tile.TYPES.CITY,
-    centerTerminus: true
+    centerTerminus: true,
+    centerCity: false,
   },
   3: {
     top: Tile.TYPES.FIELD,
@@ -324,11 +445,12 @@ function playTile(x, y){
 }
 
 var tile1 = playTile(0,1);
-addToRoad(tile1);
+//addToRoad(tile1);
+addToCity(tile1);
 
 var tile2 = playTile(0,0);
-addToRoad(tile2);
-
+//addToRoad(tile2);
+addToCity(tile2);
 // var tile3 = playTile(1,0);
 // addToRoad(tile3);
 //
@@ -336,10 +458,10 @@ addToRoad(tile2);
 // addToRoad(tile4);
 
 
-console.log(roads);
+console.log(cities);
 
-checkFinishedRoads();
-console.log(roads);
+checkFinishedCities();
+console.log(cities);
 return;
 
 var app = require('express')();
