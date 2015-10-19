@@ -60,6 +60,7 @@ window.onload = function() {
 
   function createTile() {
     var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+
     console.log(type);
     // console.log('CreateTiles', arguments);
 

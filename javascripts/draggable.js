@@ -13,7 +13,7 @@ Draggable.prototype = Object.create(Phaser.Sprite.prototype);
 
 function Tile(game, x, y, type)
 {
-  console.log('Tile ctor', arguments);
+  // console.log('Tile ctor', arguments);
   Draggable.call(this, game, x, y, 'tiles', Tile.FRAMES[type]);
 
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
@@ -55,30 +55,30 @@ Tile.TYPES = {
 };
 
 Tile.MEEPLECOORDS = {
- B: {p4: [0, 0, true], p0: [-20, -20, false]},
- A: {p4: [0, 0, true], p0: [-20, -20, false], p7: [-8, -20, true]},
- C: {p4: [0, 0, true]},
- R: {p0: [0, -15, true], p6: [0, -20, false]},
- Q: {p0: [0, -15, true], p6: [0, -20, false]},
- T: {p0: [0, -15, true], p6: [-15, -20, false], p7: [0, -20, true], p8: [60, -20, false]},
- S: {p0: [0, -15, true], p6: [-15, -20, false], p7: [0, -20, true], p8: [60, -20, false]},
- N: {p1: [-20, -20, true], p4: [10, -20, false]},
- M: {p1: [-20, -20, true], p4: [10, -20, false]},
- P: {p1: [-20, -20, true], p4: [0, 0, false], p5: [0, -20, true], p8: [60, -20, false]},
- O: {p1: [-20, -20, true], p4: [0, 0, false], p5: [0, -20, true], p8: [60, -20, false]},
- G: {p0: [0, -20, false], p3: [0, 0, true], p6: [0, 20, false]},
- F: {p0: [0, -20, false], p3: [0, 0, true], p6: [0, 20, false]},
- I: {p1: [0, -20, true], p3: [-20, 0, true], p4: [0, 0, false]},
- H: {p1: [0, -20, true], p4: [0, 0, false],  p7: [-20, 0, true]},
- E: {p1: [0, -20, true], p4: [0, 60, false]},
- K: {p1: [0, 0, true], p3: [-20, 0, true], p6: [-20, 20, false], p8: [60, 0, false]},
- J: {p1: [0, 0, true], p5: [-20, 0, true], p6: [-20, 20, false], p8: [60, 0, false]},
- L: {p0: [0, 36, false], p1: [0, -20, true], p3: [-20, 0, true], p5: [20, 0, true], p6: [-20, 75, false], p7: [0, 75, true], p8: [20, 75, false]},
- U: {p0: [-20, 0, false], p2: [20, 0, false], p4: [0, 0, true]},
- V: {p0: [20, -20, false], p4: [0, 0, true], p6: [-20, 20, false]},
- W: {p0: [0, -20, false], p3: [-20, 0, true], p5: [20, 0, true], p6: [20, 20, false], p7: [0, 20, true], p8: [20, 20, false]},
- X: {p0: [-20, -20, false], p1: [0, -20, true], p2: [20, -20, false], p3: [-20, 0, true], p5: [20, 0, true], p6: [20, 20, false], p7: [0, 20, true], p8: [20, 20, false]},
- D: {p0: [20, -15, false], p1: [0, -20, true], p4: [0, 0, true], p6: [0, 20, false]}
+ B: {p4: [0, 0, false], p0: [-30, -30, true]},
+ A: {p4: [0, 0, false], p0: [-30, -30, true], p7: [8, 30, false]},
+ C: {p4: [0, 0, false]},
+ R: {p0: [0, -25, false], p6: [0, 30, true]},
+ Q: {p0: [0, -25, false], p6: [0, 30, true]},
+ T: {p0: [0, -25, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
+ S: {p0: [0, -25, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
+ N: {p1: [-30, -30, false], p4: [25, 20, true]},
+ M: {p1: [-20, -30, false], p4: [25, 20, true]},
+ P: {p1: [-20, -20, false], p4: [0, 0, true], p5: [5, 20, false], p8: [30, 30, true]},
+ O: {p1: [-20, -20, false], p4: [0, 0, true], p5: [5, 20, false], p8: [30, 30, true]},
+ G: {p0: [0, -35, true], p3: [0, -10, false], p6: [0, 30, true]},
+ F: {p0: [0, -35, true], p3: [0, -10, false], p6: [0, 30, true]},
+ I: {p1: [0, -30, false], p3: [-32, 0, false], p4: [5, 5, true]},
+ H: {p1: [0, -30, false], p4: [0, 0, true],  p7: [0, 30, false]},
+ E: {p1: [0, -30, false], p4: [0, 15, true]},
+ K: {p1: [0, -30, false], p3: [-30, 0, false], p6: [-30, 30, true], p8: [25, 0, true]},
+ J: {p1: [0, -30, false], p5: [10, 10, false], p6: [-25, -10, true], p8: [30, 30, true]},
+ L: {p0: [-20, -20, true], p1: [0, -30, false], p3: [-25, 0, false], p5: [25, 0, false], p6: [-30, 30, true], p7: [0, 30, false], p8: [30, 30, true]},
+ U: {p0: [-25, -15, true], p2: [25, 15, true], p4: [0, 0, false]},
+ V: {p0: [20, -20, true], p4: [0, 0, false], p6: [-20, 20, true]},
+ W: {p0: [0, -30, true], p3: [-20, 0, false], p5: [20, 0, false], p6: [30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
+ X: {p0: [-30, -30, true], p1: [0, -20, false], p2: [30, -30, true], p3: [-20, 0, false], p5: [20, 0, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
+ D: {p0: [-30, -18, true], p1: [0, -30, false], p4: [-10, 0, false], p6: [0, 30, true]}
 };
 
 Tile.FRAMES = {
@@ -236,7 +236,7 @@ Tile.prototype.rightKeyDown = function rightKeyDown() {
 Tile.prototype.placeTile = function placeTile(newTile, x, y) {
 
 
-    console.log(`Playing tile ${newTile.type} on ${newTile.x}, ${newTile.y}`);
+    // console.log(`Playing tile ${newTile.tileType} on ${newTile.x}, ${newTile.y}`);
 
     playedTiles.forEach(function(oldTile) {
 
@@ -244,7 +244,7 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
          console.log("Space occupied");
          return false;
       }
-      console.log(oldTile.x, oldTile.y, newTile.x, newTile.y);
+      // console.log(oldTile.x, oldTile.y, newTile.x, newTile.y);
       //Bottom Neighbour
       if(oldTile.x == newTile.x && oldTile.y + 90 == newTile.y) {
         oldTile.neighbours.top = newTile;
@@ -255,11 +255,11 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
            return false;
         }
 
-        console.log("Has top neighbour");
+        // console.log("Has top neighbour");
       }
       //Right Neighbour
       if(oldTile.y == newTile.y && oldTile.x + 90 == newTile.x){
-        console.log("Checking for right neighbour");
+        // console.log("Checking for right neighbour");
         oldTile.neighbours.right = newTile;
         newTile.neighbours.left = oldTile;
 
@@ -267,7 +267,7 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
            console.log(`Invalid move. ${oldTile.typeRight.toString()} does not connect with ${newTile.typeLeft.toString()}`);
            return false;
         }
-        console.log("Has right neighbour");
+        // console.log("Has right neighbour");
       }
       //Top Neighbour
       if(oldTile.x == newTile.x && oldTile.y - 90 == newTile.y) {
@@ -278,7 +278,7 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
            console.log(`Invalid move. ${oldTile.typeTop.toString()} does not connect with ${newTile.typeBottom.toString()}`);
            return false;
         }
-        console.log("Has bottom neighbour");
+        // console.log("Has bottom neighbour");
       }
 
       //Left Neighbour
@@ -290,7 +290,7 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
            console.log(`Invalid move. ${oldTile.typeLeft.toString()} does not connect with ${newTile.typeRight.toString()}`);
            return false;
         }
-        console.log("Has left neighbour");
+        // console.log("Has left neighbour");
       }
     });
   
@@ -307,7 +307,7 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
   // newTile.x = x;
   // newTile.y = y;
 
-  console.log(`Playing tile ${newTile.tileType} on ${target.x}, ${target.y}`);
+  // console.log(`Playing tile ${newTile.tileType} on ${target.x}, ${target.y}`);
   var hasNeighbour = false;
   var valid = true;
 
@@ -329,7 +329,7 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
          return false;
       }
 
-      console.log("Has top neighbour");
+      // console.log("Has top neighbour");
     }
     //Right Neighbour
     if(oldTile.y == target.y && oldTile.x + 90 == target.x){
@@ -341,7 +341,7 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
          valid = false;
          return false;
       }
-      console.log("Has right neighbour");
+      // console.log("Has right neighbour");
     }
     //Top Neighbour
     if(oldTile.x == target.x && oldTile.y - 90 == target.y){
@@ -352,7 +352,7 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
          valid = false;
          return false;
       }
-      console.log("Has bottom neighbour");
+      // console.log("Has bottom neighbour");
     }
 
     //Left Neighbour
@@ -364,7 +364,7 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
          valid = false;
          return false;
       }
-      console.log("Has left neighbour");
+      // console.log("Has left neighbour");
     }
   });
 
@@ -374,8 +374,8 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
     return false;
   }
 
-  console.log("Done checking for valid\r\n");
-  console.log('placment is valid? ', valid);
+  // console.log("Done checking for valid\r\n");
+  // console.log('placment is valid? ', valid);
   return valid;
 }
 
@@ -400,7 +400,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
             // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y)
-              console.log("Dropped", tile);
+              // console.log("Dropped", tile);
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
@@ -412,7 +412,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
     }
   } else {
     // Start dragging
-    console.log("Grabbed", this);
+    // console.log("Grabbed", this);
     this.fixedToCamera = false;
     this.dragged = !this.dragged;
   }
@@ -459,12 +459,18 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
   var coords = Tile.MEEPLECOORDS[tile.tileType]
   for (var key in coords) {
     var position = key;
-    var xCoord = coords[key][0] + tile.x;
-    var yCoord = coords[key][1] + tile.y;
+    var ghostCoords = tileRotationCoordTransform(tile, coords[key][0], coords[key][1])
     var farmer = coords[key][2];
-    console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
-    tile.game.add.button(xCoord, yCoord, 'meepleGhost', tile.addMeeple, position);
+    // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
+    console.log(ghostCoords)
+    tile.game.add.button(ghostCoords[0], ghostCoords[1], 'meepleGhost', tile.addMeeple, position).anchor.setTo(0.5);
 
+  }
+
+  function tileRotationCoordTransform (tile, localX, localY) {
+    var x = localX * Math.cos(Phaser.Math.degToRad(tile.angle)) - localY * Math.sin(Phaser.Math.degToRad(tile.angle)) + tile.x;
+    var y = localX * Math.sin(Phaser.Math.degToRad(tile.angle)) + localY * Math.cos(Phaser.Math.degToRad(tile.angle)) + tile.y;
+    return [x, y];
   }
 
 }
