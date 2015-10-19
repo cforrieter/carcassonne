@@ -239,11 +239,7 @@ Tile.prototype.rightKeyDown = function rightKeyDown() {
 Tile.prototype.placeTile = function placeTile(newTile, x, y) {
 
 
-<<<<<<< HEAD
-    // console.log(`Playing tile ${newTile.type} on ${newTile.x}, ${newTile.y}`);
-=======
     // console.log(`Playing tile ${newTile.tileType} on ${newTile.x}, ${newTile.y}`);
->>>>>>> warren_development
 
     playedTiles.forEach(function(oldTile) {
 
@@ -408,11 +404,9 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
             // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y)
-<<<<<<< HEAD
+
               console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
-=======
-              // console.log("Dropped", tile);
->>>>>>> warren_development
+
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
@@ -461,7 +455,6 @@ Tile.prototype.update = function update() {
   }
 }
 
-<<<<<<< HEAD
 Tile.prototype.getValidMoves = function getValidMoves(){
   var possibleMovesAsStrings = [];
 
@@ -514,7 +507,7 @@ Tile.prototype.getValidMoves = function getValidMoves(){
   return validMoves;
 }
 
-=======
+
 Tile.prototype.addMeeple = function addMeeple() {
 
   console.log('You clicked on ' + this.ghostCoords)
@@ -543,6 +536,4 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
 
 }
 
-
->>>>>>> warren_development
 
