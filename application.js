@@ -2,14 +2,11 @@
 
 window.onload = function() {
 
-  var screenWidth = 1024;
-  var screenHeight = 768
+  var screenWidth = 800;
+  var screenHeight = 600;
 
   var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
-
-  var meepleCoords = [
-
-  ]
+  
 
   // var attachedToPointer = false;
   function preload () {
@@ -23,8 +20,6 @@ window.onload = function() {
 
   }
 
-  var leftKey;
-  var rightKey;
   var spaceKey;
 
   function create () {
@@ -33,7 +28,7 @@ window.onload = function() {
     game.add.tileSprite(0,0, 13000, 13000, 'background');
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-    // game.stage.backgroundColor = "#FFFFFF"
+
 
     button = game.add.button(screenWidth - 100, screenHeight - 100, 'tiles', createTile, this, 24, 24, 24);
     button.fixedToCamera = true;
@@ -45,20 +40,7 @@ window.onload = function() {
     createTile();
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
-
-
   }
-
-  // function createMeeple() {
-
-  //   meeple = game.add.sprite(50, 130, 'meeple');
-  //   meeple.anchor.setTo(0.5);
-  //   meeple.scale.setTo(0.1);
-
-  //   meeple.inputEnabled = true;
-  //   meeple.events.onInputDown.add(onClickAttach, this, 0, meeple);
-  //   meeple.fixedToCamera = true;
-  // }
 
   function createTile() {
     var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
@@ -66,11 +48,9 @@ window.onload = function() {
     console.log(type);
     // console.log('CreateTiles', arguments);
 
-    // frame = Math.floor((Math.random() * 18) + 1);
     tile = new Tile(game, 50, 50,  type);
     this.game.add.existing(tile);
     console.log('Possible moves: ',tile.getValidMoves());
-
   }
 
   function spaceKeyDown() {
@@ -105,13 +85,4 @@ window.onload = function() {
     // game.debug.cameraInfo(game.camera, 32, 32, 'rgb(150, 0, 0)');
     // game.debug.pointer(game.input.activePointer, 32, 32);
   }
-  //TODO: coord validation
-
-  // function moveValid(sprite) {
-  //   validCoords.forEach (function(coords) {
-  //     if
-  //   })
-  // }
-
-
 };

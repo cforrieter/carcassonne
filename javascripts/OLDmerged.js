@@ -263,110 +263,30 @@ Tile.prototype.rotate = function(){
 
 Tile.prototype.hasNeighbours = function() { return !!(this.neighbours.left || this.neighbours.right || this.neighbours.top || this.neighbours.bottom); };
 
-Tile.prototype.numNeighbours = function(type) {
-  var count = 0;
-  for(var key in this.neighbours){
-    if(this.neighbours[key] && this[key] == type){
-      count += 1;
-    }
-  }
-  return count;
-};
-
 var tiles = [];
 var playableTiles = "231".split('').map(function(c) { return new Tile(c); });
 
-function makeGrid(){
-  const grid = [];
-  tiles.forEach(tile => {
-    if(!grid[tile.x])
-    {
-      grid[tile.x] = [];
-    }
-    if(!grid[tile.x][tile.y])
-    {
-      grid[tile.x][tile.y] = []
-    }
-    grid[tile.x][tile.y] = tile;
-  });
-  return grid;
-}
+// function makeGrid(){
+//   const grid = [];
+//   tiles.forEach(tile => {
+//     if(!grid[tile.x])
+//     {
+//       grid[tile.x] = [];
+//     }
+//     if(!grid[tile.x][tile.y])
+//     {
+//       grid[tile.x][tile.y] = []
+//     }
+//     grid[tile.x][tile.y] = tile;
+//   });
+//   return grid;
+// }
 
-function playTile(x, y){
-  if(playableTiles.length === 0)
-  {
-    throw new Error("Out of moves");
-  }
-  var newTile = playableTiles.pop();
-  newTile.x = x;
-  newTile.y = y;
 
-  console.log(`Playing tile ${newTile.type} on ${newTile.x}, ${newTile.y}`);
-
-  tiles.forEach(oldTile =>
-  {
-    if(oldTile.x == newTile.x && oldTile.y == newTile.y)
-    {
-      throw new Error("Space occupied");
-    }
-    console.log(oldTile.x, oldTile.y, newTile.x, newTile.y);
-    //Old tile is the Top Neighbour
-    if(oldTile.x == newTile.x && oldTile.y + 1 == newTile.y){
-      oldTile.neighbours.top = newTile;
-      newTile.neighbours.bottom = oldTile;
-
-      if(oldTile.top != newTile.bottom){
-        throw new Error(`Invalid move. ${oldTile.bottom.toString()} does not connect with ${newTile.top.toString()}`);
-      }
-
-      console.log("Has top neighbour");
-    }
-    //Bottom Neighbour
-    if(oldTile.x == newTile.x && oldTile.y - 1 == newTile.y){
-      oldTile.neighbours.bottom = newTile;
-      newTile.neighbours.top = oldTile;
-
-      if(oldTile.bottom != newTile.top){
-        throw new Error(`Invalid move. ${oldTile.top.toString()} does not connect with ${newTile.bottom.toString()}`);
-      }
-      console.log("Has bottom neighbour");
-    }
-
-    //Left Neighbour
-    if(oldTile.y == newTile.y && oldTile.x + 1 == newTile.x){
-      oldTile.neighbours.right = newTile;
-      newTile.neighbours.left = oldTile;
-
-      if(oldTile.right != newTile.left){
-        throw new Error(`Invalid move. ${oldTile.right} does not connect with ${newTile.left}`);
-      }
-      console.log("Has left neighbour");
-    }
-    //Right Neighbour
-    if(oldTile.y == newTile.y && oldTile.x - 1 == newTile.x){
-      console.log("Checking for right neighbour");
-      oldTile.neighbours.left = newTile;
-      newTile.neighbours.right = oldTile;
-
-      if(oldTile.left != newTile.right){
-        throw new Error(`Invalid move. ${oldTile.left} does not connect with ${newTile.right}`);
-      }
-      console.log("Has right neighbour");
-    }
-
-  });
-
-  // if(!newTile.hasNeighbours() && tiles.length > 0){
-  //   inspect(newTile);
-  //   throw new Error(`Must be adjacent to another tile. Were playing ${newTile.type} on ${newTile.x}, ${newTile.y}`);
-  // }
-  tiles.push(newTile);
-  return newTile;
-}
 
 var tile1 = playTile(0,0);
 addToRoad(tile1);
-
+checkFinishedRoads();
 
 var tile3 = playTile(2,0);
 addToRoad(tile3);
@@ -379,8 +299,6 @@ addToRoad(tile2);
 
 
 console.log(roads);
-
-checkFinishedRoads();
 console.log(roads);
 return;
 
