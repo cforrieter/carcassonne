@@ -169,7 +169,7 @@ Tile.prototype.getValidMoves = function getValidMoves(){
           rotation: i
         }
         validMoves.push(currentTarget);
-        console.log('VALID MOVE: ',currentTarget)
+        // console.log('VALID MOVE: ',currentTarget)
       }
       tile.rotateRight();
     }

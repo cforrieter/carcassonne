@@ -43,8 +43,8 @@ window.onload = function() {
   }
 
   function createTile() {
-    var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-
+    // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+    var type = 'B';
     console.log(type);
     // console.log('CreateTiles', arguments);
 

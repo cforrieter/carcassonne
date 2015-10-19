@@ -203,6 +203,11 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
               tile.showMeepleSpots(tile);
 
+              // if (tile.center === 'monastery'){
+                monasteries.push(tile);
+                console.log(monasteries);
+              // }
+              checkMonasteries();
             // }
           }
         }, this);
