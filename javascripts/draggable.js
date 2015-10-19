@@ -1,5 +1,3 @@
-// var rotate = require('./rotate');
-
 function Draggable(game, x, y, key, frame)
 {
   Phaser.Sprite.call(this, game, x, y, key, frame);
@@ -166,35 +164,38 @@ Tile.prototype = Object.create(Draggable.prototype);
 
 // Tile.prototype.hasNeighbours = function hasNeighbours() { return !!(this.neighbours.left || this.neighbours.right || this.neighbours.top || this.neighbours.bottom); };
 
-Tile.prototype.rotateRight = function rotateRight(){
-  switch(this.type){
-    case 'B':
-    case 'C':
-    case 'X':
-      return;
-  }
+Tile.prototype.rotateRight = rotate.right;
+// Tile.prototype.rotateRight = function rotateRight(){
+//   switch(this.type){
+//     case 'B':
+//     case 'C':
+//     case 'X':
+//       return;
+//   }
 
-  var x = this.typeBottom, y = this.typeLeft, z = this.typeTop, w = this.typeRight;
-  this.typeLeft = x;
-  this.typeTop = y;
-  this.typeRight = z;
-  this.typeBottom = w;
-};
+//   var x = this.typeBottom, y = this.typeLeft, z = this.typeTop, w = this.typeRight;
+//   this.typeLeft = x;
+//   this.typeTop = y;
+//   this.typeRight = z;
+//   this.typeBottom = w;
+// };
 
-Tile.prototype.rotateLeft = function rotateLeft(){
-  switch(this.type){
-    case 'B':
-    case 'C':
-    case 'X':
-      return;
-  }
+Tile.prototype.rotateLeft = rotate.left;
 
-  var x = this.typeBottom, y = this.typeLeft, z = this.typeTop, w = this.typeRight;
-  this.typeLeft = z;
-  this.typeTop = w;
-  this.typeRight = x;
-  this.typeBottom = y;
-};
+// Tile.prototype.rotateLeft = function rotateLeft(){
+//   switch(this.type){
+//     case 'B':
+//     case 'C':
+//     case 'X':
+//       return;
+//   }
+
+//   var x = this.typeBottom, y = this.typeLeft, z = this.typeTop, w = this.typeRight;
+//   this.typeLeft = z;
+//   this.typeTop = w;
+//   this.typeRight = x;
+//   this.typeBottom = y;
+// };
 
 Tile.prototype.leftKeyDown = function leftKeyDown() {
   this.angle -= 90;
@@ -446,7 +447,7 @@ Tile.prototype.getValidMoves = function getValidMoves(){
   });
 
   function onlyUnique(value, index, self) { 
-      return self.indexOf(value) === index;
+    return self.indexOf(value) === index;
   }
 
   //remove non-unqiue elements
@@ -463,11 +464,11 @@ Tile.prototype.getValidMoves = function getValidMoves(){
   possibleMovesAsObjects.forEach(function(target){
     for (i = 0; i < 4; i++){
       if (tile.placementValid(tile, target)){
-       var currentTarget = {
-            x: target.x,
-            y: target.y,
-            rotation: i
-          }
+        var currentTarget = {
+          x: target.x,
+          y: target.y,
+          rotation: i
+        }
         validMoves.push(currentTarget);
         console.log('VALID MOVE: ',currentTarget)
       }

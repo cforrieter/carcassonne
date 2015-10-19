@@ -1,3 +1,5 @@
+// var rotate = require('./rotate');
+
 window.onload = function() {
 
   var game = window.game = new Phaser.Game(800, 600, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
