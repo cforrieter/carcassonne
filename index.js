@@ -48,7 +48,7 @@ function insertTiles(db){
      'center':{'condition': 'terminus'},
      'banner':false,
      'position':{'x':0,'y':1},
-   }
+   };
   // Insert some users
   collection.insert([tile1, tile2], function (err, result) {
     if (err) {
