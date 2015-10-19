@@ -60,7 +60,6 @@ var collection;
 function checkForTerminus(placedTile, firstTile, direction) {
   console.log("check for terminus called");
   firstTile = firstTile || false;
-
   //TODO:: gameState.playedTiles
   if(!firstTile){
     //check for teminus -- end condition
