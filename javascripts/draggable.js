@@ -449,14 +449,11 @@ Tile.prototype.update = function update() {
   }
 }
 
-Tile.prototype.addMeeple = function addMeeple() {
-
-  console.log('You clicked on ' + this.ghostCoords)
-}
 
 Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
   // debugger;
   var coords = Tile.MEEPLECOORDS[tile.tileType]
+  var meepleButtons = game.add.group();
   for (var key in coords) {
     var position = {
       positionKey: key,
@@ -465,14 +462,20 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
     };
     // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
     console.log(position['ghostCoords'])
-    tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', tile.addMeeple, position).anchor.setTo(0.5);
+    var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position).anchor.setTo(0.5);
 
+    // meepleButtons.add(button, false);
   }
 
   function tileRotationCoordTransform (tile, localX, localY) {
     var x = localX * Math.cos(Phaser.Math.degToRad(tile.angle)) - localY * Math.sin(Phaser.Math.degToRad(tile.angle)) + tile.x;
     var y = localX * Math.sin(Phaser.Math.degToRad(tile.angle)) + localY * Math.cos(Phaser.Math.degToRad(tile.angle)) + tile.y;
     return [x, y];
+  }
+
+  function addMeeple() {
+
+    console.log('You clicked on ' + this.ghostCoords)
   }
 
 }
