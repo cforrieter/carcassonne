@@ -18,7 +18,6 @@ function Tile(game, x, y, frame)
 {
   console.log('Tile ctor', arguments);
   Draggable.call(this, game, x, y, 'tiles', frame);
-
 }
 
 Tile.constructor = Tile;
