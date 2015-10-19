@@ -196,13 +196,17 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
             // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y)
 
-              console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
+              // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
 
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
               tile.showMeepleSpots(tile);
 
+              if (tile.centerMonastery){
+                monasteries.push(tile);
+              }
+              checkMonasteries();
             // }
           }
         }, this);
