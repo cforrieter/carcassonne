@@ -17,6 +17,8 @@ window.onload = function() {
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
     game.load.image('check', 'assets/check.png')
     game.load.image('tileBorder', 'assets/border.png')
+    game.load.image('blueMeeple', 'assets/blueMeeple2.png')
+    game.load.image('meepleFarmer', 'assets/meepleFarmer.png')
 
   }
 
