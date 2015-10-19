@@ -61,15 +61,15 @@ function checkCityPosition(placedTile, position, single, allPos, existingCity){
               updateEdgeCount(city, counter);
               if(placedTile.numNeighbours("CITY") > 1 && city.edgeCount !== 0){
                 var cityToMerge, mergedCity, originalCity = city;
-                console.log("should merge cities");
+                console.log("Merging cities");
 
-                city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
                 //remove the current position from check since we're merging / accounting for it now
                 var index = allPos.indexOf(position);
                 allPos.splice(index, 1);
 
                 remainingPos = allPos;
 
+                city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
                 remainingPos.forEach(function(pos){
                   cityToMerge = findAdjacentCity(placedTile, pos);
 
@@ -82,18 +82,6 @@ function checkCityPosition(placedTile, position, single, allPos, existingCity){
                 citiesArray.splice(citiesArray.indexOf(city), 1);
                 //add newly merged city
                 citiesArray.push(originalCity);
-
-                  // roads.forEach(function(road2, index){
-                  //   road2.tiles.forEach(function(tile){
-                  //     if(placedTile.neighbours[otherPos] == tile.tile && tile.pos.indexOf(backwards[otherPos]) != -1 && placedTile.neighbours[otherPos][backwards[otherPos]] ){
-                  //         var newRoad = mergeRoads(road, road2);
-                  //         newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
-                  //         roadsArray.push(newRoad);
-                  //         roadsArray.splice(index, 1);
-                  //         roadsArray.splice(roadsArray.indexOf(road), 1);
-                  //     }
-                  //   });
-                  // });
               }
               allPos = allPos.join('');
           }
@@ -143,7 +131,6 @@ function addToCity(placedTile){
         }
       }
     });
-
 
     if(!added && cityToAdd){
       console.log("new " + cityToAdd + " city");
@@ -197,26 +184,26 @@ Tile.KINDS = {
     centerCity: false,
   },
   2: {
-    top: Tile.TYPES.FIELD,
+    top: Tile.TYPES.CITY,
     bottom: Tile.TYPES.FIELD,
-    left: Tile.TYPES.CITY,
-    right: Tile.TYPES.CITY,
+    left: Tile.TYPES.FIELD,
+    right: Tile.TYPES.FIELD,
     centerTerminus: true,
-    centerCity: true,
+    centerCity: false,
   },
   3: {
     top: Tile.TYPES.FIELD,
     bottom: Tile.TYPES.FIELD,
     left: Tile.TYPES.CITY,
-    right: Tile.TYPES.ROAD,
+    right: Tile.TYPES.FIELD,
     centerTerminus: false,
     centerCity: false
   },
   4: {
     top: Tile.TYPES.ROAD,
-    bottom: Tile.TYPES.FIELD,
-    left: Tile.TYPES.FIELD,
-    right: Tile.TYPES.ROAD,
+    bottom: Tile.TYPES.CITY,
+    left: Tile.TYPES.CITY,
+    right: Tile.TYPES.CITY,
     centerTerminus: false,
     centerCity: true
   },
@@ -291,7 +278,7 @@ Tile.prototype.numNeighbours = function(type) {
 };
 
 var tiles = [];
-var playableTiles = "231".split('').map(function(c) { return new Tile(c); });
+var playableTiles = "4321".split('').map(function(c) { return new Tile(c); });
 
 function makeGrid(){
   const grid = [];
@@ -381,19 +368,19 @@ function playTile(x, y){
   return newTile;
 }
 
-var tile1 = playTile(0,0);
+var tile1 = playTile(0,1);
 addToCity(tile1);
 console.log(cities);
 
-var tile2 = playTile(2,0);
+var tile2 = playTile(1,0);
 addToCity(tile2);
 console.log(cities);
 
-var tile3 = playTile(1,0);
+var tile3 = playTile(2,1);
 addToCity(tile3);
 
-// var tile4 = playTile(1,1);
-// addToRoad(tile4);
+var tile4 = playTile(1,1);
+addToCity(tile4);
 
 
 console.log(cities);

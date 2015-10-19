@@ -60,7 +60,6 @@ var collection;
 function checkForTerminus(placedTile, firstTile, direction) {
   console.log("check for terminus called");
   firstTile = firstTile || false;
-
   //TODO:: gameState.playedTiles
   if(!firstTile){
     //check for teminus -- end condition
@@ -150,6 +149,7 @@ function completeRoad(position, direction, currentPath, meeples){
 }
 
 function score(road){
+
   // var winner = Object.keys(meeples).reduce(function(maxValue, currentValue));
   //compare meeples for winner
   // addScore(road.length, winner);

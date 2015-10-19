@@ -25,11 +25,20 @@ function updateEdgeCount(road, count){
   }
 }
 
+function mergeRoads(road1, road2) {
+  var newRoad = new Road();
+  newRoad.tiles = road1.tiles.concat(road2.tiles);
+  newRoad.meeples = road1.meeples.concat(road2.meeples);
+  newRoad.edgeCount = road1.edgeCount + road2.edgeCount;
+  return newRoad;
+}
+
+
 function checkRoadPosition(placedTile, position, single, allPos){
   var roadToAdd = '';
   var added = false;
   if(placedTile[position] == "ROAD"){
-    roads.forEach(function(road){
+    roads.forEach(function(road, firstIndex, roadsArray){
       road.tiles.forEach(function(tile){
         if(!added){
           if(placedTile.neighbours[position] == tile.tile && tile.pos.indexOf(backwards[position]) != -1 && placedTile.neighbours[position][backwards[position]] ){
@@ -40,6 +49,23 @@ function checkRoadPosition(placedTile, position, single, allPos){
             }else{
               var counter = getEdges(placedTile, allPos);
               updateEdgeCount(road, counter);
+              if(placedTile.numNeighbours("ROAD") > 1 && road.edgeCount !== 0){
+                  console.log("should merge roads");
+                  var index = allPos.indexOf(position);
+                  allPos.splice(index, 1);
+                  otherPos = allPos.join('');
+                  roads.forEach(function(road2, index){
+                    road2.tiles.forEach(function(tile){
+                      if(placedTile.neighbours[otherPos] == tile.tile && tile.pos.indexOf(backwards[otherPos]) != -1 && placedTile.neighbours[otherPos][backwards[otherPos]] ){
+                          var newRoad = mergeRoads(road, road2);
+                          newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
+                          roadsArray.push(newRoad);
+                          roadsArray.splice(index, 1);
+                          roadsArray.splice(roadsArray.indexOf(road), 1);
+                      }
+                    });
+                  });
+              }
               allPos = allPos.join('');
             }
             road.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
@@ -48,17 +74,17 @@ function checkRoadPosition(placedTile, position, single, allPos){
         }
       });
     });
-    if(!added && !single){
-      console.log("new " + position + " road");
-      newRoad = new Road();
-      newRoad.edgeCount = 1;
-      allPos = position;
-      newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
-      roads.push(newRoad);
-      added = true;
-    }else{
-      if(!added){
-        roadToAdd = position;
+    if(!added){
+      if(!single){
+        console.log("new " + position + " road");
+        newRoad = new Road();
+        newRoad.edgeCount = 1;
+        allPos = position;
+        newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
+        roads.push(newRoad);
+        added = true;
+      }else{
+          roadToAdd = position;
       }
     }
   }
@@ -72,7 +98,7 @@ function addToRoad(placedTile){
     var returned = [];
     var done = false;
 
-    if(placedTile.centerCity){
+    if(placedTile.centerRoad){
       single = true;
     }
 
