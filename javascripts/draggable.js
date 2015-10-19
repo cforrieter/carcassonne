@@ -8,7 +8,7 @@ function Draggable(game, x, y, key, frame)
   this.dragged = false;
 }
 
-Draggable.constructor = Draggable;
+// Draggable.constructor = Draggable;
 Draggable.prototype = Object.create(Phaser.Sprite.prototype);
 
 function Tile(game, x, y, type)
@@ -76,7 +76,7 @@ Tile.MEEPLECOORDS = {
  L: {p0: [-20, -20, true], p1: [0, -30, false], p3: [-25, 0, false], p5: [25, 0, false], p6: [-30, 30, true], p7: [0, 30, false], p8: [30, 30, true]},
  U: {p0: [-25, -15, true], p2: [25, 15, true], p4: [0, 0, false]},
  V: {p0: [20, -20, true], p4: [0, 0, false], p6: [-20, 20, true]},
- W: {p0: [0, -30, true], p3: [-20, 0, false], p5: [20, 0, false], p6: [30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
+ W: {p0: [0, -30, true], p3: [-20, 0, false], p5: [20, 0, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
  X: {p0: [-30, -30, true], p1: [0, -20, false], p2: [30, -30, true], p3: [-20, 0, false], p5: [20, 0, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
  D: {p0: [-30, -18, true], p1: [0, -30, false], p4: [-10, 0, false], p6: [0, 30, true]}
 };
@@ -186,7 +186,7 @@ Tile.KINDS = {
 
 var playedTiles = []
 
-Tile.constructor = Tile;
+// Tile.constructor = Tile;
 Tile.prototype = Object.create(Draggable.prototype);
 
 // Tile.prototype.hasNeighbours = function hasNeighbours() { return !!(this.neighbours.left || this.neighbours.right || this.neighbours.top || this.neighbours.bottom); };
@@ -451,19 +451,21 @@ Tile.prototype.update = function update() {
 
 Tile.prototype.addMeeple = function addMeeple() {
 
-  console.log('You clicked on position' + this)
+  console.log('You clicked on ' + this.ghostCoords)
 }
 
 Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
   // debugger;
   var coords = Tile.MEEPLECOORDS[tile.tileType]
   for (var key in coords) {
-    var position = key;
-    var ghostCoords = tileRotationCoordTransform(tile, coords[key][0], coords[key][1])
-    var farmer = coords[key][2];
+    var position = {
+      positionKey: key,
+      ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
+      farmer: coords[key][2]
+    };
     // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
-    console.log(ghostCoords)
-    tile.game.add.button(ghostCoords[0], ghostCoords[1], 'meepleGhost', tile.addMeeple, position).anchor.setTo(0.5);
+    console.log(position['ghostCoords'])
+    tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', tile.addMeeple, position).anchor.setTo(0.5);
 
   }
 
