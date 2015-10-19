@@ -8,7 +8,7 @@ function Draggable(game, x, y, key, frame)
   this.dragged = false;
 }
 
-Draggable.constructor = Draggable;
+// Draggable.constructor = Draggable;
 Draggable.prototype = Object.create(Phaser.Sprite.prototype);
 
 function Tile(game, x, y, type)
@@ -54,6 +54,33 @@ Tile.TYPES = {
   FIELD: Symbol("FIELD")
 };
 
+Tile.MEEPLECOORDS = {
+ B: {p4: [0, 0, false], p0: [-30, -30, true]},
+ A: {p4: [0, 0, false], p0: [-30, -30, true], p7: [8, 30, false]},
+ C: {p4: [0, 0, false]},
+ R: {p0: [0, -25, false], p6: [0, 30, true]},
+ Q: {p0: [0, -25, false], p6: [0, 30, true]},
+ T: {p0: [0, -25, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
+ S: {p0: [0, -25, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
+ N: {p1: [-30, -30, false], p4: [25, 20, true]},
+ M: {p1: [-20, -30, false], p4: [25, 20, true]},
+ P: {p1: [-20, -20, false], p4: [0, 0, true], p5: [5, 20, false], p8: [30, 30, true]},
+ O: {p1: [-20, -20, false], p4: [0, 0, true], p5: [5, 20, false], p8: [30, 30, true]},
+ G: {p0: [0, -35, true], p3: [0, -10, false], p6: [0, 30, true]},
+ F: {p0: [0, -35, true], p3: [0, -10, false], p6: [0, 30, true]},
+ I: {p1: [0, -30, false], p3: [-32, 0, false], p4: [5, 5, true]},
+ H: {p1: [0, -30, false], p4: [0, 0, true],  p7: [0, 30, false]},
+ E: {p1: [0, -30, false], p4: [0, 15, true]},
+ K: {p1: [0, -30, false], p3: [-30, 0, false], p6: [-30, 30, true], p8: [25, 0, true]},
+ J: {p1: [0, -30, false], p5: [10, 10, false], p6: [-25, -10, true], p8: [30, 30, true]},
+ L: {p0: [-20, -20, true], p1: [0, -30, false], p3: [-25, 0, false], p5: [25, 0, false], p6: [-30, 30, true], p7: [0, 30, false], p8: [30, 30, true]},
+ U: {p0: [-25, -15, true], p2: [25, 15, true], p4: [0, 0, false]},
+ V: {p0: [20, -20, true], p4: [0, 0, false], p6: [-20, 20, true]},
+ W: {p0: [0, -30, true], p3: [-20, 0, false], p5: [20, 0, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
+ X: {p0: [-30, -30, true], p1: [0, -20, false], p2: [30, -30, true], p3: [-20, 0, false], p5: [20, 0, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
+ D: {p0: [-30, -18, true], p1: [0, -30, false], p4: [-10, 0, false], p6: [0, 30, true]}
+};
+
 Tile.FRAMES = {
   A: 1,
   B: 0,
@@ -77,7 +104,7 @@ Tile.FRAMES = {
   T: 5,
   U: 19, 
   V: 20,
-  w: 21,
+  W: 21,
   X: 22
 }
 
@@ -159,7 +186,7 @@ Tile.KINDS = {
 
 var playedTiles = []
 
-Tile.constructor = Tile;
+// Tile.constructor = Tile;
 Tile.prototype = Object.create(Draggable.prototype);
 
 // Tile.prototype.hasNeighbours = function hasNeighbours() { return !!(this.neighbours.left || this.neighbours.right || this.neighbours.top || this.neighbours.bottom); };
@@ -212,7 +239,11 @@ Tile.prototype.rightKeyDown = function rightKeyDown() {
 Tile.prototype.placeTile = function placeTile(newTile, x, y) {
 
 
+<<<<<<< HEAD
     // console.log(`Playing tile ${newTile.type} on ${newTile.x}, ${newTile.y}`);
+=======
+    // console.log(`Playing tile ${newTile.tileType} on ${newTile.x}, ${newTile.y}`);
+>>>>>>> warren_development
 
     playedTiles.forEach(function(oldTile) {
 
@@ -377,10 +408,15 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
             // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y)
+<<<<<<< HEAD
               console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
+=======
+              // console.log("Dropped", tile);
+>>>>>>> warren_development
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+              tile.showMeepleSpots(tile);
             // }
           }
         }, this);
@@ -414,8 +450,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
   }
 }
 
-Tile.prototype.update = function update()
-{
+Tile.prototype.update = function update() {
   if(this.dragged && this.currentPointer)
   {
     // console.log(this.currentPointer.worldX, this.currentPointer.worldY);
@@ -426,6 +461,7 @@ Tile.prototype.update = function update()
   }
 }
 
+<<<<<<< HEAD
 Tile.prototype.getValidMoves = function getValidMoves(){
   var possibleMovesAsStrings = [];
 
@@ -478,4 +514,35 @@ Tile.prototype.getValidMoves = function getValidMoves(){
   return validMoves;
 }
 
+=======
+Tile.prototype.addMeeple = function addMeeple() {
+
+  console.log('You clicked on ' + this.ghostCoords)
+}
+
+Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
+  // debugger;
+  var coords = Tile.MEEPLECOORDS[tile.tileType]
+  for (var key in coords) {
+    var position = {
+      positionKey: key,
+      ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
+      farmer: coords[key][2]
+    };
+    // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
+    console.log(position['ghostCoords'])
+    tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', tile.addMeeple, position).anchor.setTo(0.5);
+
+  }
+
+  function tileRotationCoordTransform (tile, localX, localY) {
+    var x = localX * Math.cos(Phaser.Math.degToRad(tile.angle)) - localY * Math.sin(Phaser.Math.degToRad(tile.angle)) + tile.x;
+    var y = localX * Math.sin(Phaser.Math.degToRad(tile.angle)) + localY * Math.cos(Phaser.Math.degToRad(tile.angle)) + tile.y;
+    return [x, y];
+  }
+
+}
+
+
+>>>>>>> warren_development
 
