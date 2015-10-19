@@ -63,6 +63,7 @@ window.onload = function() {
     // frame = Math.floor((Math.random() * 18) + 1);
     tile = new Tile(game, 50, 50,  type);
     this.game.add.existing(tile);
+    console.log('Possible moves: ',tile.getValidMoves());
 
   }
 
