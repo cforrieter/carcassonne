@@ -123,10 +123,11 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
             // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y);
               var validMeeples = addToRoad(tile);
+              console.log("Valid meeples for roads are " + validMeeples);
               checkFinishedRoads();
-              addToCity(tile);
-              console.log("Valid meeples are " + validMeeples);
-              // console.log(cities);
+              validMeeples = addToCity(tile);
+              console.log("Valid meeples for cities are " + validMeeples);
+              console.log(cities);
               checkFinishedCities();
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
 

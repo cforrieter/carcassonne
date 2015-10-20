@@ -51,11 +51,16 @@ function findAdjacentCity(searchTile, pos){
 }
 
 function mergeCities(city1, city2){
-  var newCity = new City();
-  newCity.tiles = city1.tiles.concat(city2.tiles);
-  newCity.meeples = city1.meeples.concat(city2.meeples);
-  newCity.edgeCount = city1.edgeCount + city2.edgeCount;
-  return newCity;
+  if(city2){
+    var newCity = new City();
+    newCity.tiles = city1.tiles.concat(city2.tiles);
+    newCity.meeples = city1.meeples.concat(city2.meeples);
+    newCity.edgeCount = city1.edgeCount + city2.edgeCount - 1;
+    return newCity;
+  }else{
+    return city1;
+  }
+
 }
 
 function checkCityPosition(placedTile, position, single, allPos, existingCity){
@@ -74,7 +79,7 @@ function checkCityPosition(placedTile, position, single, allPos, existingCity){
             }else{
               var counter = getEdges(placedTile, allPos);
               updateEdgeCount(city, counter);
-              if(placedTile.numNeighbours("CITY") > 1 && city.edgeCount !== 0){
+              if(placedTile.numNeighbours("CITY") > 1){
                 var cityToMerge, mergedCity, originalCity = city;
                 console.log("Merging cities");
 
@@ -102,7 +107,7 @@ function checkCityPosition(placedTile, position, single, allPos, existingCity){
           }
           city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
           added = true;
-          meeples = (city.meeples.length > 0) ? false : true;
+          meeples = (city.meeples.length > 0) ? true : false;
         }
       }
       });
@@ -166,7 +171,11 @@ function addToCity(placedTile){
     if(!added && cityToAdd){
       console.log("new " + cityToAdd + " city");
       newCity = new City();
-      validCities.push(cityToAdd);
+      if(single){
+        validCities.push("typeCenter");
+      }else{
+        validCities.push(cityToAdd);
+      }
       newCity.edgeCount = 2;
       newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
       cities.push(newCity);

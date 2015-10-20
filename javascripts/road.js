@@ -157,8 +157,6 @@ function addToRoad(placedTile){
     roads.push(newRoad);
   }
 
-  console.log("Valid raods" + validRoads);
-
   return validRoads;
 }
 
