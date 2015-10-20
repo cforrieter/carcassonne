@@ -8,14 +8,12 @@ window.onload = function() {
   var screenHeight = 600;
 
   var players = [
-    {color: 0xFF0000, },
-    {color: 0x0000FF},
-    {color: 0x00CC00},
-    {color: 0xFF9900},
-    {color: 0xCC0099}
+    {color: "FF0000"},
+    {color: "0000FF"},
+    {color: "00CC00"},
+    {color: "FF9900"},
+    {color: "CC0099"}
   ]
-
-
 
   var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
 
@@ -31,6 +29,7 @@ window.onload = function() {
     game.load.image('tileBorder', 'assets/border.png')
     game.load.image('blueMeeple', 'assets/blueMeeple2.png')
     game.load.image('meepleFarmer', 'assets/meepleFarmer.png')
+    game.load.font
 
   }
 
@@ -86,13 +85,21 @@ window.onload = function() {
       playersDisplay.fixedToCamera = true;
 
       players.forEach(function(player, index){
-        var icon = game.add.graphics( game.world.centerX, game.world.centerY)
+        player.icon = game.add.graphics( 0, 0)
 
-                // playersDisplay.add(icon)
-        icon.lineStyle(2, 0x0000FF, 1);
-        icon.drawRect(10, 10 + index * 60, 100, 100);
+        playersDisplay.add(player.icon)
+        player.icon.lineStyle(2, "0x" + player.color, 1);
+        player.icon.beginFill("0x" + player.color, 0.6)
+        player.icon.drawRect(10, 10 + index * 50, 40, 40);
+
+        player.score = game.add.text(60, 7 + index * 50, "123", { font: "26px Lindsay", fill: "#" + player.color, align: "Left", fontWeight: "bold"});
+        player.score.fixedToCamera = true;
+
+        player.score.text = '456'
+
+
         // icon.fixedToCamera = true;
-
+        // debugger;
         // game.context.fillStyle = player.color
         // game.context.fillRect(10, 10 + 60 * index, 50, 50)
         // icon.fixedToCamera = true;
