@@ -4,9 +4,24 @@
         <meta charset="UTF-8" />
         <title>hello carcassonne!</title>
         <script src="node_modules/phaser/build/phaser.js"></script>
-        <script src="javascripts/draggable.js"></script>
+        <script src="javascripts/tile.js"></script>
+        <script src="javascripts/tileValidations.js"></script>
+        <script src="javascripts/rotate.js"></script>
+        <script src="javascripts/tileInfo.js"></script>
+        <script src="javascripts/road.js"></script>
+        <script src="javascripts/city.js"></script>
+        <script src="javascripts/meeples.js"></script>
+        <script src="javascripts/monastery.js"></script>        
         <script src='application.js'></script>
     </head>
     <body>
+    <script>
+        (function() {
+          var game = window.game = new Phaser.Game(800, 600, Phaser.CANVAS, '');
+          game.state.add('mainMenu', CarcassoneGame.mainMenu);
+          game.state.add('mainGame', CarcassoneGame.mainGame);
+          game.state.start('splashScreen');
+        });
+    </script>
     </body>
 </html>
