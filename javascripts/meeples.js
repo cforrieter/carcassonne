@@ -37,6 +37,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
     };
     // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
     // console.log(position['ghostCoords'])
+
     var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
     button.anchor.setTo(0.5);
     // debugger;
