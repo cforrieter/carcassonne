@@ -1,24 +1,31 @@
-// var rotate = require('./rotate');
+var screenWidth = 800;
+var screenHeight = 600;
+
 CarcassoneGame.mainGame = function(game) {
   this.leftKey;
   this.rightKey;
   this.button;
   this.camera;
   this.spaceKey;
-  this.gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
   this.screenWidth = 800;
   this.screenHeight = 600;
+  this.gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 };
 
 CarcassoneGame.mainGame.prototype = {
   // var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
+<<<<<<< HEAD
 
+=======
+
+// >>>>>>> 3e8973e2c3158788626f2f87105e468221f395f7:javascripts/application.js
+>>>>>>> 12447a26c5624eb6112e4648a02d57b00b52f307
 
   // var attachedToPointer = false;
   preload: function() {
 
     game.load.image('background', './assets/background.png');
-    game.load.spritesheet('tiles', 'assets/tiles_sprite.png', 88, 88, 24);
+    game.load.spritesheet('tiles', 'assets/zelda-tilesprite.png', 88, 88, 24);
     game.load.image('meeple', 'assets/MEEPLE.png')
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
     game.load.image('check', 'assets/check.png')
@@ -28,24 +35,24 @@ CarcassoneGame.mainGame.prototype = {
 
   },
 
-  // var spaceKey;
-
   create: function() {
+
+    var players = [
+      {color: "FF0000"},
+      {color: "0000FF"},
+      {color: "00CC00"},
+      {color: "FF9900"},
+      {color: "CC0099"}
+    ]
 
     game.world.setBounds(0, 0, 13000, 13000);
     game.add.tileSprite(0,0, 13000, 13000, 'background');
-    leftKey = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-    rightKey = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-
-
-    button = game.add.button(this.screenWidth - 100, this.screenHeight - 100, 'tiles', this.createTile, this, 24, 24, 24);
-    button.fixedToCamera = true;
 
     camera = new Phaser.Camera(game, 0 , 0, 0, this.screenWidth, this.screenHeight);
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
 
-    this.createTile('D');
+    createTile('D');
 
     tile.fixedToCamera = false;
 
@@ -65,10 +72,44 @@ CarcassoneGame.mainGame.prototype = {
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
     console.log(game.world.centerX, game.world.centerY)
-    this.createTile();
+    createTile();
 
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    spaceKey.onDown.add(this.spaceKeyDown, this, 0, tile);
+    spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
+
+    createHUD()
+
+    function createHUD() {
+
+      console.log('adding hud')
+      var playersDisplay = game.add.group();
+      playersDisplay.fixedToCamera = true;
+
+      players.forEach(function(player, index){
+        player.icon = game.add.graphics( 0, 0)
+        playersDisplay.add(player.icon)
+        player.icon.lineStyle(2, "0x" + player.color, 1);
+        player.icon.beginFill("0x" + player.color, 0.6)
+        player.icon.drawRect(10, 10 + index * 50, 40, 40);
+
+        player.score = game.add.text(60, 7 + index * 50, "123", { font: "26px Lindsay", fill: "#" + player.color, align: "Left", fontWeight: "bold"});
+        player.score.fixedToCamera = true;
+
+        player.score.text = '456'
+
+
+        // icon.fixedToCamera = true;
+        // debugger;
+        // game.context.fillStyle = player.color
+        // game.context.fillRect(10, 10 + 60 * index, 50, 50)
+        // icon.fixedToCamera = true;
+      });
+    }
+
+    function spaceKeyDown() {
+      this.game.camera.x = game.world.centerX;
+      this.game.camera.y = game.world.centerY;
+    }
   },
 
   randomizeGameTiles: function(gameTiles) {
@@ -84,6 +125,7 @@ CarcassoneGame.mainGame.prototype = {
   // this.gameTiles = randomizeGameTiles(gameTiles);
   // console.log(gameTiles);
 
+<<<<<<< HEAD
   createTile: function(type) {
     if (typeof type != 'string') {
       //var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
@@ -125,6 +167,8 @@ CarcassoneGame.mainGame.prototype = {
     this.game.camera.y = game.world.centerY;
   },
 
+=======
+>>>>>>> 12447a26c5624eb6112e4648a02d57b00b52f307
   update: function() {
 
     // TODO: dry this out
@@ -153,3 +197,63 @@ CarcassoneGame.mainGame.prototype = {
     // game.debug.pointer(game.input.activePointer, 32, 32);
   }
 };
+
+
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('')
+gameTiles = randomizeGameTiles(gameTiles);
+
+function createTile(type) {
+    // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+    var type = type || gameTiles.pop();
+
+  tile = new Tile(game, screenWidth - 50, screenHeight - 50,  type);
+
+  if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
+    if (gameTiles.length === 0){
+      //TODO -- handle this shit
+      alert("Game over.");
+    }
+    swapTile(type);
+  }
+  this.game.add.existing(tile);
+  // console.log('Possible moves: ',tile.getValidMoves());
+}
+
+function randomizeGameTiles(gameTiles) {
+  for (var i = gameTiles.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = gameTiles[i];
+      gameTiles[i] = gameTiles[j];
+      gameTiles[j] = temp;
+  }
+  return gameTiles;
+}
+
+// console.log(gameTiles);
+
+function swapTile(type){
+  console.log("swapping tile")
+  var tempArray = [];
+  tempArray.push(type);
+  gameTiles.forEach(function(currentTile){
+    tempArray.push(currentTile);
+  });
+  gameTiles = tempArray;
+  type = gameTiles.pop();
+  game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+  game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+  tile = new Tile(game, screenWidth - 50, screenHeight - 50, type);
+}
+
+// function createTile(type) {
+//   if (typeof type != 'string') {
+//     var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+//   }
+
+//   // console.log(type);
+//   // console.log('CreateTiles', arguments);
+
+//   tile = new Tile(game, screenWidth - 50, screenHeight - 50,  type);
+//   this.game.add.existing(tile);
+//   // console.log('Possible moves: ',tile.getValidMoves());
+// }
