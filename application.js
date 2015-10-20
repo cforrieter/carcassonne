@@ -40,21 +40,73 @@ window.onload = function() {
     this.game.camera.y = game.world.centerY;
 
     createTile('D');
+
+    tile.fixedToCamera = false;
+
+    //TODO, dry this out--code from tile.js dropping a tile
+    tile.x = game.world.centerX + screenWidth/2;
+    tile.y = game.world.centerY + screenHeight/2;
+    tile.x = Math.floor((tile.x + 45) / 90) * 90;
+    tile.y = Math.floor((tile.y + 45) / 90) * 90;
+    tile.placeTile(tile, game.world.centerX, game.world.centerY);
+    tile.inputEnabled = false;
+    game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+    game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+    console.log(game.world.centerX, game.world.centerY)
+    createTile();
+
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
   }
 
+  function randomizeGameTiles(gameTiles) {
+    for (var i = gameTiles.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = gameTiles[i];
+        gameTiles[i] = gameTiles[j];
+        gameTiles[j] = temp;
+    }
+    return gameTiles;
+  }
+
+  var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('') 
+  gameTiles = randomizeGameTiles(gameTiles);
+  // console.log(gameTiles);
+
   function createTile(type) {
     if (typeof type != 'string') {
-      var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+      // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+      var type = gameTiles.pop();
     }
 
     // console.log(type);
     // console.log('CreateTiles', arguments);
 
     tile = new Tile(game, 50, 50,  type);
+
+    if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
+      if (gameTiles.length === 0){
+        //TODO -- handle this shit
+        alert("Game over."); 
+      }
+      swapTile(type);
+    }
     this.game.add.existing(tile);
     // console.log('Possible moves: ',tile.getValidMoves());
+  }
+
+  function swapTile(type){
+    console.log("swapping tile")
+    var tempArray = [];
+    tempArray.push(type);
+    gameTiles.forEach(function(currentTile){
+      tempArray.push(currentTile);
+    });
+    gameTiles = tempArray;
+    type = gameTiles.pop();
+    game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+    game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+    tile = new Tile(game, 50, 50, type);
   }
 
   function spaceKeyDown() {
