@@ -36,7 +36,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
       farmer: coords[key][2]
     };
     // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
-    console.log(position['ghostCoords'])
+    // console.log(position['ghostCoords'])
     var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
     button.anchor.setTo(0.5);
     // debugger;
@@ -71,7 +71,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
       var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
       meeple.anchor.setTo(0.5);
     }
-    console.log('You clicked on ' + this.ghostCoords)
+    // console.log('You clicked on ' + this.ghostCoords)
   }
 
 }

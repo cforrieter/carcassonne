@@ -1,9 +1,9 @@
 Tile.TYPES = {
-  ROAD: Symbol("ROAD"),
-  CITY: Symbol("CITY"),
-  TERMINATOR: Symbol("TERMINATOR"),
-  CLOISTER: Symbol("CLOISTER"),
-  FIELD: Symbol("FIELD")
+  ROAD: "ROAD",
+  CITY: "CITY",
+  TERMINATOR: "TERMINATOR",
+  CLOISTER: "CLOISTER",
+  FIELD: "FIELD"
 };
 
 Tile.FRAMES = {
