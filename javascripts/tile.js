@@ -120,12 +120,9 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
             // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y)
-<<<<<<< HEAD
               addToRoad(tile);
               checkFinishedRoads();
-=======
 
->>>>>>> 3ffd0b22176f281a0660434b368f40ae8f6ed11e
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
 
               tile.inputEnabled = false;
