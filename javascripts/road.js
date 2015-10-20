@@ -142,7 +142,7 @@ function addToRoad(placedTile){
   console.log(roadToAdd);
   if(!added && roadToAdd){
     console.log("new " + roadToAdd + " road");
-    validRoads.push(pos);
+    validRoads.push(roadToAdd);
     newRoad = new Road();
     newRoad.edgeCount = 2;
     newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
