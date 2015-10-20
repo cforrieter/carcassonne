@@ -81,23 +81,36 @@ Tile.MONASTERYMEEPLECOORDS = {
 
 MEEPLECOORDS = [Tile.ROADMEEPLECOORDS, Tile.CITYMEEPLECOORDS]
 
-Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, meepleEdges) {
+Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityEdges) {
 
 
   // MEEPLECOORDS.forEach(function(meepleType){
   //   var coords = meepleType[tile.tileType]
   // })
-  var coords = Tile.ROADMEEPLECOORDS[tile.tileType]
-  var positions = allowablePositions(meepleEdges);
-  console.log('allowable spots ', positions)
+  var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType]
+  var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType]
+  console.log('Road coords: ', roadCoords);
+  console.log('City coords: ', cityCoords);
+
+
+  // coords = mergeObjects(roadCoords, cityCoords);
+  // console.log('Merged coords: ', coords);
+
   var meepleButtons = game.add.group();
-  for (var key in coords) {
+
+  checkPositions(roadCoords, roadEdges, 'road');
+  checkPositions(cityCoords, cityEdges, 'city');
+
+  function checkPositions(coords, meepleEdges, scoringObjectType){
+    var positions = allowablePositions(meepleEdges);
+    for (var key in coords) {
     // debugger;
     if (positions.indexOf(key) >= 0) {
       var position = {
         positionKey: key,
         ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
-        farmer: coords[key][2]
+        farmer: coords[key][2],
+        scoringObjectType: scoringObjectType
       };
       // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
       // console.log(position['ghostCoords'])
@@ -106,8 +119,13 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, meepleEdges) {
       button.anchor.setTo(0.5);
       // debugger;
       meepleButtons.add(button, false);
+      }
     }
   }
+  
+  // console.log('allowable spots ', positions)
+ 
+  
 
   var confirm = tile.game.add.button(tile.x + 60, tile.y - 30, 'check', confirm, this, 23, 23, 23);
   confirm.scale.setTo(0.3);
@@ -156,7 +174,15 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, meepleEdges) {
       meeple.anchor.setTo(0.5);
     }
     window.createTile();
-    // console.log('You clicked on ' + this.position)
+    console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
   }
 
 }
+
+function mergeObject(obj1,obj2){
+  var obj3 = {};
+  for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+  for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+  return obj3;
+}
+
