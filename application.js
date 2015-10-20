@@ -49,6 +49,12 @@ window.onload = function() {
     tile.x = Math.floor((tile.x + 45) / 90) * 90;
     tile.y = Math.floor((tile.y + 45) / 90) * 90;
     tile.placeTile(tile, game.world.centerX, game.world.centerY);
+    addToRoad(tile);
+    checkFinishedRoads();
+    addToCity(tile);
+    console.log(cities);
+    checkFinishedCities();
+    
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
