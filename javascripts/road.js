@@ -54,7 +54,6 @@ function checkRoadPosition(placedTile, position, single, allPos){
     roads.forEach(function(road, firstIndex, roadsArray){
       road.tiles.forEach(function(tile){
         if(!added){
-          
           if(placedTile.neighbours[position] == tile.tile && tile.pos.indexOf(backwards[position]) != -1 && placedTile.neighbours[position][backwards[position]] ){
             console.log("existing " + position + " road");
             if(!single){
@@ -122,7 +121,6 @@ function addToRoad(placedTile){
     single = true;
   }
 
-  console.log("Single is ", single);
   var allPos = getAllRoadPositions(placedTile);
   // debugger;
   positions.forEach(function(pos){

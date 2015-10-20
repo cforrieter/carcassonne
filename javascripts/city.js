@@ -8,7 +8,7 @@ var backwards = {
 };
 
 function getAllCityPositions(placedTile){
-  var positions = ['top', 'right', 'bottom', 'left'];
+  var positions = ['typeTop', 'typeRight', 'typeBottom', 'typeLeft'];
   var allPos = [];
   positions.forEach(function(position){
     if(placedTile[position] == "CITY"){
@@ -19,10 +19,11 @@ function getAllCityPositions(placedTile){
 }
 
 function updateEdgeCount(city, count){
-  city.edgeCount -= count;
-  if(count == 1){
-    city.edgeCount += 1;
-  }
+  city.edgeCount -= 1;
+  city.edgeCount += count;
+  // if(count == 1){
+  //   city.edgeCount += 1;
+  // }
 }
 
 function findCity(searchTile, pos){
@@ -115,7 +116,7 @@ function checkCityPosition(placedTile, position, single, allPos, existingCity){
         newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
         cities.push(newCity);
         added = true;
-        meeples = (city.meeples.length > 0) ? false : true;
+        meeples = false;
       }else{
         cityToAdd = position;
       }
@@ -125,17 +126,19 @@ function checkCityPosition(placedTile, position, single, allPos, existingCity){
 }
 
 function addToCity(placedTile){
-    var positions = ['top', 'right', 'bottom', 'left'];
+    var positions = ['typeTop', 'typeRight', 'typeBottom', 'typeLeft'];
     var added = false, newCity, single = false, counter;
     var cityToAdd = '';
     var returned = [];
     var done = false;
-    var validRoads = '';
+    var validCities = [];
     var meeplePlaced = false;
 
     if(placedTile.centerCity){
       single = true;
     }
+
+    console.log("Single for city is ", single);
 
    var allPos = getAllCityPositions(placedTile);
 
@@ -147,7 +150,7 @@ function addToCity(placedTile){
         meeplePlaced = returned[2];
         if(added){
           if(!meeplePlaced){
-          validRoads += pos;
+          validCities.push(pos);
           }
           if(single){
             done = true;
@@ -159,18 +162,18 @@ function addToCity(placedTile){
     if(!added && cityToAdd){
       console.log("new " + cityToAdd + " city");
       newCity = new City();
-      validRoads += pos;
+      validCities.push(cityToAdd);
       newCity.edgeCount = 2;
       newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
       cities.push(newCity);
     }
-  return validRoads;
+  return validCities;
 }
 
 function getEdges(tile, allPos){
   counter = 0;
   allPos.forEach(function(pos){
-    if(tile.neighbours[pos]){
+    if(!tile.neighbours[pos]){
       counter += 1;
     }
   });
@@ -179,6 +182,7 @@ function getEdges(tile, allPos){
 
 function scoreCity(city, playerArray){
   var points = city.tiles.length;
+  console.log("The closing city was worth " + points + " points.");
   var players, winners;
   city.meeples.forEach(function(meeple){
     players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
