@@ -143,7 +143,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-              tile.showMeepleSpots(tile);
+              tile.showMeepleSpots(tile, meepleEdges);
 
               if (tile.centerMonastery){
                 monasteries.push(tile);

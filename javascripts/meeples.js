@@ -82,7 +82,7 @@ Tile.MONASTERYMEEPLECOORDS = {
 Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, meepleEdges) {
 
   // debugger;
-  var coords = Tile.MEEPLECOORDS[tile.tileType]
+  var coords = Tile.ROADMEEPLECOORDS[tile.tileType]
   var positions = allowablePositions(meepleEdges);
   console.log('allowable spots ', positions)
   var meepleButtons = game.add.group();
