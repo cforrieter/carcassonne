@@ -19,17 +19,18 @@ function getAllRoadPositions(placedTile){
 }
 
 function updateEdgeCount(road, count){
+  road.edgeCount -= 1;
   road.edgeCount -= count;
-  if(count == 1){
-    road.edgeCount += 1;
-  }
+  // if(count == 1){
+  //   road.edgeCount += 1;
+  // }
 }
 
 function mergeRoads(road1, road2) {
   var newRoad = new Road();
   newRoad.tiles = road1.tiles.concat(road2.tiles);
   newRoad.meeples = road1.meeples.concat(road2.meeples);
-  newRoad.edgeCount = road1.edgeCount + road2.edgeCount;
+  newRoad.edgeCount = road1.edgeCount + road2.edgeCount - 1;
   return newRoad;
 }
 
@@ -43,6 +44,31 @@ function findRoad(searchTile, pos){
     });
   });
   return roadToReturn;
+}
+
+function findAdjacentRoad(searchTile, pos){
+  var roadToReturn;
+  roads.forEach(function(road){
+    road.tiles.forEach(function(tile){
+      if(searchTile.neighbours[pos] == tile.tile && tile.pos.indexOf(backwards[pos]) != -1 && searchTile.neighbours[pos][backwards[pos]] ){
+        roadToReturn = road;
+      }
+    });
+  });
+  return roadToReturn;
+}
+
+function mergeCities(road1, road2){
+  if(road2){
+    var newRoad = new Road();
+    newRoad.tiles = road1.tiles.concat(road2.tiles);
+    newRoad.meeples = road1.meeples.concat(road2.meeples);
+    newRoad.edgeCount = road1.edgeCount + road2.edgeCount - 1;
+    return newRoad;
+  }else{
+    return road1;
+  }
+
 }
 
 
@@ -62,22 +88,29 @@ function checkRoadPosition(placedTile, position, single, allPos){
             }else{
               var counter = getEdges(placedTile, allPos);
               updateEdgeCount(road, counter);
-              if(placedTile.numNeighbours("ROAD") > 1 && road.edgeCount !== 0){
-                  console.log("should merge roads");
-                  var index = allPos.indexOf(position);
-                  allPos.splice(index, 1);
-                  otherPos = allPos.join('');
-                  roads.forEach(function(road2, index){
-                    road2.tiles.forEach(function(tile){
-                      if(placedTile.neighbours[otherPos] == tile.tile && tile.pos.indexOf(backwards[otherPos]) != -1 && placedTile.neighbours[otherPos][backwards[otherPos]] ){
-                          var newRoad = mergeRoads(road, road2);
-                          newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
-                          roadsArray.push(newRoad);
-                          roadsArray.splice(index, 1);
-                          roadsArray.splice(roadsArray.indexOf(road), 1);
-                      }
-                    });
-                  });
+              if(placedTile.numNeighbours("ROAD") > 1){
+                var roadToMerge, mergedRoad, originalRoad = road;
+                console.log("Merging roads");
+
+                //remove the current position from check since we're merging / accounting for it now
+                var index = allPos.indexOf(position);
+                allPos.splice(index, 1);
+
+                remainingPos = allPos;
+
+                road.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
+                remainingPos.forEach(function(pos){
+                  roadToMerge = findAdjacentRoad(placedTile, pos);
+
+                  //remove road from array, since it's being merged into a new road
+                  roadsArray.splice(roadsArray.indexOf(roadToMerge), 1);
+                  originalRoad = mergeRoads(originalRoad, roadToMerge);
+                });
+
+                //remove original road
+                roadsArray.splice(roadsArray.indexOf(road), 1);
+                //add newly merged road
+                roadsArray.push(originalRoad);
               }
               allPos = allPos.join('');
             }
@@ -122,7 +155,6 @@ function addToRoad(placedTile){
   }
 
   var allPos = getAllRoadPositions(placedTile);
-  // debugger;
   positions.forEach(function(pos){
     if(!done){
       returned = checkRoadPosition(placedTile, pos, single, allPos);
@@ -144,17 +176,18 @@ function addToRoad(placedTile){
     }
   });
   console.log(roadToAdd);
-  if(!added && roadToAdd){
+  if(!added && single){
     console.log("new " + roadToAdd + " road");
-    if(single){
-      validRoads.push("typeCenter");
-    }else{
-      validRoads.push(roadToAdd);
-    }
+
     newRoad = new Road();
     newRoad.edgeCount = 2;
     newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
     roads.push(newRoad);
+    if(single){
+      validRoads.push({ pos: "typeCenter", road: newRoad});
+    }else{
+      validRoads.push(roadToAdd);
+    }
   }
 
   return validRoads;
@@ -163,7 +196,7 @@ function addToRoad(placedTile){
 function getEdges(tile, allPos){
   counter = 0;
   allPos.forEach(function(pos){
-    if(tile.neighbours[pos]){
+    if(!tile.neighbours[pos]){
       counter += 1;
     }
   });
@@ -193,14 +226,18 @@ function scoreRoad(road, playerArray){
 
 }
 
-function checkFinishedRoads(){
-  var terminusCount, key;
+function checkFinishedRoads(playerArray){
+  var roadsToRemove = [];
   roads.forEach(function(road, index){
     if(road.edgeCount === 0){
-      scoreRoad(road);
+      scoreRoad(road, playerArray);
       console.log("Closed road!");
-      roads.splice(index, 1);
+      roadsToRemove.push(road);
     }
+  });
+
+  roadsToRemove.forEach(function(road){
+    roads.splice(roads.indexOf(road), 1);
   });
 }
 
