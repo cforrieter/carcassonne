@@ -165,6 +165,7 @@ function getEdges(tile, allPos){
 
 function scoreRoad(road, playerArray){
   var points = road.tiles.length;
+  console.log("Closing the road was worth " + points + " points.");
   var players, winners;
   road.meeples.forEach(function(meeple){
     players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
