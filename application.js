@@ -43,16 +43,32 @@ window.onload = function() {
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
   }
+  
+  function randomizeGameTiles(gameTiles) {
+    for (var i = gameTiles.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = gameTiles[i];
+        gameTiles[i] = gameTiles[j];
+        gameTiles[j] = temp;
+    }
+    return gameTiles;
+  }
+
+  var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('') 
+  gameTiles = randomizeGameTiles(gameTiles);
+  console.log(gameTiles);
 
   function createTile(type) {
     if (typeof type != 'string') {
       var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
     }
-
     // console.log(type);
     // console.log('CreateTiles', arguments);
+    var type = gameTiles.pop();
+    console.log(type);
 
-    tile = new Tile(game, 50, 50,  type);
+    tile = new Tile(game, 50, 50, type);
+
     this.game.add.existing(tile);
     // console.log('Possible moves: ',tile.getValidMoves());
   }
