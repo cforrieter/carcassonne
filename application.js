@@ -40,6 +40,20 @@ window.onload = function() {
     this.game.camera.y = game.world.centerY;
 
     createTile('D');
+    tile.fixedToCamera = false;
+
+    //TODO, dry this out--code from tile.js dropping a tile
+    tile.x = game.world.centerX + screenWidth/2;
+    tile.y = game.world.centerY + screenHeight/2;
+    tile.x = Math.floor((tile.x + 45) / 90) * 90;
+    tile.y = Math.floor((tile.y + 45) / 90) * 90;
+    tile.placeTile(tile, game.world.centerX, game.world.centerY);
+    tile.inputEnabled = false;
+    game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+    game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+    console.log(game.world.centerX, game.world.centerY)
+    createTile();
+
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
   }
@@ -61,18 +75,15 @@ window.onload = function() {
   // var gameTiles = 'XCX'.split('');
 
   function createTile(type) {
-    // if (typeof type != 'string') {
-    //   var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-    // }
+   
+    if (typeof type != 'string') {
+      // type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+       var type = gameTiles.pop();
+    } 
     // console.log(type);
     // console.log('CreateTiles', arguments);
-
-    if(playedTiles.length === 0){
-      tile = new Tile(game, 50, 50, 'D');
-       tile.placeTile(tile, 6000, 6000)
-    }
     
-    var type = gameTiles.pop();
+    // var type = gameTiles.pop();
     console.log(type);
     tile = new Tile(game, 50, 50, type);
 

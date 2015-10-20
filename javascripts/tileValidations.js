@@ -63,7 +63,7 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
        valid = false;
        return false;
     }
-    // console.log(oldTile.x, oldTile.y, target.x, target.y);
+    console.log("placements: ", oldTile.x, oldTile.y, target.x, target.y);
 
     //Bottom Neighbour
     if(oldTile.x == target.x && oldTile.y + 90 == target.y){
