@@ -1,3 +1,4 @@
+
 Tile.POSITION = {
   '0': {typeTop: 'p1', typeRight: 'p5', typeBottom: 'p7', typeLeft: 'p3', typeCenter: 'p4' },
   '90': {typeTop: 'p3', typeRight: 'p1', typeBottom: 'p5', typeLeft: 'p7', typeCenter: 'p4' },
@@ -5,34 +6,81 @@ Tile.POSITION = {
   '-90': {typeTop: 'p5', typeRight: 'p7', typeBottom: 'p3', typeLeft: 'p1', typeCenter: 'p4' }
 }
 
-Tile.MEEPLECOORDS = {
- B: {p4: [0, 0, false], p0: [-30, -30, true]},
- A: {p4: [0, 0, false], p0: [-30, -30, true], p7: [8, 30, false]},
- C: {p4: [0, 0, false]},
- R: {p0: [0, -25, false], p6: [0, 30, true]},
- Q: {p0: [0, -25, false], p6: [0, 30, true]},
- T: {p0: [0, -25, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
- S: {p0: [0, -25, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
- N: {p1: [-30, -30, false], p4: [25, 20, true]},
- M: {p1: [-20, -30, false], p4: [25, 20, true]},
- P: {p1: [-20, -20, false], p4: [0, 0, true], p5: [5, 20, false], p8: [30, 30, true]},
- O: {p1: [-20, -20, false], p4: [0, 0, true], p5: [5, 20, false], p8: [30, 30, true]},
- G: {p0: [0, -35, true], p3: [0, -10, false], p6: [0, 30, true]},
- F: {p0: [0, -35, true], p3: [0, -10, false], p6: [0, 30, true]},
- I: {p1: [0, -30, false], p3: [-32, 0, false], p4: [5, 5, true]},
- H: {p1: [0, -30, false], p4: [0, 0, true],  p7: [0, 30, false]},
- E: {p1: [0, -30, false], p4: [0, 15, true]},
- K: {p1: [0, -30, false], p3: [-30, 0, false], p6: [-30, 30, true], p8: [25, 0, true]},
- J: {p1: [0, -30, false], p5: [10, 10, false], p6: [-25, -10, true], p8: [30, 30, true]},
- L: {p0: [-20, -20, true], p1: [0, -30, false], p3: [-25, 0, false], p5: [25, 0, false], p6: [-30, 30, true], p7: [0, 30, false], p8: [30, 30, true]},
- U: {p0: [-25, -15, true], p2: [25, 15, true], p4: [0, 0, false]},
- V: {p0: [20, -20, true], p4: [0, 0, false], p6: [-20, 20, true]},
- W: {p0: [0, -30, true], p3: [-20, 0, false], p5: [20, 0, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
- X: {p0: [-30, -30, true], p1: [0, -20, false], p2: [30, -30, true], p3: [-20, 0, false], p5: [20, 0, false], p6: [-30, 30, true], p7: [0, 20, false], p8: [30, 30, true]},
- D: {p0: [-30, -18, true], p1: [0, -30, false], p4: [-10, 0, false], p6: [0, 30, true]}
+Tile.ROADMEEPLECOORDS = {
+  A: {p7: [0, 35]},
+  T: {p7: [0, 25]},
+  S: {p7: [0, 25]},
+  P: {p4: [-28, -28]},
+  O: {p4: [-28, -28]},
+  G: {p4: [0, -5]},
+  F: {p4: [0, -5]},
+  I: {p1: [0, -35], p3: [-35, 0]},
+  H: {p1: [0, -35], p7: [0, 35]},
+  E: {p1: [0, -35]},  
+  K: {p4: [-30, 0]},
+  J: {p4: [30, 0]},
+  L: {p3: [-28, 0], p5: [28, 0], p7: [0, 30]},
+  U: {p4: [0, 0]},
+  V: {p4: [-2, 0]},
+  W: {p3: [-25, -2], p5: [25, -2], p7: [0, 20]},
+  X: {p1: [0, -22], p3: [-22, 0], p5: [22, 0], p7: [0, 22]},
+  D: {p4: [10, -3]}
 };
 
+Tile.CITYMEEPLECOORDS = {
+  C: {p4: [0, 0]},
+  R: {p4: [0, -25]},
+  Q: {p4: [0, -25]},
+  T: {p4: [0, -25]},
+  S: {p4: [0, -25]},
+  N: {p4: [-30, -30]},
+  M: {p4: [-30, -30]},
+  P: {p4: [5, 30]},
+  O: {p4: [-28, -28]},
+  G: {p4: [0, -5]},
+  F: {p4: [0, -5]},
+  I: {p1: [0, -35], p3: [-35, 0]},
+  H: {p1: [0, -35], p7: [0, 35]},
+  E: {p1: [0, -35]}, 
+  K: {p1: [0, -35]},
+  J: {p1: [0, -35]},
+  L: {p1: [0, -35]},
+  D: {p1: [0, -35]}
+};
+
+Tile.FARMERMEEPLECOORDS = {
+  B: {p0: [-30, -30]},
+  A: {p0: [-30, -30]},
+  R: {p6: [0, 35]},
+  Q: {p6: [0, 35]},
+  T: {p6: [-30, 35], p8: [30, 35]},
+  S: {p6: [-30, 35], p8: [30, 35]},
+  N: {p4: [15, 15]},
+  M: {p4: [15, 15]},
+  P: {p4: [5, 0], p8: [35, 35]},
+  O: {p4: [5, 0], p8: [35, 35]},
+  G: {p0: [0, -38], p6: [0, 35]},
+  F: {p0: [0, -38], p6: [0, 35]},
+  I: {p4: [5, 5]},
+  H: {p4: [0, 0]},
+  E: {p4: [0, 10]}, 
+  K: {p6: [-32, 30], p8: [20, 0]},
+  J: {p6: [-25, 0], p8: [30, 30]},
+  L: {p0: [0, -7], p6: [-30, 32], p8: [30, 32]},
+  U: {p0: [-28, -28], p2: [28, 28]},
+  V: {p0: [28, -28], p6: [-28, 28]},
+  W: {p0: [0, -30], p6: [-30, 30], p8: [30, 30]},
+  X: {p0: [-30, -30], p2: [30, -30], p6: [-30, 30], p8: [30, 30]},
+  D: {p0: [-35, -18], p6: [0, 35]}
+};
+
+Tile.MONASTERYMEEPLECOORDS = {
+  B: {p4: [0,0]},
+  A: {p4: [0,0]}
+}
+
 Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, meepleEdges) {
+
   // debugger;
   var coords = Tile.MEEPLECOORDS[tile.tileType]
   var positions = allowablePositions(meepleEdges);
