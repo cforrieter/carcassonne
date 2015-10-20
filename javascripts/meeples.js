@@ -1,3 +1,11 @@
+
+Tile.POSITION = {
+  '0': {typeTop: 'p1', typeRight: 'p5', typeBottom: 'p7', typeLeft: 'p3', typeCenter: 'p4' },
+  '90': {typeTop: 'p3', typeRight: 'p1', typeBottom: 'p5', typeLeft: 'p7', typeCenter: 'p4' },
+  '-180': {typeTop: 'p7', typeRight: 'p3', typeBottom: 'p1', typeLeft: 'p5', typeCenter: 'p4' },
+  '-90': {typeTop: 'p5', typeRight: 'p7', typeBottom: 'p3', typeLeft: 'p1', typeCenter: 'p4' }
+}
+
 Tile.ROADMEEPLECOORDS = {
   A: {p7: [0, 35]},
   T: {p7: [0, 25]},
@@ -71,24 +79,29 @@ Tile.MONASTERYMEEPLECOORDS = {
   A: {p4: [0,0]}
 }
 
-Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
+Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, meepleEdges) {
+
   // debugger;
-  var coords = Tile.MEEPLECOORDS[tile.tileType]
+  var coords = Tile.ROADMEEPLECOORDS[tile.tileType]
+  var positions = allowablePositions(meepleEdges);
+  console.log('allowable spots ', positions)
   var meepleButtons = game.add.group();
   for (var key in coords) {
-    var position = {
-      positionKey: key,
-      ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
-      farmer: coords[key][2]
-    };
-    // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
-    // console.log(position['ghostCoords'])
-
-    var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
-    button.anchor.setTo(0.5);
     // debugger;
-    meepleButtons.add(button, false);
+    if (positions.indexOf(key) >= 0) {
+      var position = {
+        positionKey: key,
+        ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
+        farmer: coords[key][2]
+      };
+      // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
+      // console.log(position['ghostCoords'])
 
+      var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
+      button.anchor.setTo(0.5);
+      // debugger;
+      meepleButtons.add(button, false);
+    }
   }
 
   var confirm = tile.game.add.button(tile.x + 60, tile.y - 30, 'check', confirm, this, 23, 23, 23);
@@ -97,6 +110,15 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
   function confirm() {
     confirm.destroy();
     meepleButtons.destroy();
+    window.createTile();
+  }
+
+  function allowablePositions (meepleEdges) {
+    var positions = [];
+    for ( var i = 0; i < meepleEdges.length; i++ ) {
+      positions.push(Tile.POSITION[tile.angle.toString()][meepleEdges[i]])
+    }
+    return positions;
   }
 
   function tileRotationCoordTransform (tile, localX, localY) {
@@ -107,6 +129,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
 
   function addMeeple() {
     meepleButtons.destroy();
+    confirm.destroy();
     if (this.farmer) {
       var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
       shadow.anchor.setTo(0.5);
@@ -126,6 +149,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
       var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
       meeple.anchor.setTo(0.5);
     }
+    window.createTile();
     // console.log('You clicked on ' + this.ghostCoords)
   }
 
