@@ -45,6 +45,14 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
 
   }
 
+  var confirm = tile.game.add.button(tile.x + 60, tile.y - 30, 'check', confirm, this, 23, 23, 23);
+  confirm.scale.setTo(0.3);
+
+  function confirm() {
+    confirm.destroy();
+    meepleButtons.destroy();
+  }
+
   function tileRotationCoordTransform (tile, localX, localY) {
     var x = localX * Math.cos(Phaser.Math.degToRad(tile.angle)) - localY * Math.sin(Phaser.Math.degToRad(tile.angle)) + tile.x;
     var y = localX * Math.sin(Phaser.Math.degToRad(tile.angle)) + localY * Math.cos(Phaser.Math.degToRad(tile.angle)) + tile.y;
