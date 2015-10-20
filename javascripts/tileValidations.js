@@ -20,31 +20,31 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
 
       //Bottom Neighbour
       if(oldTile.x == newTile.x && oldTile.y + 90 == newTile.y) {
-        oldTile.neighbours.top = newTile;
-        newTile.neighbours.bottom = oldTile;
+        oldTile.neighbours.typeBottom = newTile;
+        newTile.neighbours.typeTop = oldTile;
       }
 
       //Right Neighbour
       if(oldTile.y == newTile.y && oldTile.x + 90 == newTile.x){
-        // console.log("Checking for right neighbour");
-        oldTile.neighbours.right = newTile;
-        newTile.neighbours.left = oldTile;
+        // console.log("Checking for typeRight neighbour");
+        oldTile.neighbours.typeRight = newTile;
+        newTile.neighbours.typeLeft = oldTile;
 
       }
       //Top Neighbour
       if(oldTile.x == newTile.x && oldTile.y - 90 == newTile.y) {
-        oldTile.neighbours.top = newTile;
-        newTile.neighbours.bottom = oldTile;
+        oldTile.neighbours.typeTop = newTile;
+        newTile.neighbours.typeBottom = oldTile;
 
       }
       //Left Neighbour
       if(oldTile.y == newTile.y && oldTile.x - 90 == newTile.x){
-        oldTile.neighbours.left = newTile;
-        newTile.neighbours.right = oldTile;
+        oldTile.neighbours.typeLeft = newTile;
+        newTile.neighbours.typeRight = oldTile;
 
       }
     });
-  
+
   playedTiles.push(newTile);
   // console.log(playedTiles);
 }
@@ -52,7 +52,7 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
 
 Tile.prototype.placementValid = function placementValid(newTile, target){
 
-  console.log('checking valid')
+  // console.log('checking valid')
   // console.log(`Playing tile ${newTile.tileType} on ${target.x}, ${target.y}`);
   var hasNeighbour = false;
   var valid = true;
@@ -75,19 +75,19 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
          return false;
       }
 
-      // console.log("Has top neighbour");
+      // console.log("Has typeTop neighbour");
     }
     //Right Neighbour
     if(oldTile.y == target.y && oldTile.x + 90 == target.x){
       hasNeighbour = true;
-      // console.log("Checking for right neighbour");
+      // console.log("Checking for typeRight neighbour");
 
       if(oldTile.typeRight != newTile.typeLeft){
          // console.log(`Invalid move. ${oldTile.typeRight.toString()} does not connect with ${newTile.typeLeft.toString()}`);
          valid = false;
          return false;
       }
-      // console.log("Has right neighbour");
+      // console.log("Has typeRight neighbour");
     }
     //Top Neighbour
     if(oldTile.x == target.x && oldTile.y - 90 == target.y){
@@ -98,7 +98,7 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
          valid = false;
          return false;
       }
-      // console.log("Has bottom neighbour");
+      // console.log("Has typeBottom neighbour");
     }
 
     //Left Neighbour
@@ -110,7 +110,7 @@ Tile.prototype.placementValid = function placementValid(newTile, target){
          valid = false;
          return false;
       }
-      // console.log("Has left neighbour");
+      // console.log("Has typeLeft neighbour");
     }
   });
 
@@ -131,28 +131,28 @@ Tile.prototype.getValidMoves = function getValidMoves(){
 
   playedTiles.forEach(function(oldTile){
     // if !(checkForFourNeighbours){
-      if (!oldTile.neighbours.top) {
+      if (!oldTile.neighbours.typeTop) {
         possibleMovesAsStrings.push(oldTile.x + ',' + (oldTile.y - 90));
       }
-      if (!oldTile.neighbours.right) {
+      if (!oldTile.neighbours.typeRight) {
         possibleMovesAsStrings.push((oldTile.x + 90) + ',' + oldTile.y);
       }
-      if (!oldTile.neighbours.bottom) {
+      if (!oldTile.neighbours.typeBottom) {
         possibleMovesAsStrings.push(oldTile.x + ',' + (oldTile.y + 90));
       }
-      if (!oldTile.neighbours.left) {
+      if (!oldTile.neighbours.typeLeft) {
         possibleMovesAsStrings.push((oldTile.x - 90) + ',' + oldTile.y);
       }
     // }
   });
 
-  function onlyUnique(value, index, self) { 
+  function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
 
   //remove non-unqiue elements
   possibleMovesAsStrings = possibleMovesAsStrings.filter(onlyUnique);
-  
+
   //convert string coords to objects
   possibleMovesAsObjects = [];
   possibleMovesAsStrings.forEach(function(stringCoords){
@@ -177,5 +177,3 @@ Tile.prototype.getValidMoves = function getValidMoves(){
   });
   return validMoves;
 }
-
-

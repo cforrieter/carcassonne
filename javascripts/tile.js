@@ -27,12 +27,12 @@ function Tile(game, x, y, type)
   this.typeTop = null;
   this.typeBottom = null;
   this.neighbours = {
-    left: null,
-    right: null,
-    top: null,
-    bottom: null
+    typeLeft: null,
+    typeRight: null,
+    typeTop: null,
+    typeBottom: null
   };
-  
+
   var kind = Tile.KINDS[type];
   if(!kind){
     throw new Error('Invalid tile type: ' + type);
@@ -56,15 +56,15 @@ function Tile(game, x, y, type)
 //   xA: [0 + 90 * sin(degToRad(this.angle)), 90 - 90 * cos(degToRad(this.angle))],
 //   xB: [45 + 45 * sin(degToRad(this.angle)), 45 - 45 * cos(degToRad(this.angle))],
 //   xC: [0 + 90 * sin(degToRad(this.angle + 90)), 90 - 90 * cos(degToRad(this.angle + 90))],
-     
+
 //   xD: [45 + 45 * sin(degToRad(this.angle + 270)), 45 - 45 * cos(degToRad(this.angle + 270))],
-//   xE: [45, 45], 
+//   xE: [45, 45],
 //   xF: [45 + 45 * sin(degToRad(this.angle + 90)), 45 - 45 * cos(degToRad(this.angle + 90))],
-    
+
 //   xG: [0 + 90 * sin(degToRad(this.angle + 270)), 90 - 90 * cos(degToRad(this.angle + 270))],
 //   xH: [45 + 45 * sin(degToRad(this.angle + 180)), 45 - 45 * cos(degToRad(this.angle + 180))],
-//   xI: [0 + 90 * sin(degToRad(this.angle + 180)), 90 - 90 * cos(degToRad(this.angle + 180))]   
-//   };                                         
+//   xI: [0 + 90 * sin(degToRad(this.angle + 180)), 90 - 90 * cos(degToRad(this.angle + 180))]
+//   };
 
 // Tile.ROADS = {
 //   B: [],
@@ -108,7 +108,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
   var target = { x: Math.floor((this.x + 45) / 90) * 90,
                  y: Math.floor((this.y + 45) / 90) * 90
                  };
-  
+
   if(this.dragged){
 
     if (tile.placementValid(tile, target)) {
@@ -121,10 +121,11 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
           if (confirmed) {
 
             // if (tile.placementValid (tile, target.x, target.y)){
-              tile.placeTile(tile, tile.x, tile.y)
+              tile.placeTile(tile, tile.x, tile.y);
               addToRoad(tile);
+              console.log(roads);
               checkFinishedRoads();
-              
+
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
 
               tile.inputEnabled = false;
@@ -177,7 +178,3 @@ Tile.prototype.update = function update() {
     this.y = this.currentPointer.worldY;
   }
 }
-
-
-
-

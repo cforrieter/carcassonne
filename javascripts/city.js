@@ -1,10 +1,10 @@
 var cities = [];
 
 var backwards = {
-  top: "bottom",
-  right: "left",
-  bottom: "top",
-  left: "right"
+  typeTop: "typeBottom",
+  typeRight: "typeLeft",
+  typeBottom: "typeTop",
+  typeLeft: "typeRight"
 };
 
 function getAllCityPositions(placedTile){
