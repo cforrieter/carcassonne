@@ -58,22 +58,48 @@ window.onload = function() {
   gameTiles = randomizeGameTiles(gameTiles);
   console.log(gameTiles);
 
+  // var gameTiles = 'XCX'.split('');
+
   function createTile(type) {
-    if (typeof type != 'string') {
-      var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-    }
+    // if (typeof type != 'string') {
+    //   var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+    // }
     // console.log(type);
     // console.log('CreateTiles', arguments);
+
+    if(playedTiles.length === 0){
+      tile = new Tile(game, 50, 50, 'D');
+       tile.placeTile(tile, 6000, 6000)
+    }
+    
     var type = gameTiles.pop();
     console.log(type);
-
     tile = new Tile(game, 50, 50, type);
+
+    if (tile.getValidMoves.length === 0 && playedTiles.length > 0){
+      if (gameTiles.length === 0){
+        //TODO -- handle this shit
+        alert("Game over."); 
+      }
+      swapTile(type);
+    }
 
     this.game.add.existing(tile);
     // console.log('Possible moves: ',tile.getValidMoves());
   }
 
-  function spaceKeyDown() {
+  function swapTile(type){
+    var tempArray = [];
+    tempArray.push(type);
+    gameTiles.forEach(function(currentTile){
+      tempArray.push(currentTile);
+    });
+    gameTiles = tempArray;
+    type = gameTiles.pop();
+    tile = new Tile(game, 50, 50, type);
+  }
+
+  function spaceKeyDown(){
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
   }
