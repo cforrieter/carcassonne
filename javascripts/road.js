@@ -83,7 +83,7 @@ function checkRoadPosition(placedTile, position, single, allPos){
             }
             road.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
             added = true;
-            meeples = (road.meeples.length > 0) ? false : true;
+            meeples = (road.meeples.length > 0) ? true : false;
           }
         }
       });
@@ -131,7 +131,11 @@ function addToRoad(placedTile){
       meeplePlaced = returned[2];
       if(added){
         if(!meeplePlaced){
-        validRoads.push(pos);
+          if(single){
+            validRoads.push("typeCenter");
+          }else{
+            validRoads.push(pos);
+          }
         }
         if(single){
           done = true;
@@ -142,13 +146,18 @@ function addToRoad(placedTile){
   console.log(roadToAdd);
   if(!added && roadToAdd){
     console.log("new " + roadToAdd + " road");
-    validRoads.push(roadToAdd);
+    if(single){
+      validRoads.push("typeCenter");
+    }else{
+      validRoads.push(roadToAdd);
+    }
     newRoad = new Road();
     newRoad.edgeCount = 2;
     newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
     roads.push(newRoad);
   }
-  console.log(validRoads);
+
+  console.log("Valid raods" + validRoads);
 
   return validRoads;
 }
@@ -165,6 +174,7 @@ function getEdges(tile, allPos){
 
 function scoreRoad(road, playerArray){
   var points = road.tiles.length;
+  console.log("Closing the road was worth " + points + " points.");
   var players, winners;
   road.meeples.forEach(function(meeple){
     players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
