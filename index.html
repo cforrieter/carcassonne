@@ -11,9 +11,20 @@
         <script src="javascripts/road.js"></script>
         <script src="javascripts/city.js"></script>
         <script src="javascripts/meeples.js"></script>
-        <script src="javascripts/monastery.js"></script>        
-        <script src='application.js'></script>
+        <script src="javascripts/monastery.js"></script>
+        <script src='javascripts/mainMenu.js'></script>     
+        <script src='javascripts/application.js'></script>
     </head>
     <body>
+    <script>
+        (function() {
+          // Initialize Phaser
+          var game = window.game = new Phaser.Game(800, 600, Phaser.CANVAS);
+          // Add gamestates to Phaser
+          game.state.add('mainMenu', CarcassoneGame.mainMenu);
+          game.state.add('mainGame', CarcassoneGame.mainGame);
+          game.state.start('mainMenu');
+        })();
+    </script>
     </body>
 </html>
