@@ -1,6 +1,4 @@
 // var rotate = require('./rotate');
-var CarcassoneGame = {};
-
 CarcassoneGame.mainGame = function(game) {
   this.leftKey;
   this.rightKey;
