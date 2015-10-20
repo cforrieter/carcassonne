@@ -51,6 +51,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
   function confirm() {
     confirm.destroy();
     meepleButtons.destroy();
+    window.createTile();
   }
 
   function tileRotationCoordTransform (tile, localX, localY) {
@@ -61,6 +62,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
 
   function addMeeple() {
     meepleButtons.destroy();
+    confirm.destroy();
     if (this.farmer) {
       var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
       shadow.anchor.setTo(0.5);
@@ -80,6 +82,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
       var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
       meeple.anchor.setTo(0.5);
     }
+    window.createTile();
     // console.log('You clicked on ' + this.ghostCoords)
   }
 

@@ -1,4 +1,6 @@
-// var rotate = require('./rotate');
+
+var screenWidth = 800;
+var screenHeight = 600;
 
 window.onload = function() {
 
@@ -32,8 +34,8 @@ window.onload = function() {
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
 
 
-    button = game.add.button(screenWidth - 100, screenHeight - 100, 'tiles', createTile, this, 24, 24, 24);
-    button.fixedToCamera = true;
+    // button = game.add.button(screenWidth - 100, screenHeight - 100, 'tiles', createTile, this, 24, 24, 24);
+    // button.fixedToCamera = true;
 
     camera = new Phaser.Camera(game, 0 , 0, 0, screenWidth, screenHeight);
     this.game.camera.x = game.world.centerX;
@@ -44,18 +46,7 @@ window.onload = function() {
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
   }
 
-  function createTile(type) {
-    if (typeof type != 'string') {
-      var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-    }
 
-    // console.log(type);
-    // console.log('CreateTiles', arguments);
-
-    tile = new Tile(game, 50, 50,  type);
-    this.game.add.existing(tile);
-    // console.log('Possible moves: ',tile.getValidMoves());
-  }
 
   function spaceKeyDown() {
     this.game.camera.x = game.world.centerX;
@@ -90,3 +81,16 @@ window.onload = function() {
     // game.debug.pointer(game.input.activePointer, 32, 32);
   }
 };
+
+function createTile(type) {
+  if (typeof type != 'string') {
+    var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+  }
+
+  // console.log(type);
+  // console.log('CreateTiles', arguments);
+
+  tile = new Tile(game, screenWidth - 50, screenHeight - 50,  type);
+  this.game.add.existing(tile);
+  // console.log('Possible moves: ',tile.getValidMoves());
+}
