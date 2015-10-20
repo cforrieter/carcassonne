@@ -24,6 +24,19 @@ function updateEdgeCount(city, count){
     city.edgeCount += 1;
   }
 }
+
+function findCity(searchTile, pos){
+  var cityToReturn;
+  cities.forEach(function(city){
+    city.tiles.forEach(function(tile){
+      if(searchTile == tile.tile && tile.pos.indexOf(pos) != -1){
+        cityToReturn = city;
+      }
+    });
+  });
+  return cityToReturn;
+}
+
 function findAdjacentCity(searchTile, pos){
   var cityToReturn;
   cities.forEach(function(city){
@@ -164,11 +177,34 @@ function getEdges(tile, allPos){
   return counter;
 }
 
-function checkFinishedCities(){
+function scoreCity(city, playerArray){
+  var points = city.tiles.length;
+  var players, winners;
+  city.meeples.forEach(function(meeple){
+    players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
+  });
+  //find the player with the most meeples
+  var max = 0;
+  for(var player in players){
+    if(players[player] > max){
+      max = players[player];
+    }
+  }
+
+  //aware points to all the people with the max # of meeples
+  for(var p in players){
+    if(players[p] == max){
+      playerArray[p].score += points;
+    }
+  }
+
+}
+
+function checkFinishedCities(playerArray){
   var terminusCount, key;
   cities.forEach(function(city, index){
     if(city.edgeCount === 0){
-      // todo check meeples and assign points
+      scoreCity(city, playerArray);
       console.log("Closed city!");
       cities.splice(index, 1);
     }
