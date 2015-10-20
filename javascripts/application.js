@@ -12,7 +12,7 @@ CarcassoneGame.mainGame = function(game) {
 
 CarcassoneGame.mainGame.prototype = {
   // var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
-  
+
 
   // var attachedToPointer = false;
   preload: function() {
@@ -60,7 +60,7 @@ CarcassoneGame.mainGame.prototype = {
     addToCity(tile);
     console.log(cities);
     checkFinishedCities();
-    
+
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
@@ -86,7 +86,7 @@ CarcassoneGame.mainGame.prototype = {
 
   createTile: function(type) {
     if (typeof type != 'string') {
-      // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+      //var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
       var type = this.gameTiles.pop();
     }
 
@@ -98,7 +98,7 @@ CarcassoneGame.mainGame.prototype = {
     if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
       if (gameTiles.length === 0){
         //TODO -- handle this shit
-        alert("Game over."); 
+        alert("Game over.");
       }
       swapTile(type);
     }

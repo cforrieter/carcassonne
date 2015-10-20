@@ -123,6 +123,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
             // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y);
               var validMeeples = addToRoad(tile);
+              tile.showMeepleSpots(tile, validMeeples);
               console.log(roads);
               console.log("Valid meeples for roads are " + validMeeples);
               checkFinishedRoads();
@@ -135,7 +136,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-              tile.showMeepleSpots(tile);
+
 
               if (tile.centerMonastery){
                 monasteries.push(tile);

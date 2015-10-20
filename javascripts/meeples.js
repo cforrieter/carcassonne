@@ -1,22 +1,22 @@
 Tile.ROADMEEPLECOORDS = {
-  A: {p7: [0, 35]},
-  T: {p7: [0, 25]},
-  S: {p7: [0, 25]},
-  P: {p4: [-28, -28]},
-  O: {p4: [-28, -28]},
-  G: {p4: [0, -5]},
-  F: {p4: [0, -5]},
-  I: {p1: [0, -35], p3: [-35, 0]},
-  H: {p1: [0, -35], p7: [0, 35]},
-  E: {p1: [0, -35]},  
-  K: {p4: [-30, 0]},
-  J: {p4: [30, 0]},
-  L: {p3: [-28, 0], p5: [28, 0], p7: [0, 30]},
-  U: {p4: [0, 0]},
-  V: {p4: [-2, 0]},
-  W: {p3: [-25, -2], p5: [25, -2], p7: [0, 20]},
-  X: {p1: [0, -22], p3: [-22, 0], p5: [22, 0], p7: [0, 22]},
-  D: {p4: [10, -3]}
+  A: {r7: [0, 35]},
+  T: {r7: [0, 25]},
+  S: {r7: [0, 25]},
+  P: {r4: [-28, -28]},
+  O: {r4: [-28, -28]},
+  G: {r4: [0, -5]},
+  F: {r4: [0, -5]},
+  I: {r1: [0, -35], r3: [-35, 0]},
+  H: {r1: [0, -35], r7: [0, 35]},
+  E: {r1: [0, -35]},
+  K: {r4: [-30, 0]},
+  J: {r4: [30, 0]},
+  L: {r3: [-28, 0], r5: [28, 0], r7: [0, 30]},
+  U: {r4: [0, 0]},
+  V: {r4: [-2, 0]},
+  W: {r3: [-25, -2], r5: [25, -2], r7: [0, 20]},
+  X: {r1: [0, -22], r3: [-22, 0], r5: [22, 0], r7: [0, 22]},
+  D: {r4: [10, -3]}
 };
 
 Tile.CITYMEEPLECOORDS = {
@@ -33,7 +33,7 @@ Tile.CITYMEEPLECOORDS = {
   F: {p4: [0, -5]},
   I: {p1: [0, -35], p3: [-35, 0]},
   H: {p1: [0, -35], p7: [0, 35]},
-  E: {p1: [0, -35]}, 
+  E: {p1: [0, -35]},
   K: {p1: [0, -35]},
   J: {p1: [0, -35]},
   L: {p1: [0, -35]},
@@ -55,7 +55,7 @@ Tile.FARMERMEEPLECOORDS = {
   F: {p0: [0, -38], p6: [0, 35]},
   I: {p4: [5, 5]},
   H: {p4: [0, 0]},
-  E: {p4: [0, 10]}, 
+  E: {p4: [0, 10]},
   K: {p6: [-32, 30], p8: [20, 0]},
   J: {p6: [-25, 0], p8: [30, 30]},
   L: {p0: [0, -7], p6: [-30, 32], p8: [30, 32]},
@@ -69,11 +69,36 @@ Tile.FARMERMEEPLECOORDS = {
 Tile.MONASTERYMEEPLECOORDS = {
   B: {p4: [0,0]},
   A: {p4: [0,0]}
-}
+};
 
-Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
+Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, validRoadMeeples) {
   // debugger;
-  var coords = Tile.MEEPLECOORDS[tile.tileType]
+  var coords = {};
+  validRoadMeeples.forEach(function(position){
+    switch(position){
+      case 'typeTop':
+        coords.r1 = Tile.ROADMEEPLECOORDS[tile.tileType].r1;
+        break;
+      case 'typeBottom':
+        coords.r7 = Tile.ROADMEEPLECOORDS[tile.tileType].r7;
+        break;
+      case 'typeLeft':
+        coords.r3 = Tile.ROADMEEPLECOORDS[tile.tileType].r3;
+        break;
+      case 'typeRight':
+        coords.r5 = Tile.ROADMEEPLECOORDS[tile.tileType].r5;
+        break;
+      case 'typeRight':
+        coords.r4 = Tile.ROADMEEPLECOORDS[tile.tileType].r4;
+        break;
+    }
+  });
+
+  console.log(Tile.ROADMEEPLECOORDS[tile.tileType]);
+  console.log(coords);
+  //console.log(coords)
+  //var coords = Tile.ROADMEEPLECOORDS[tile.tileType];
+  //coords.concat(Tile.CITYMEEPLECOORDS[tile.tileType]);
   var meepleButtons = game.add.group();
   for (var key in coords) {
     var position = {

@@ -72,7 +72,7 @@ function mergeCities(road1, road2){
 }
 
 
-function checkRoadPosition(placedTile, position, single, allPos){
+function checkRoadPosition(placedTile, position, single, allPos, validRoads){
   var roadToAdd = '';
   var meeples;
   var added = false;
@@ -111,12 +111,20 @@ function checkRoadPosition(placedTile, position, single, allPos){
                 roadsArray.splice(roadsArray.indexOf(road), 1);
                 //add newly merged road
                 roadsArray.push(originalRoad);
+                if(originalRoad.meeples.length === 0){
+                  validRoads.push({ pos: position, road: newRoad });
+                }
+                added = true;
               }
               allPos = allPos.join('');
             }
-            road.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
-            added = true;
-            meeples = (road.meeples.length > 0) ? true : false;
+            if(!added){
+              road.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
+              if(road.meeples.length === 0){
+                validRoads.push({ pos: position, road: newRoad });
+              }
+              added = true;
+            }
           }
         }
       });
@@ -129,15 +137,15 @@ function checkRoadPosition(placedTile, position, single, allPos){
         allPos = position;
         newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
         roads.push(newRoad);
+        validRoads.push({ pos: position, road: newRoad });
         added = true;
-        meeples = false;
       }else{
         console.log("new road to add at " + position + " road");
         roadToAdd = position;
       }
     }
   }
-  return [added, roadToAdd, meeples];
+  return [added, roadToAdd, validRoads];
 }
 
 function addToRoad(placedTile){
@@ -157,18 +165,19 @@ function addToRoad(placedTile){
   var allPos = getAllRoadPositions(placedTile);
   positions.forEach(function(pos){
     if(!done){
-      returned = checkRoadPosition(placedTile, pos, single, allPos);
+      returned = checkRoadPosition(placedTile, pos, single, allPos, validRoads);
       added = returned[0];
       roadToAdd += returned[1];
-      meeplePlaced = returned[2];
+      validRoads = returned[2];
+      // meeplePlaced = returned[2];
       if(added){
-        if(!meeplePlaced){
-          if(single){
-            validRoads.push("typeCenter");
-          }else{
-            validRoads.push(pos);
-          }
-        }
+        // if(!meeplePlaced){
+        //   if(single){
+        //     validRoads.push("typeCenter");
+        //   }else{
+        //     validRoads.push(pos);
+        //   }
+        // }
         if(single){
           done = true;
         }
@@ -186,7 +195,7 @@ function addToRoad(placedTile){
     if(single){
       validRoads.push({ pos: "typeCenter", road: newRoad});
     }else{
-      validRoads.push(roadToAdd);
+      validRoads.push({ pos:roadToAdd, road: newRoad });
     }
   }
 
