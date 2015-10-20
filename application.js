@@ -7,14 +7,24 @@ window.onload = function() {
   var screenWidth = 800;
   var screenHeight = 600;
 
+  var players = [
+    {color: 0xFF0000, },
+    {color: 0x0000FF},
+    {color: 0x00CC00},
+    {color: 0xFF9900},
+    {color: 0xCC0099}
+  ]
+
+
+
   var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
-  
+
 
   // var attachedToPointer = false;
   function preload () {
 
     game.load.image('background', './assets/background.png');
-    game.load.spritesheet('tiles', 'assets/tiles_sprite.png', 88, 88, 24);
+    game.load.spritesheet('tiles', 'assets/zelda-tilesprite.png', 88, 88, 24);
     game.load.image('meeple', 'assets/MEEPLE.png')
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
     game.load.image('check', 'assets/check.png')
@@ -44,6 +54,28 @@ window.onload = function() {
     createTile('D');
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
+
+    createHUD();
+
+    function createHUD() {
+
+      console.log('adding hud')
+      var playersDisplay = game.add.group();
+      playersDisplay.fixedToCamera = true;
+
+      players.forEach(function(player, index){
+        var icon = game.add.graphics( game.world.centerX, game.world.centerY)
+
+        // playersDisplay.add(icon)
+        icon.lineStyle(2, 0x0000FF, 1);
+        icon.drawRect(10, 10 + index * 60, 100, 100);
+        // icon.fixedToCamera = true;
+
+        // game.context.fillStyle = player.color
+        // game.context.fillRect(10, 10 + 60 * index, 50, 50)
+        // icon.fixedToCamera = true;
+      });
+    }
   }
 
 

@@ -111,9 +111,12 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
   
   if(this.dragged){
 
+    tile.inputEnabled = false;    
+
     if (tile.placementValid(tile, target)) {
     // Stop dragged
       this.game.add.tween(this).to(target, 250).start().onComplete.add(addButtons, this);
+      tile.inputEnabled = true;  
 
       function addButtons() {
         tile.dragged = !tile.dragged;
@@ -122,15 +125,15 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
             // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y)
-              addToRoad(tile);
+              var meepleEdges = addToRoad(tile);
               checkFinishedRoads();
-              
+
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
 
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-              tile.showMeepleSpots(tile);
+              tile.showMeepleSpots(tile, meepleEdges);
 
               if (tile.centerMonastery){
                 monasteries.push(tile);
@@ -175,7 +178,10 @@ Tile.prototype.update = function update() {
     // console.log(this.currentPointer.worldX, this.currentPointer.worldY);
     this.x = this.currentPointer.worldX;
     this.y = this.currentPointer.worldY;
+    this.inputEnabled = true;
   }
+
+
 }
 
 

@@ -52,7 +52,6 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
 
 Tile.prototype.placementValid = function placementValid(newTile, target){
 
-  console.log('checking valid')
   // console.log(`Playing tile ${newTile.tileType} on ${target.x}, ${target.y}`);
   var hasNeighbour = false;
   var valid = true;
