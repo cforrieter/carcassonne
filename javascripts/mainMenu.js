@@ -11,7 +11,6 @@ CarcassoneGame.mainMenu.prototype = {
 
   preload: function() {
     game.load.image('meeple-3d-blue', 'assets/meeple-3d-blue.png');
-    game.load.image('meeple-banner', 'assets/meeple-all-flat.png');
     game.load.image('header', 'assets/carcassone-header.png');
     game.load.image('meeple-blue-flat', 'assets/meeple-blue-flat.png');
   },
