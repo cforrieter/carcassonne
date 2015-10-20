@@ -79,10 +79,15 @@ Tile.MONASTERYMEEPLECOORDS = {
   A: {p4: [0,0]}
 }
 
+MEEPLECOORDS = [Tile.ROADMEEPLECOORDS, Tile.CITYMEEPLECOORDS]
+
 Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, meepleEdges) {
 
-  // debugger;
-  var coords = Tile.MEEPLECOORDS[tile.tileType]
+
+  // MEEPLECOORDS.forEach(function(meepleType){
+  //   var coords = meepleType[tile.tileType]
+  // })
+  var coords = Tile.ROADMEEPLECOORDS[tile.tileType]
   var positions = allowablePositions(meepleEdges);
   console.log('allowable spots ', positions)
   var meepleButtons = game.add.group();
@@ -119,6 +124,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, meepleEdges) {
       positions.push(Tile.POSITION[tile.angle.toString()][meepleEdges[i]])
     }
     return positions;
+    console.log('allowable positions: ', positions);
   }
 
   function tileRotationCoordTransform (tile, localX, localY) {
@@ -150,7 +156,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, meepleEdges) {
       meeple.anchor.setTo(0.5);
     }
     window.createTile();
-    // console.log('You clicked on ' + this.ghostCoords)
+    // console.log('You clicked on ' + this.position)
   }
 
 }
