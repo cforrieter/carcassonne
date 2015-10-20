@@ -150,7 +150,11 @@ function addToCity(placedTile){
         meeplePlaced = returned[2];
         if(added){
           if(!meeplePlaced){
-          validCities.push(pos);
+            if(single){
+              validCities.push("typeCenter");
+            }else{
+              validCities.push(pos);
+            }
           }
           if(single){
             done = true;
