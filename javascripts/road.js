@@ -121,7 +121,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
             if(!added){
               road.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
               if(road.meeples.length === 0){
-                validRoads.push({ pos: position, road: newRoad });
+                validRoads.push({ pos: position, road: road });
               }
               added = true;
             }

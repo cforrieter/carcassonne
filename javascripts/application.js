@@ -14,12 +14,8 @@ CarcassoneGame.mainGame = function(game) {
 
 CarcassoneGame.mainGame.prototype = {
   // var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
-<<<<<<< HEAD
 
-=======
 
-// >>>>>>> 3e8973e2c3158788626f2f87105e468221f395f7:javascripts/application.js
->>>>>>> 12447a26c5624eb6112e4648a02d57b00b52f307
 
   // var attachedToPointer = false;
   preload: function() {
@@ -125,50 +121,50 @@ CarcassoneGame.mainGame.prototype = {
   // this.gameTiles = randomizeGameTiles(gameTiles);
   // console.log(gameTiles);
 
-<<<<<<< HEAD
-  createTile: function(type) {
-    if (typeof type != 'string') {
-      //var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-      var type = this.gameTiles.pop();
-    }
-
-    // console.log(type);
-    // console.log('CreateTiles', arguments);
-
-    tile = new Tile(game, 50, 50,  type);
-
-    if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
-      if (gameTiles.length === 0){
-        //TODO -- handle this shit
-        alert("Game over.");
-      }
-      swapTile(type);
-    }
-    this.game.add.existing(tile);
-    // console.log('Possible moves: ',tile.getValidMoves());
-  },
-
-  swapTile: function(type){
-    console.log("swapping tile")
-    var tempArray = [];
-    tempArray.push(type);
-    gameTiles.forEach(function(currentTile){
-      tempArray.push(currentTile);
-    });
-    gameTiles = tempArray;
-    type = gameTiles.pop();
-    game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
-    game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-    tile = new Tile(game, 50, 50, type);
-  },
-
-  spaceKeyDown: function() {
-    this.game.camera.x = game.world.centerX;
-    this.game.camera.y = game.world.centerY;
-  },
-
-=======
->>>>>>> 12447a26c5624eb6112e4648a02d57b00b52f307
+// <<<<<<< HEAD
+//   createTile: function(type) {
+//     if (typeof type != 'string') {
+//       //var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+//       var type = this.gameTiles.pop();
+//     }
+//
+//     // console.log(type);
+//     // console.log('CreateTiles', arguments);
+//
+//     tile = new Tile(game, 50, 50,  type);
+//
+//     if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
+//       if (gameTiles.length === 0){
+//         //TODO -- handle this shit
+//         alert("Game over.");
+//       }
+//       swapTile(type);
+//     }
+//     this.game.add.existing(tile);
+//     // console.log('Possible moves: ',tile.getValidMoves());
+//   },
+//
+//   swapTile: function(type){
+//     console.log("swapping tile")
+//     var tempArray = [];
+//     tempArray.push(type);
+//     gameTiles.forEach(function(currentTile){
+//       tempArray.push(currentTile);
+//     });
+//     gameTiles = tempArray;
+//     type = gameTiles.pop();
+//     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+//     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+//     tile = new Tile(game, 50, 50, type);
+//   },
+//
+//   spaceKeyDown: function() {
+//     this.game.camera.x = game.world.centerX;
+//     this.game.camera.y = game.world.centerY;
+//   },
+//
+// =======
+// >>>>>>> 12447a26c5624eb6112e4648a02d57b00b52f307
   update: function() {
 
     // TODO: dry this out
