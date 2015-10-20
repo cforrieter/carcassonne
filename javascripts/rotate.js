@@ -1,31 +1,60 @@
 rotate = {
   right: function(){
-    switch(this.type){
+    switch(tile.tileType){
       case 'B':
       case 'C':
       case 'X':
         return;
     }
 
-    var x = this.typeBottom, y = this.typeLeft, z = this.typeTop, w = this.typeRight;
-    this.typeLeft = x;
-    this.typeTop = y;
-    this.typeRight = z;
-    this.typeBottom = w;
+    tile.angle += 90;
+
+    var x = tile.typeBottom, y = tile.typeLeft, z = tile.typeTop, w = tile.typeRight;
+    tile.typeLeft = x;
+    tile.typeTop = y;
+    tile.typeRight = z;
+    tile.typeBottom = w;
+
+    if (!tile.dragged) {
+      if (!(tile.placementValid(tile, tile))) {
+        rotate.right();
+      }      
+    }
   },
 
   left: function(){
-    switch(this.type){
+    switch(tile.tileType){
       case 'B':
       case 'C':
       case 'X':
         return;
     }
 
-    var x = this.typeBottom, y = this.typeLeft, z = this.typeTop, w = this.typeRight;
-    this.typeLeft = z;
-    this.typeTop = w;
-    this.typeRight = x;
-    this.typeBottom = y;
+    tile.angle -= 90;
+
+    var x = tile.typeBottom, y = tile.typeLeft, z = tile.typeTop, w = tile.typeRight;
+    tile.typeLeft = z;
+    tile.typeTop = w;
+    tile.typeRight = x;
+    tile.typeBottom = y;
+
+    if (!tile.dragged) {
+      if (!(tile.placementValid(tile, tile))) {
+        rotate.left();
+      }
+    }
   }
 };
+
+Tile.prototype.rotateRight = rotate.right;
+
+Tile.prototype.rotateLeft = rotate.left;
+
+Tile.prototype.rightKeyDown = function rightKeyDown() {
+  tile.rotateRight();
+}
+
+Tile.prototype.leftKeyDown = function leftKeyDown() {
+  tile.rotateLeft();
+}
+

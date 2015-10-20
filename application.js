@@ -17,6 +17,8 @@ window.onload = function() {
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
     game.load.image('check', 'assets/check.png')
     game.load.image('tileBorder', 'assets/border.png')
+    game.load.image('blueMeeple', 'assets/blueMeeple2.png')
+    game.load.image('meepleFarmer', 'assets/meepleFarmer.png')
 
   }
 
@@ -37,20 +39,22 @@ window.onload = function() {
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
 
-    createTile();
+    createTile('D');
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
   }
 
-  function createTile() {
-    var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+  function createTile(type) {
+    if (typeof type != 'string') {
+      var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+    }
 
-    console.log(type);
+    // console.log(type);
     // console.log('CreateTiles', arguments);
 
     tile = new Tile(game, 50, 50,  type);
     this.game.add.existing(tile);
-    console.log('Possible moves: ',tile.getValidMoves());
+    // console.log('Possible moves: ',tile.getValidMoves());
   }
 
   function spaceKeyDown() {

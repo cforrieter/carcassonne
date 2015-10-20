@@ -37,9 +37,12 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
     };
     // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
     // console.log(position['ghostCoords'])
-    var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position).anchor.setTo(0.5);
 
-    // meepleButtons.add(button, false);
+    var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
+    button.anchor.setTo(0.5);
+    // debugger;
+    meepleButtons.add(button, false);
+
   }
 
   function tileRotationCoordTransform (tile, localX, localY) {
@@ -49,8 +52,27 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile) {
   }
 
   function addMeeple() {
-
-    console.log('You clicked on ' + this.ghostCoords)
+    meepleButtons.destroy();
+    if (this.farmer) {
+      var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
+      shadow.anchor.setTo(0.5);
+      shadow.x = shadow.x + 3
+      shadow.y = shadow.y + 3
+      shadow.tint = 0x000000;
+      shadow.alpha = 0.6;
+      var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
+      meeple.anchor.setTo(0.5);
+    } else {
+       var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
+      shadow.anchor.setTo(0.5);
+      shadow.x = shadow.x + 3
+      shadow.y = shadow.y + 3
+      shadow.tint = 0x000000;
+      shadow.alpha = 0.6;
+      var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
+      meeple.anchor.setTo(0.5);
+    }
+    // console.log('You clicked on ' + this.ghostCoords)
   }
 
 }
