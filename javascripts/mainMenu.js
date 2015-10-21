@@ -1,4 +1,5 @@
 var CarcassoneGame = {};
+var startGameButton;
 
 CarcassoneGame.mainMenu = function(game) {
   this.titleText;
@@ -28,12 +29,16 @@ CarcassoneGame.mainMenu.prototype = {
     var background = game.add.sprite(0,0, 'background');
     var header = game.add.sprite(10, 32, 'header');
 
-    var meep = game.add.sprite(game.world.centerX, game.world.centerY, 'link-spin');
-    meep.anchor.set(0.5);
-    meep.inputEnabled = true;
-    var spin = meep.animations.add('spin');
-    meep.animations.play('spin', 15, false);
+    // Sprite for start button and animation
+    startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'link-spin');
+    startGameButton.anchor.set(0.5);
+    startGameButton.scale.x = 3;
+    startGameButton.scale.y = 3;
+    startGameButton.inputEnabled = true;
+    
+    
 
+    // Used for rupee burst on click
     game.physics.startSystem(Phaser.Physics.ARCADE);
     emitter = game.add.emitter(0, 0, 100);
     emitter.makeParticles('orange-rupee');
@@ -42,12 +47,31 @@ CarcassoneGame.mainMenu.prototype = {
     singleParticle.animations.play('particleAnim', 4, true);
     });
     emitter.gravity = 200;
-    // meep.scale.setTo(0.20,0.20);
-    
-    
-    meep.events.onInputDown.add(function() {
-    this.state.start('mainGame')}, this);
     game.input.onDown.add(this.particleBurst, this);
+    console.log(String(this.randomRupees()));
+    // startGameButton.scale.setTo(0.20,0.20);
+    
+    // Changes state from the start screen to the main game
+    startGameButton.events.onInputDown.add(this.addTimer, this);
+    startGameButton.events.onInputDown.add(this.changeSprite, this);
+  },
+
+  randomRupees: function(){
+    var particles = ['green-rupee', 'blue-rupee', 'red-rupee', 'yellow-rupee', 'orange-rupee', 'purple-rupee']
+    return particles[Math.floor((Math.random() * particles.length) + 1)];
+  },
+
+  changeSprite: function() {
+    startGameButton.animations.add('spin');
+    startGameButton.animations.play('spin', 20, false);
+  },
+
+  addTimer: function() {
+    this.game.time.events.add(3000, this.stateChange, this);
+  },
+
+  stateChange: function() {
+    this.state.start('mainGame');
   },
 
   particleBurst: function(pointer) {
