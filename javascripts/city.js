@@ -63,9 +63,10 @@ function mergeCities(city1, city2){
 
 }
 
-function checkCityPosition(placedTile, position, single, allPos, existingCity, validCities){
+function checkCityPosition(placedTile, position, single, allPos, validCities){
   var cityToAdd = '';
   var added = false;
+
   if(placedTile[position] == "CITY"){
     cities.forEach(function(city, index, citiesArray){
       city.tiles.forEach(function(tile){

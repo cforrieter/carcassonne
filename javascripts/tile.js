@@ -139,12 +139,13 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               console.log(roads);
               checkFinishedRoads(players);
               console.log(players);
+
               //TODO: get cities uncommented and tested *********
 
-              // meepleEdges = addToCity(tile);
-              // console.log("Valid meeples for cities are " + meepleEdges);
-              // console.log(cities);
-              // checkFinishedCities();
+              meepleEdges = addToCity(tile);
+              console.log("Valid meeples for cities are " + meepleEdges);
+              console.log(cities);
+              checkFinishedCities();
 
               //*********************
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
