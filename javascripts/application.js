@@ -9,7 +9,7 @@ CarcassoneGame.mainGame = function(game) {
   this.spaceKey;
   this.screenWidth = 800;
   this.screenHeight = 600;
-  this.gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+  // this.gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 };
 
 CarcassoneGame.mainGame.prototype = {
@@ -61,13 +61,13 @@ CarcassoneGame.mainGame.prototype = {
     addToRoad(tile);
     checkFinishedRoads();
     addToCity(tile);
-    console.log(cities);
+    // console.log(cities);
     checkFinishedCities();
 
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-    console.log(game.world.centerX, game.world.centerY)
+    // console.log(game.world.centerX, game.world.centerY)
     createTile();
 
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -77,7 +77,7 @@ CarcassoneGame.mainGame.prototype = {
 
     function createHUD() {
 
-      console.log('adding hud')
+      // console.log('adding hud')
       var playersDisplay = game.add.group();
       playersDisplay.fixedToCamera = true;
 
@@ -195,7 +195,7 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('')
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {

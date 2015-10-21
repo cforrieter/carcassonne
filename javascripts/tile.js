@@ -1,4 +1,3 @@
-
 var playedTiles = [];
 
 var players = {
@@ -8,6 +7,7 @@ var players = {
     name: "Corey"
   }
 };
+
 
 function Tile(game, x, y, type)
 {
@@ -130,22 +130,23 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
         tile.dragged = !tile.dragged;
         confirmDrop(target, function(confirmed){
           if (confirmed) {
-
-            // if (tile.placementValid (tile, target.x, target.y)){
+              // var meepleEdges = [];
+              // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y);
 
-              var meepleEdges = addToRoad(tile);
-              console.log("Valid meeples for roads are " + meepleEdges);
-              console.log(roads);
+              var roadEdges = (addToRoad(tile));
+              // console.log("Road edges: ", roadEdges)
               checkFinishedRoads(players);
-              console.log(players);
 
               //TODO: get cities uncommented and tested *********
 
-              meepleEdges = addToCity(tile);
-              console.log("Valid meeples for cities are " + meepleEdges);
+              var cityEdges = (addToCity(tile));
               console.log(cities);
-              checkFinishedCities();
+              // console.log("City edges: ", cityEdges)
+              // console.log("Valid meeples for cities are " + meepleEdges);
+              // console.log(cities);
+              // checkFinishedCities(players);
+
 
               //*********************
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
@@ -154,7 +155,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
 
-              tile.showMeepleSpots(tile, meepleEdges);
+              tile.showMeepleSpots(tile, roadEdges, cityEdges);
 
               if (tile.centerMonastery){
                 monasteries.push(tile);

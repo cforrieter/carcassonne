@@ -125,7 +125,6 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
                 }else{
                   validRoads.push({ pos: position, scoringObject: road });
                 }
-
               }
               added = true;
             }
@@ -153,7 +152,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
 }
 
 function addToRoad(placedTile){
-  console.log(placedTile);
+  // console.log(placedTile);
   var positions = ['typeTop', 'typeRight', 'typeBottom', 'typeLeft'];
   var added = false, newRoad, single = false, counter;
   var roadToAdd = '';
@@ -188,9 +187,9 @@ function addToRoad(placedTile){
       }
     }
   });
-  console.log(roadToAdd);
+  // console.log(roadToAdd);
   if(!added && single){
-    console.log("new " + roadToAdd + " road");
+    // console.log("new " + roadToAdd + " road");
     newRoad = new Road();
     newRoad.edgeCount = 2;
     newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
@@ -215,22 +214,22 @@ function scoreRoad(road, playersObject){
   var points = road.tiles.length;
   console.log("Closing the road was worth " + points + " points.");
   var players, winners;
-  road.meeples.forEach(function(meeple){
-    players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
-  });
-  //find the player with the most meeples
-  var max = 0;
-  for(var player in players){
-    if(players[player] > max){
-      max = players[player];
-    }
-  }
-
-  for(var p in players){
-    if(players[p] == max){
-      playersObject[p].score += points;
-    }
-  }
+  // road.meeples.forEach(function(meeple){
+  //   // players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
+  // });
+  // //find the player with the most meeples
+  // var max = 0;
+  // for(var player in players){
+  //   if(players[player] > max){
+  //     max = players[player];
+  //   }
+  // }
+  //
+  // for(var p in players){
+  //   if(players[p] == max){
+  //     playersObject[p].score += points;
+  //   }
+  // }
 
 }
 
@@ -239,7 +238,7 @@ function checkFinishedRoads(playersObject){
   roads.forEach(function(road, index){
     if(road.edgeCount === 0){
       scoreRoad(road, playersObject);
-      console.log("Closed road!");
+      // console.log("Closed road!");
       roadsToRemove.push(road);
     }
   });
