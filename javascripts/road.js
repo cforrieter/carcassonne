@@ -214,23 +214,27 @@ function scoreRoad(road, playersObject){
   var points = road.tiles.length;
   console.log("Closing the road was worth " + points + " points.");
   var players, winners;
-  road.meeples.forEach(function(meeple){
-    players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
-  });
+  // road.meeples.forEach(function(meeple){
+  //   players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
+  // });
   //find the player with the most meeples
-  var max = 0;
-  for(var player in players){
-    if(players[player] > max){
-      max = players[player];
-    }
-  }
+  // var max = 0;
+  // for(var player in players){
+  //   if(players[player] > max){
+  //     max = players[player];
+  //   }
+  // }
 
-  for(var p in players){
-    if(players[p] == max){
-      playersObject[p].score += points;
-    }
-  }
+  // for(var p in players){
+  //   if(players[p] == max){
+  //     playersObject[p].score += points;
+  //   }
+  // }
 
+  console.log(road.meepleGroup)
+  road.meepleGroup.destroy();
+  // scoringMeeples.destroy();
+  console.log(road.meepleGroup)
 }
 
 function checkFinishedRoads(playersObject){
@@ -248,8 +252,12 @@ function checkFinishedRoads(playersObject){
   });
 }
 
+
+
 function Road(){
   this.tiles = [];
   this.meeples = [];
   this.edgeCount = 0;
+  this.meepleGroup = game.add.group();
+  game.add.existing(this.meepleGroup);
 }

@@ -1,4 +1,3 @@
-
 Tile.POSITION = {
   '0': {typeTop: 'p1', typeRight: 'p5', typeBottom: 'p7', typeLeft: 'p3', typeCenter: 'p4' },
   '90': {typeTop: 'p3', typeRight: 'p1', typeBottom: 'p5', typeLeft: 'p7', typeCenter: 'p4' },
@@ -80,8 +79,6 @@ Tile.MONASTERYMEEPLECOORDS = {
 };
 
 
-MEEPLECOORDS = [Tile.ROADMEEPLECOORDS, Tile.CITYMEEPLECOORDS]
-
 Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityEdges) {
 
 
@@ -107,7 +104,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     positions.forEach(function(position){
       for (var key in coords){
         if (position.pos === key){
-          var position = {
+          var meeplePosition = {
             positionKey: key,
             ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
             farmer: coords[key][2],
@@ -116,37 +113,16 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
         // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
         // console.log(position['ghostCoords'])
 
-        var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
+        var button = tile.game.add.button(meeplePosition['ghostCoords'][0], meeplePosition['ghostCoords'][1], 'meepleGhost', addMeeple, meeplePosition)
         button.anchor.setTo(0.5);
         // debugger;
         meepleButtons.add(button, false);
         }
       }
     })
-    // for (var key in coords) {
-    // // debugger;
-      
-    //   if (positions.indexOf(key) >= 0) {
-    //   // for (var prop in positions){
-    //     // if(positions[prop] === key){
-    //       console.log("KEY: ",key)
-    //       var position = {
-    //         positionKey: key,
-    //         ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
-    //         farmer: coords[key][2],
-    //         // scoringObject: scoringObjectType
-    //       };
-    //     // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
-    //     // console.log(position['ghostCoords'])
-
-    //     var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
-    //     button.anchor.setTo(0.5);
-    //     // debugger;
-    //     meepleButtons.add(button, false);
-    //     // }
-    //   }
-    // }
   }
+
+  // console.log('MEEPLE BUTTONS',meepleButtons)
   
   // console.log('allowable spots ', positions)
  
@@ -192,10 +168,10 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
       var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
       meeple.anchor.setTo(0.5);
     } else {
-       var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
+      var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
       shadow.anchor.setTo(0.5);
-      shadow.x = shadow.x + 3
-      shadow.y = shadow.y + 3
+      shadow.x += 3;
+      shadow.y += 3;
       shadow.tint = 0x000000;
       shadow.alpha = 0.6;
       var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
@@ -203,10 +179,19 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     }
     window.createTile();
     this.scoringObject.meeples.push('player');
-    console.log("This should be a reference to the meeple that was dropped: ", this)
-    // console.log("ROAD OBJECT IS: ", this.scoringObject)
+    console.log("Scoring object: ",this.scoringObject)
+    this.scoringObject.meepleGroup.add(shadow, false);
+    this.scoringObject.meepleGroup.add(meeple, false);
+    this.scoringObject.meepleGroup.renderable = true;
+    console.log("SCORING OBJECT'S RENDERABLE PROPERTY = ", this.scoringObject.meepleGroup.renderable)
+    console.log("SCORING OBJECT'S MEEPLE GROUP: ", this.scoringObject.meepleGroup)
+    // var currentScoringObjectMeepGroup = this.scoringObject.meepleGroup
+    game.add.existing(this.scoringObject.meepleGroup);
+    game.world.bringToTop(this.scoringObject.meepleGroup);
 
     // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
+    checkFinishedRoads(players);
+    checkFinishedCities(players);
   }
 
 }

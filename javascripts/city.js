@@ -204,23 +204,27 @@ function scoreCity(city, playerArray){
   var points = city.tiles.length;
   console.log("The closing city was worth " + points + " points.");
   var players, winners;
-  city.meeples.forEach(function(meeple){
-    players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
-  });
-  //find the player with the most meeples
-  var max = 0;
-  for(var player in players){
-    if(players[player] > max){
-      max = players[player];
-    }
-  }
+  // city.meeples.forEach(function(meeple){
+  //   players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
+  // });
 
-  //aware points to all the people with the max # of meeples
-  for(var p in players){
-    if(players[p] == max){
-      playerArray[p].score += points;
-    }
-  }
+  console.log(this.meepleGroup)
+  this.meepleGroup.destroy();
+  console.log(this.meepleGroup)
+  //find the player with the most meeples
+  // var max = 0;
+  // for(var player in players){
+  //   if(players[player] > max){
+  //     max = players[player];
+  //   }
+  // }
+
+  // //aware points to all the people with the max # of meeples
+  // for(var p in players){
+  //   if(players[p] == max){
+  //     playerArray[p].score += points;
+  //   }
+  // }
 
 }
 
@@ -242,4 +246,6 @@ function checkFinishedCities(playerArray){
 function City(){
   this.tiles = [];
   this.meeples = [];
+  this.meepleGroup = game.add.group();
+  this.edgeCount = 0;
 }

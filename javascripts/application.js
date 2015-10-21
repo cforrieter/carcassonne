@@ -9,6 +9,7 @@ CarcassoneGame.mainGame = function(game) {
   this.spaceKey;
   this.screenWidth = 800;
   this.screenHeight = 600;
+  this.tilesGroup = new Phaser.Group(game);
   this.gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 };
 
@@ -42,7 +43,7 @@ CarcassoneGame.mainGame.prototype = {
     ]
 
     game.world.setBounds(0, 0, 13000, 13000);
-    game.add.tileSprite(0,0, 13000, 13000, 'background');
+    // game.add.tileSprite(0,0, 13000, 13000, 'background');
 
     camera = new Phaser.Camera(game, 0 , 0, 0, this.screenWidth, this.screenHeight);
     this.game.camera.x = game.world.centerX;
@@ -166,7 +167,7 @@ CarcassoneGame.mainGame.prototype = {
 // =======
 // >>>>>>> 12447a26c5624eb6112e4648a02d57b00b52f307
   update: function() {
-
+    game.world.sendToBack(this.tilesGroup);
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
       if(this.game.input.activePointer.position.x > this.screenWidth - 25) {
@@ -201,8 +202,11 @@ gameTiles = randomizeGameTiles(gameTiles);
 function createTile(type) {
     // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
   type = type || gameTiles.pop();
+  console.log(type);
 
   tile = new Tile(game, screenWidth - 50, screenHeight - 50,  type);
+  // debugger;
+  game.state.states.mainGame.tilesGroup.add(tile);
 
   if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
     if (gameTiles.length === 0){
