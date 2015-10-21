@@ -63,10 +63,9 @@ function mergeCities(city1, city2){
 
 }
 
-function checkCityPosition(placedTile, position, single, allPos, existingCity){
+function checkCityPosition(placedTile, position, single, allPos, existingCity, validCities){
   var cityToAdd = '';
   var added = false;
-  var meeples;
   if(placedTile[position] == "CITY"){
     cities.forEach(function(city, index, citiesArray){
       city.tiles.forEach(function(tile){
@@ -102,12 +101,24 @@ function checkCityPosition(placedTile, position, single, allPos, existingCity){
                 citiesArray.splice(citiesArray.indexOf(city), 1);
                 //add newly merged city
                 citiesArray.push(originalCity);
+                if(originalCity.meeples.length === 0){
+                  validCities.push({ pos: 'typeCenter', scoringObject: newRoad });
+                }
+                added = true;
               }
               allPos = allPos.join('');
           }
-          city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
-          added = true;
-          meeples = (city.meeples.length > 0) ? true : false;
+          if(!added){
+            city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
+            added = true;
+            if(city.meeples.length === 0){
+              if(single){
+                validCities.push({ pos: 'typeCenter', scoringObject: city });
+              }else{
+                validCities.push({ pos: position, scoringObject: city });
+              }
+            }
+          }
         }
       }
       });
@@ -149,18 +160,18 @@ function addToCity(placedTile){
 
     positions.forEach(function(pos){
       if(!done){
-        returned = checkCityPosition(placedTile, pos, single, allPos);
+        returned = checkCityPosition(placedTile, pos, single, allPos, validCities);
         added = returned[0];
         cityToAdd += returned[1];
         meeplePlaced = returned[2];
         if(added){
-          if(!meeplePlaced){
-            if(single){
-              validCities.push("typeCenter");
-            }else{
-              validCities.push(pos);
-            }
-          }
+          // if(!meeplePlaced){
+            // if(single){
+            //   validCities.push("typeCenter");
+            // }else{
+            //   validCities.push(pos);
+            // }
+          // }
           if(single){
             done = true;
           }
@@ -168,17 +179,13 @@ function addToCity(placedTile){
       }
     });
 
-    if(!added && cityToAdd){
+    if(!added && single){
       console.log("new " + cityToAdd + " city");
       newCity = new City();
-      if(single){
-        validCities.push("typeCenter");
-      }else{
-        validCities.push(cityToAdd);
-      }
       newCity.edgeCount = 2;
       newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
       cities.push(newCity);
+      validCities.push({ pos: 'typeCenter', scoringObject: newCity });
     }
   return validCities;
 }
@@ -218,13 +225,17 @@ function scoreCity(city, playerArray){
 }
 
 function checkFinishedCities(playerArray){
-  var terminusCount, key;
+  var citiesToRemove = [];
   cities.forEach(function(city, index){
     if(city.edgeCount === 0){
       scoreCity(city, playerArray);
       console.log("Closed city!");
-      cities.splice(index, 1);
+      citiesToRemove.push(city);
     }
+  });
+
+  citiesToRemove.forEach(function(city){
+    cities.splice(cities.indexOf(city), 1);
   });
 }
 

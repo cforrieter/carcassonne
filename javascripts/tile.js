@@ -1,5 +1,13 @@
 
-var playedTiles = []
+var playedTiles = [];
+
+var players = {
+  player1: {
+    score: 0,
+    color: 'blue',
+    name: "Corey"
+  }
+};
 
 function Tile(game, x, y, type)
 {
@@ -111,12 +119,12 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
   if(this.dragged){
 
-    tile.inputEnabled = false;    
+    tile.inputEnabled = false;
 
     if (tile.placementValid(tile, target)) {
     // Stop dragged
       this.game.add.tween(this).to(target, 250).start().onComplete.add(addButtons, this);
-      tile.inputEnabled = true;  
+      tile.inputEnabled = true;
 
       function addButtons() {
         tile.dragged = !tile.dragged;
@@ -125,10 +133,12 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
             // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y);
+
               var meepleEdges = addToRoad(tile);
               console.log("Valid meeples for roads are " + meepleEdges);
-              checkFinishedRoads();
-
+              console.log(roads);
+              checkFinishedRoads(players);
+              console.log(players);
               //TODO: get cities uncommented and tested *********
 
               // meepleEdges = addToCity(tile);
@@ -137,12 +147,12 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               // checkFinishedCities();
 
               //*********************
-
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
 
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+
               tile.showMeepleSpots(tile, meepleEdges);
 
               if (tile.centerMonastery){
