@@ -10,9 +10,13 @@ CarcassoneGame.mainMenu = function(game) {
 CarcassoneGame.mainMenu.prototype = {
 
   preload: function() {
+    game.load.spritesheet('link-spin', 'assets/link-spin-spritesheet.png',40,46,14);
     game.load.spritesheet('red-rupee', 'assets/zelda-red-rupee-spritesheet.png',8,14,3);
     game.load.spritesheet('blue-rupee', 'assets/zelda-blue-rupee-spritesheet.png',8,14,3);
     game.load.spritesheet('green-rupee', 'assets/zelda-green-rupee-spritesheet.png',8,14,3);
+    game.load.spritesheet('yellow-rupee', 'assets/zelda-yellow-rupee-spritesheet.png',8,14,3);
+    game.load.spritesheet('orange-rupee', 'assets/zelda-orange-rupee-spritesheet.png',8,14,3);
+    game.load.spritesheet('purple-rupee', 'assets/zelda-purple-rupee-spritesheet.png',8,14,3);
     game.load.image('meeple-3d-blue', 'assets/meeple-3d-blue.png');
     game.load.image('header', 'assets/carcassone-header.png');
     game.load.image('meeple-blue-flat', 'assets/meeple-blue-flat.png');
@@ -24,15 +28,15 @@ CarcassoneGame.mainMenu.prototype = {
     var background = game.add.sprite(0,0, 'background');
     var header = game.add.sprite(10, 32, 'header');
 
-    var meep = game.add.sprite(game.world.centerX, game.world.centerY, 'green-rupee');
+    var meep = game.add.sprite(game.world.centerX, game.world.centerY, 'link-spin');
     meep.anchor.set(0.5);
     meep.inputEnabled = true;
-    var sparkle = meep.animations.add('sparkle');
-    meep.animations.play('sparkle', 4, true);
+    var spin = meep.animations.add('spin');
+    meep.animations.play('spin', 15, false);
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
     emitter = game.add.emitter(0, 0, 100);
-    emitter.makeParticles('red-rupee');
+    emitter.makeParticles('orange-rupee');
     emitter.forEach(function(singleParticle) {
     singleParticle.animations.add('particleAnim');
     singleParticle.animations.play('particleAnim', 4, true);
