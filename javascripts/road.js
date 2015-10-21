@@ -211,45 +211,43 @@ function getEdges(tile, allPos){
 }
 
 function scoreRoad(road, playersObject){
-  // var arrResult = {};
-  // for (i = 0, n = road.tiles.length; i < n; i++) {
-  //     var item = road.tiles[i];
-  //     arrResult[ item.x + "," + item.y ] = item;
-  // }
-  // var i = 0;
-  // var nonDuplicatedArray = [];
-  // for(var item in arrResult) {
-  //     nonDuplicatedArray[i++] = arrResult[item];
-  // }
-  // var points = nonDuplicatedArray.length;
-  var points = road.tiles.length;
+
+  var o = {}, i, l = road.tiles.length, r = [];
+  for(i=0; i<l;i+=1){
+    o[road.tiles[i].tile.x + "," + road.tiles[i].tile.y] = road.tiles[i];
+  }
+  for(i in o){
+    r.push(o[i]);
+  }
+
+  var points = r.length;
   // console.log("Closing the road was worth " + points + " points.");
-  var players, winners;
-  // road.meeples.forEach(function(meeple){
-  //   // players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
-  // });
-  // //find the player with the most meeples
-  //   players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
-  // });
+  var playerMeeples = {};
+
+  road.meeples.forEach(function(meeple){
+    if(playerMeeples[meeple.name]){
+      playerMeeples[meeple.name] = playerMeeples[meeple.name] + 1;
+    }else{
+      playerMeeples[meeple.name] = 1;
+    }
+  });
+  // console.log(this.meepleGroup)
+
   //find the player with the most meeples
-  // var max = 0;
-  // for(var player in players){
-  //   if(players[player] > max){
-  //     max = players[player];
-  //   }
-  // }
-  //
-
-  // for(var p in players){
-  //   if(players[p] == max){
-  //     playersObject[p].score += points;
-  //   }
-  // }
-
-  // console.log(road.meepleGroup);
+  var max = 0;
+  for(var p in playerMeeples){
+    if(playerMeeples[p] > max){
+      max = playerMeeples[p];
+    }
+  }
+  //award points to all the people with the max # of meeples
+  for(var p in playerMeeples){
+    if(playerMeeples[p] == max){
+      getPlayer(p).score += points;
+      console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
+    }
+  }
   road.meepleGroup.destroy();
-  // scoringMeeples.destroy();
-  // console.log(road.meepleGroup);
 }
 
 function checkFinishedRoads(playersObject){

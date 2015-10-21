@@ -1,13 +1,32 @@
 var screenWidth = 800;
 var screenHeight = 600;
 
+
 var globalPlayers = {
-  player1: {turn: true, num: 0, color: "FF0000", score: 0, numMeeples: 7},
-  player2: {turn: false, num: 1, color: "00CCFF", score: 0, numMeeples: 7},
-  player3: {turn: false, num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
-  player4: {turn: false, num: 3, color: "FF9900", score: 0, numMeeples: 7},
-  player5: {turn: false, num: 4, color: "CC0099", score: 0, numMeeples: 7}
+  player1: {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
+  player2: {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
+  player3: {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
+  player4: {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
+  player5: {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
 }
+
+
+function getCurrentPlayer(){
+  for(var player in globalPlayers){
+    if(globalPlayers[player].turn){
+      return globalPlayers[player];
+    }
+  }
+}
+
+function getPlayer(name){
+  for(var player in globalPlayers){
+    if(globalPlayers[player].name == name){
+      return globalPlayers[player];
+    }
+  }
+}
+
 
 CarcassoneGame.mainGame = function(game) {
   this.tilesRemaining = 83;
@@ -172,6 +191,7 @@ CarcassoneGame.mainGame.prototype = {
         }
       }
     }
+
   },
 
   render: function() {

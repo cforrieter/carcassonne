@@ -12,7 +12,7 @@ function Tile(game, x, y, type)
   this.anchor.setTo(0.5);
   this.events.onInputDown.add(this.onClick, this, 0);
   this.dragged = false;
-  this.grabbed = false;
+  this.dropped = false;
 
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -102,7 +102,7 @@ Tile.prototype = Object.create(Phaser.Sprite.prototype);
 // This function addes the tile placement box and confirmation dialog
 Tile.prototype.onClick = function onClick(draggable, pointer){
   this.currentPointer = pointer;
-  tile.grabbed = true;
+  // tile.grabbed = true;
 
   var target = { x: Math.floor((this.x + 45) / 90) * 90,
                  y: Math.floor((this.y + 45) / 90) * 90
@@ -111,56 +111,57 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
   if(this.dragged){
 
     if (tile.placementValid(tile, target)) {
-      tile.dragged = !tile.dragged;
       // Stop dragged
-      this.game.add.tween(this).to(target, 250).start().onComplete.add(addButtons, this);
+
+      if (!tile.dropped) {
+        tile.dropped = true;
+        this.game.add.tween(this).to(target, 250).start().onComplete.add(addButtons, this);
+      }
 
       function addButtons() {
-        if (!this.dragged) {
           confirmDrop(target, function(confirmed){
             if (confirmed) {
-                // var meepleEdges = [];
-                // if (tile.placementValid (tile, target.x, target.y)){
-                tile.placeTile(tile, tile.x, tile.y);
+              // var meepleEdges = [];
+              // if (tile.placementValid (tile, target.x, target.y)){
+              tile.placeTile(tile, tile.x, tile.y);
 
-                var roadEdges = (addToRoad(tile));
-                // console.log("Road edges: ", roadEdges)
-                checkFinishedRoads();
+              var roadEdges = (addToRoad(tile));
+              // console.log("Road edges: ", roadEdges)
+              checkFinishedRoads();
 
-                //TODO: get cities uncommented and tested *********
+              //TODO: get cities uncommented and tested *********
 
-                var cityEdges = (addToCity(tile));
-                // console.log(cities);
-                // console.log("City edges: ", cityEdges)
-                // console.log("Valid meeples for cities are " + meepleEdges);
-                // console.log(cities);
-                // checkFinishedCities();
+              var cityEdges = (addToCity(tile));
+              // console.log(cities);
+              // console.log("City edges: ", cityEdges)
+              // console.log("Valid meeples for cities are " + meepleEdges);
+              // console.log(cities);
+              // checkFinishedCities();
 
 
-                //*********************
-                // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
+              //*********************
+              // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
 
-                tile.inputEnabled = false;
-                game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
-                game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+              tile.inputEnabled = false;
+              game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+              game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
 
-                tile.showMeepleSpots(tile, roadEdges, cityEdges);
+              tile.showMeepleSpots(tile, roadEdges, cityEdges);
 
-                if (tile.centerMonastery){
-                  monasteries.push(tile);
-                }
-                checkMonasteries();
+              // if (tile.centerMonastery){
+              //   monasteries.push(tile);
               // }
-            }
-          }, this);
-        }
+              checkMonasteries();
+            // }
+          }
+        }, this);
       }
     }
   } else {
     // Start dragged
     // console.log("Grabbed", this);
     this.fixedToCamera = false;
-    this.dragged = !this.dragged;
+    this.dragged = true;
   }
 
   function confirmDrop(target, callback, tile) {
@@ -178,19 +179,19 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
     function decline() {
       confirm.destroy();
       decline.destroy();
-      tile.dragged = !tile.dragged;
+      tile.dragged = true;
+      tile.dropped = false;
       callback(false);
     }
   }
 }
 
 Tile.prototype.update = function update() {
-  if(this.dragged && this.currentPointer)
+  if(this.dragged && this.currentPointer && !this.dropped)
   {
     // console.log(this.currentPointer.worldX, this.currentPointer.worldY);
     this.x = this.currentPointer.worldX;
     this.y = this.currentPointer.worldY;
-    this.inputEnabled = true;
   }
 
 
