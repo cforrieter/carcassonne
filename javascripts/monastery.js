@@ -27,7 +27,7 @@ function checkMonasteries(){
         monasteryNeighbours ++;
       }
     };
-    console.log(monasteryNeighbours);
+    // console.log(monasteryNeighbours);
     if(monasteryNeighbours === 8){
       scoreMonastery();
       removeMonastery(monastery);

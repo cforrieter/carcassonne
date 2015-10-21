@@ -1,5 +1,4 @@
-
-var playedTiles = []
+var playedTiles = [];
 
 function Tile(game, x, y, type)
 {
@@ -111,39 +110,41 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
   if(this.dragged){
 
-    tile.inputEnabled = false;    
+    tile.inputEnabled = false;
 
     if (tile.placementValid(tile, target)) {
     // Stop dragged
       this.game.add.tween(this).to(target, 250).start().onComplete.add(addButtons, this);
-      tile.inputEnabled = true;  
+      tile.inputEnabled = true;
 
       function addButtons() {
         tile.dragged = !tile.dragged;
         confirmDrop(target, function(confirmed){
           if (confirmed) {
-
-            // if (tile.placementValid (tile, target.x, target.y)){
+              // var meepleEdges = [];
+              // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y);
-              var meepleEdges = addToRoad(tile);
-              console.log("Valid meeples for roads are " + meepleEdges);
-              checkFinishedRoads();
+
+              var roadEdges = (addToRoad(tile));
+              console.log("Road edges: ", roadEdges)
+              checkFinishedRoads(players);
 
               //TODO: get cities uncommented and tested *********
 
-              // meepleEdges = addToCity(tile);
+              var cityEdges = (addToCity(tile));
+              console.log("City edges: ", cityEdges)
               // console.log("Valid meeples for cities are " + meepleEdges);
               // console.log(cities);
-              // checkFinishedCities();
+              checkFinishedCities(players);
 
               //*********************
-
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
 
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-              tile.showMeepleSpots(tile);
+
+              tile.showMeepleSpots(tile, roadEdges, cityEdges);
 
               if (tile.centerMonastery){
                 monasteries.push(tile);
