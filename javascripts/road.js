@@ -221,8 +221,9 @@ function scoreRoad(road, playersObject){
   }
 
   var points = r.length;
-  console.log("Closing the road was worth " + points + " points.");
+  // console.log("Closing the road was worth " + points + " points.");
   var playerMeeples = {};
+
   road.meeples.forEach(function(meeple){
     if(playerMeeples[meeple.name]){
       playerMeeples[meeple.name] = playerMeeples[meeple.name] + 1;

@@ -145,13 +145,9 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
 
+              tile.showMeepleSpots(tile, roadEdges, cityEdges);
 
-                tile.showMeepleSpots(tile, roadEdges, cityEdges);
               
-              if (tile.centerMonastery){
-                monasteries.push(tile);
-              }
-              checkMonasteries();
             // }
           }
         }, this);

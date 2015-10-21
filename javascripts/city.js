@@ -135,7 +135,7 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
     });
     if(!added){
       if(!single){
-        console.log("new " + position + " city");
+        // console.log("new " + position + " city");
         newCity = new City();
         newCity.edgeCount = 1;
         allPos = position;

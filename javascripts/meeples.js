@@ -84,20 +84,32 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
 var confirm = tile.game.add.button(tile.x + 60, tile.y - 30, 'check', confirmFunc, this, 23, 23, 23);
 confirm.scale.setTo(0.3);
 
-if(getCurrentPlayer().numMeeples !== 0){
-    // MEEPLECOORDS.forEach(function(meepleType){
-    //   var coords = meepleType[tile.tileType]
-    // })
-    var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType]
-    var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType]
-    // console.log('Road coords: ', roadCoords);
-    // console.log('City coords: ', cityCoords);
 
+if(getCurrentPlayer().numMeeples !== 0){
+
+  var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType];
+  var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType];
+  var monasteryCoords = Tile.MONASTERYMEEPLECOORDS[tile.tileType];
+  // console.log('Road coords: ', roadCoords);
+  // console.log('City coords: ', cityCoords);
+
+
+  if(monasteryCoords){
+    var monastery = new Monastery();
+    monastery.tile = tile;
+    // monastery.meeples = getCurrentPlayer();
+    monasteries.push(monastery);
+  }
 
     // coords = mergeObjects(roadCoords, cityCoords);
     // console.log('Merged coords: ', coords);
 
-    var meepleButtons = game.add.group();
+
+  var meepleButtons = game.add.group();
+
+  checkPositions(roadCoords, roadEdges);
+  checkPositions(cityCoords, cityEdges);
+  checkPositions(monasteryCoords, [{pos: 'typeCenter', scoringObject: monastery}]);
 
     checkPositions(roadCoords, roadEdges);
     checkPositions(cityCoords, cityEdges);
@@ -120,7 +132,6 @@ if(getCurrentPlayer().numMeeples !== 0){
 
         var button = tile.game.add.button(meeplePosition['ghostCoords'][0], meeplePosition['ghostCoords'][1], 'meepleGhost', addMeeple, meeplePosition);
         button.anchor.setTo(0.5);
-        // debugger;
         meepleButtons.add(button, false);
         }
       }
@@ -143,6 +154,7 @@ if(getCurrentPlayer().numMeeples !== 0){
     window.createTile();
     checkFinishedRoads();
     checkFinishedCities();
+    checkMonasteries();
   }
 
   function allowablePositions (meepleEdges) {
@@ -209,4 +221,4 @@ if(getCurrentPlayer().numMeeples !== 0){
 
 
 
-}
+};
