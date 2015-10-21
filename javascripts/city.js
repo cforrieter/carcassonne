@@ -63,16 +63,15 @@ function mergeCities(city1, city2){
 
 }
 
-function checkCityPosition(placedTile, position, single, allPos, existingCity){
+function checkCityPosition(placedTile, position, single, allPos, validCities){
   var cityToAdd = '';
   var added = false;
-  var meeples;
   if(placedTile[position] == "CITY"){
     cities.forEach(function(city, index, citiesArray){
       city.tiles.forEach(function(tile){
         if(!added){
           if(placedTile.neighbours[position] == tile.tile && tile.pos.indexOf(backwards[position]) != -1 && placedTile.neighbours[position][backwards[position]] ){
-            console.log("existing " + position + " city");
+            // console.log("existing " + position + " city");
             if(!single){
               city.edgeCount -= 1;
               allPos = position;
@@ -81,7 +80,7 @@ function checkCityPosition(placedTile, position, single, allPos, existingCity){
               updateEdgeCount(city, counter);
               if(placedTile.numNeighbours("CITY") > 1){
                 var cityToMerge, mergedCity, originalCity = city;
-                console.log("Merging cities");
+                // console.log("Merging cities");
 
                 //remove the current position from check since we're merging / accounting for it now
                 var index = allPos.indexOf(position);
@@ -102,19 +101,31 @@ function checkCityPosition(placedTile, position, single, allPos, existingCity){
                 citiesArray.splice(citiesArray.indexOf(city), 1);
                 //add newly merged city
                 citiesArray.push(originalCity);
+                if(originalCity.meeples.length === 0){
+                  validCities.push({ pos: 'typeCenter', scoringObject: newRoad });
+                }
+                added = true;
               }
               allPos = allPos.join('');
           }
-          city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
-          added = true;
-          meeples = (city.meeples.length > 0) ? true : false;
+          if(!added){
+            city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
+            added = true;
+            if(city.meeples.length === 0){
+              if(single){
+                validCities.push({ pos: 'typeCenter', scoringObject: city });
+              }else{
+                validCities.push({ pos: position, scoringObject: city });
+              }
+            }
+          }
         }
       }
       });
     });
     if(!added){
       if(!single){
-        console.log("new " + position + " city");
+        // console.log("new " + position + " city");
         newCity = new City();
         newCity.edgeCount = 1;
         allPos = position;
@@ -143,24 +154,24 @@ function addToCity(placedTile){
       single = true;
     }
 
-    console.log("Single for city is ", single);
+    // console.log("Single for city is ", single);
 
    var allPos = getAllCityPositions(placedTile);
 
     positions.forEach(function(pos){
       if(!done){
-        returned = checkCityPosition(placedTile, pos, single, allPos);
+        returned = checkCityPosition(placedTile, pos, single, allPos, validCities);
         added = returned[0];
         cityToAdd += returned[1];
         meeplePlaced = returned[2];
         if(added){
-          if(!meeplePlaced){
-            if(single){
-              validCities.push("typeCenter");
-            }else{
-              validCities.push(pos);
-            }
-          }
+          // if(!meeplePlaced){
+            // if(single){
+            //   validCities.push("typeCenter");
+            // }else{
+            //   validCities.push(pos);
+            // }
+          // }
           if(single){
             done = true;
           }
@@ -168,17 +179,13 @@ function addToCity(placedTile){
       }
     });
 
-    if(!added && cityToAdd){
-      console.log("new " + cityToAdd + " city");
+    if(!added && single){
+      // console.log("new " + cityToAdd + " city");
       newCity = new City();
-      if(single){
-        validCities.push("typeCenter");
-      }else{
-        validCities.push(cityToAdd);
-      }
       newCity.edgeCount = 2;
       newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
       cities.push(newCity);
+      validCities.push({ pos: 'typeCenter', scoringObject: newCity });
     }
   return validCities;
 }
@@ -222,7 +229,7 @@ function checkFinishedCities(playerArray){
   cities.forEach(function(city, index){
     if(city.edgeCount === 0){
       scoreCity(city, playerArray);
-      console.log("Closed city!");
+      // console.log("Closed city!");
       citiesToRemove.push(city);
     }
   });

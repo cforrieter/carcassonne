@@ -90,8 +90,8 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
   // })
   var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType]
   var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType]
-  console.log('Road coords: ', roadCoords);
-  console.log('City coords: ', cityCoords);
+  // console.log('Road coords: ', roadCoords);
+  // console.log('City coords: ', cityCoords);
 
 
   // coords = mergeObjects(roadCoords, cityCoords);
@@ -100,7 +100,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
   var meepleButtons = game.add.group();
 
   checkPositions(roadCoords, roadEdges);
-  // checkPositions(cityCoords, cityEdges);
+  checkPositions(cityCoords, cityEdges);
 
   function checkPositions(coords, meepleEdges){
     var positions = allowablePositions(meepleEdges);
@@ -165,12 +165,12 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     var positions = [];
     for ( var i = 0; i < meepleEdges.length; i++ ) {
       positions.push(Tile.POSITION[tile.angle.toString()][meepleEdges[i].pos])
-      positions.push({pos: Tile.POSITION[tile.angle.toString()][meepleEdges[i].pos], scoringObject: meepleEdges[i].road})
+      positions.push({pos: Tile.POSITION[tile.angle.toString()][meepleEdges[i].pos], scoringObject: meepleEdges[i].scoringObject})
       // console.log('=======MEEPLE POS IN ALLOWABLE POSTIONS: ', meepleEdges[i].pos, meepleEdges[i].road)
-      console.log(positions)
+      // console.log(positions)
     }
     return positions;
-    console.log('allowable positions: ', positions);
+    // console.log('allowable positions: ', positions);
   }
 
   function tileRotationCoordTransform (tile, localX, localY) {
@@ -203,7 +203,8 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     }
     window.createTile();
     this.scoringObject.meeples.push('player');
-    console.log("ROAD OBJECT IS: ", this.scoringObject)
+    console.log("This should be a reference to the meeple that was dropped: ", this)
+    // console.log("ROAD OBJECT IS: ", this.scoringObject)
 
     // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
   }

@@ -61,13 +61,13 @@ CarcassoneGame.mainGame.prototype = {
     addToRoad(tile);
     checkFinishedRoads();
     addToCity(tile);
-    console.log(cities);
+    // console.log(cities);
     checkFinishedCities();
 
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-    console.log(game.world.centerX, game.world.centerY)
+    // console.log(game.world.centerX, game.world.centerY)
     createTile();
 
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -77,7 +77,7 @@ CarcassoneGame.mainGame.prototype = {
 
     function createHUD() {
 
-      console.log('adding hud')
+      // console.log('adding hud')
       var playersDisplay = game.add.group();
       playersDisplay.fixedToCamera = true;
 
@@ -200,7 +200,7 @@ gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
     // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-    var type = type || gameTiles.pop();
+  type = type || gameTiles.pop();
 
   tile = new Tile(game, screenWidth - 50, screenHeight - 50,  type);
 
@@ -228,7 +228,7 @@ function randomizeGameTiles(gameTiles) {
 // console.log(gameTiles);
 
 function swapTile(type){
-  console.log("swapping tile")
+  console.log("swapping tile");
   var tempArray = [];
   tempArray.push(type);
   gameTiles.forEach(function(currentTile){
