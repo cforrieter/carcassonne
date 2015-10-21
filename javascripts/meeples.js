@@ -16,7 +16,7 @@ Tile.ROADMEEPLECOORDS = {
   F: {p4: [0, -5]},
   I: {p1: [0, -35], p3: [-35, 0]},
   H: {p1: [0, -35], p7: [0, 35]},
-  E: {p1: [0, -35]},  
+  E: {p1: [0, -35]},
   K: {p4: [-30, 0]},
   J: {p4: [30, 0]},
   L: {p3: [-28, 0], p5: [28, 0], p7: [0, 30]},
@@ -41,7 +41,7 @@ Tile.CITYMEEPLECOORDS = {
   F: {p4: [0, -5]},
   I: {p1: [0, -35], p3: [-35, 0]},
   H: {p1: [0, -35], p7: [0, 35]},
-  E: {p1: [0, -35]}, 
+  E: {p1: [0, -35]},
   K: {p1: [0, -35]},
   J: {p1: [0, -35]},
   L: {p1: [0, -35]},
@@ -63,7 +63,7 @@ Tile.FARMERMEEPLECOORDS = {
   F: {p0: [0, -38], p6: [0, 35]},
   I: {p4: [5, 5]},
   H: {p4: [0, 0]},
-  E: {p4: [0, 10]}, 
+  E: {p4: [0, 10]},
   K: {p6: [-32, 30], p8: [20, 0]},
   J: {p6: [-25, 0], p8: [30, 30]},
   L: {p0: [0, -7], p6: [-30, 32], p8: [30, 32]},
@@ -77,7 +77,8 @@ Tile.FARMERMEEPLECOORDS = {
 Tile.MONASTERYMEEPLECOORDS = {
   B: {p4: [0,0]},
   A: {p4: [0,0]}
-}
+};
+
 
 MEEPLECOORDS = [Tile.ROADMEEPLECOORDS, Tile.CITYMEEPLECOORDS]
 
@@ -98,29 +99,53 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
 
   var meepleButtons = game.add.group();
 
-  checkPositions(roadCoords, roadEdges, 'road');
-  checkPositions(cityCoords, cityEdges, 'city');
+  checkPositions(roadCoords, roadEdges);
+  // checkPositions(cityCoords, cityEdges);
 
-  function checkPositions(coords, meepleEdges, scoringObjectType){
+  function checkPositions(coords, meepleEdges){
     var positions = allowablePositions(meepleEdges);
-    for (var key in coords) {
-    // debugger;
-    if (positions.indexOf(key) >= 0) {
-      var position = {
-        positionKey: key,
-        ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
-        farmer: coords[key][2],
-        scoringObjectType: scoringObjectType
-      };
-      // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
-      // console.log(position['ghostCoords'])
+    positions.forEach(function(position){
+      for (var key in coords){
+        if (position.pos === key){
+          var position = {
+            positionKey: key,
+            ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
+            farmer: coords[key][2],
+            scoringObject: position.scoringObject
+          };
+        // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
+        // console.log(position['ghostCoords'])
 
-      var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
-      button.anchor.setTo(0.5);
-      // debugger;
-      meepleButtons.add(button, false);
+        var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
+        button.anchor.setTo(0.5);
+        // debugger;
+        meepleButtons.add(button, false);
+        }
       }
-    }
+    })
+    // for (var key in coords) {
+    // // debugger;
+      
+    //   if (positions.indexOf(key) >= 0) {
+    //   // for (var prop in positions){
+    //     // if(positions[prop] === key){
+    //       console.log("KEY: ",key)
+    //       var position = {
+    //         positionKey: key,
+    //         ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
+    //         farmer: coords[key][2],
+    //         // scoringObject: scoringObjectType
+    //       };
+    //     // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
+    //     // console.log(position['ghostCoords'])
+
+    //     var button = tile.game.add.button(position['ghostCoords'][0], position['ghostCoords'][1], 'meepleGhost', addMeeple, position)
+    //     button.anchor.setTo(0.5);
+    //     // debugger;
+    //     meepleButtons.add(button, false);
+    //     // }
+    //   }
+    // }
   }
   
   // console.log('allowable spots ', positions)
@@ -139,7 +164,10 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
   function allowablePositions (meepleEdges) {
     var positions = [];
     for ( var i = 0; i < meepleEdges.length; i++ ) {
-      positions.push(Tile.POSITION[tile.angle.toString()][meepleEdges[i]])
+      positions.push(Tile.POSITION[tile.angle.toString()][meepleEdges[i].pos])
+      positions.push({pos: Tile.POSITION[tile.angle.toString()][meepleEdges[i].pos], scoringObject: meepleEdges[i].road})
+      // console.log('=======MEEPLE POS IN ALLOWABLE POSTIONS: ', meepleEdges[i].pos, meepleEdges[i].road)
+      console.log(positions)
     }
     return positions;
     console.log('allowable positions: ', positions);
@@ -174,15 +202,10 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
       meeple.anchor.setTo(0.5);
     }
     window.createTile();
-    console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
+    this.scoringObject.meeples.push('player');
+    console.log("ROAD OBJECT IS: ", this.scoringObject)
+
+    // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
   }
 
 }
-
-function mergeObject(obj1,obj2){
-  var obj3 = {};
-  for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
-  for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
-  return obj3;
-}
-

@@ -218,13 +218,17 @@ function scoreCity(city, playerArray){
 }
 
 function checkFinishedCities(playerArray){
-  var terminusCount, key;
+  var citiesToRemove = [];
   cities.forEach(function(city, index){
     if(city.edgeCount === 0){
       scoreCity(city, playerArray);
       console.log("Closed city!");
-      cities.splice(index, 1);
+      citiesToRemove.push(city);
     }
+  });
+
+  citiesToRemove.forEach(function(city){
+    cities.splice(cities.indexOf(city), 1);
   });
 }
 
