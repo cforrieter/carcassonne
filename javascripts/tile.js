@@ -33,9 +33,9 @@ function Tile(game, x, y, type)
   };
 
   var kind = Tile.KINDS[type];
-  if(!kind){
-    throw new Error('Invalid tile type: ' + type);
-  }
+  // if(!kind){
+  //   throw new Error('Invalid tile type: ' + type);
+  // }
 
   for(var k in kind){
     this[k] = kind[k];

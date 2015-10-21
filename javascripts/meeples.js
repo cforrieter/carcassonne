@@ -185,7 +185,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
       var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
       meeple.anchor.setTo(0.5);
     }
-    window.createTile();
+   
 
     this.scoringObject.meeples.push(getCurrentPlayer());
 
@@ -205,6 +205,13 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
     checkFinishedRoads();
     checkFinishedCities();
+    console.log("checking end game, remaining tiles = ", gameTiles.length);
+
+    if (gameTiles.length === 0){ 
+      endGame();
+    } else {
+      window.createTile();
+    }
   }
 
 

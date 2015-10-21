@@ -28,8 +28,7 @@ function checkMonasteries(){
       }
     };
     if(monasteryNeighbours === 8){
-      scoreMonastery();
-      removeMonastery(monastery);
+      scoreAndRemoveMonastery();
     };
     monasteryNeighbours = 0;
   });
@@ -39,13 +38,47 @@ function scoreMonastery(){
   console.log("Monastery completed!");
 }
 
-function removeMonastery(monasteryToRemove){
+function scoreAndRemoveMonastery(monasteryToRemove){
   monasteries.forEach(function(arrayMonastery, index){
     if (arrayMonastery.tile.y === monasteryToRemove.tile.y && arrayMonastery.tile.x === monasteryToRemove.tile.x){
       monasteries[index].meepleGroup.destroy();
       monasteries[index].meeples[0].score += 9; 
       monasteries.splice(index, 1);
     }
+  })
+}
+
+function endGameMonasteryCount(){
+  console.log('end game monastery stuff...')
+  var neighbours = 1;
+  monasteries.forEach(function(monastery, index){
+    if (monastery.tile.neighbours.typeTop){
+      neighbours += 1;
+    }
+    if (monastery.tile.neighbours.typeRight){
+      neighbours += 1;
+    } 
+    if (monastery.tile.neighbours.typeBottom){
+      neighbours += 1;
+    } 
+    if (monastery.tile.neighbours.typeLeft){
+      neighbours += 1;
+    }
+    playedTiles.forEach(function(playedTile){
+      if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y){
+        neighbours += 1;
+      }
+      if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y){
+        neighbours += 1;
+      }
+      if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y){
+        neighbours += 1;
+      }
+      if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y){
+        neighbours += 1;
+      }
+    })
+    monasteries[index].meeples[0].score += neighbours; 
   })
 }
 
