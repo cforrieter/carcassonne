@@ -136,7 +136,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               // console.log("City edges: ", cityEdges)
               // console.log("Valid meeples for cities are " + meepleEdges);
               // console.log(cities);
-              // checkFinishedCities(players);
+              // checkFinishedCities();
 
 
               //*********************
