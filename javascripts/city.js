@@ -69,6 +69,7 @@ function mergeCities(city1, city2){
 function checkCityPosition(placedTile, position, single, allPos, validCities){
   var cityToAdd = '';
   var added = false;
+  var counter;
 
   if(placedTile[position] == "CITY"){
     cities.forEach(function(city, index, citiesArray){
@@ -108,9 +109,11 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
                   validCities.push({ pos: 'typeCenter', scoringObject: newRoad });
                 }
                 added = true;
+                counter = getEdges(placedTile, allPos);
+                updateEdgeCount(originalCity, counter);
                 console.log("Newly merged city has edgecount = ", originalCity.edgeCount);
               }
-              var counter = getEdges(placedTile, allPos);
+              counter = getEdges(placedTile, allPos);
               updateEdgeCount(city, counter);
               allPos = allPos.join('');
           }

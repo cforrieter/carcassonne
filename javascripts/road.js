@@ -211,6 +211,17 @@ function getEdges(tile, allPos){
 }
 
 function scoreRoad(road, playersObject){
+  // var arrResult = {};
+  // for (i = 0, n = road.tiles.length; i < n; i++) {
+  //     var item = road.tiles[i];
+  //     arrResult[ item.x + "," + item.y ] = item;
+  // }
+  // var i = 0;
+  // var nonDuplicatedArray = [];
+  // for(var item in arrResult) {
+  //     nonDuplicatedArray[i++] = arrResult[item];
+  // }
+  // var points = nonDuplicatedArray.length;
   var points = road.tiles.length;
   console.log("Closing the road was worth " + points + " points.");
   var players, winners;
