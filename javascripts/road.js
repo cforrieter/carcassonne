@@ -80,7 +80,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
       road.tiles.forEach(function(tile){
         if(!added){
           if(placedTile.neighbours[position] == tile.tile && tile.pos.indexOf(backwards[position]) != -1 && placedTile.neighbours[position][backwards[position]] ){
-            console.log("existing " + position + " road");
+            // console.log("existing " + position + " road");
             if(!single){
               road.edgeCount -= 1;
               allPos = position;
@@ -89,7 +89,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
               updateEdgeCount(road, counter);
               if(placedTile.numNeighbours("ROAD") > 1){
                 var roadToMerge, mergedRoad, originalRoad = road;
-                console.log("Merging roads");
+                // console.log("Merging roads");
 
                 //remove the current position from check since we're merging / accounting for it now
                 var index = allPos.indexOf(position);
@@ -125,7 +125,6 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
                 }else{
                   validRoads.push({ pos: position, scoringObject: road });
                 }
-
               }
               added = true;
             }
@@ -135,7 +134,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
     });
     if(!added){
       if(!single){
-        console.log("new " + position + " road");
+        // console.log("new " + position + " road");
         newRoad = new Road();
         newRoad.edgeCount = 1;
         allPos = position;
@@ -144,7 +143,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
         validRoads.push({ pos: position, scoringObject: newRoad });
         added = true;
       }else{
-        console.log("new road to add at " + position + " road");
+        // console.log("new road to add at " + position + " road");
         roadToAdd = position;
       }
     }
@@ -153,7 +152,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
 }
 
 function addToRoad(placedTile){
-  console.log(placedTile);
+  // console.log(placedTile);
   var positions = ['typeTop', 'typeRight', 'typeBottom', 'typeLeft'];
   var added = false, newRoad, single = false, counter;
   var roadToAdd = '';
@@ -188,9 +187,9 @@ function addToRoad(placedTile){
       }
     }
   });
-  console.log(roadToAdd);
+  // console.log(roadToAdd);
   if(!added && single){
-    console.log("new " + roadToAdd + " road");
+    // console.log("new " + roadToAdd + " road");
     newRoad = new Road();
     newRoad.edgeCount = 2;
     newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
@@ -212,26 +211,45 @@ function getEdges(tile, allPos){
 }
 
 function scoreRoad(road, playersObject){
+  // var arrResult = {};
+  // for (i = 0, n = road.tiles.length; i < n; i++) {
+  //     var item = road.tiles[i];
+  //     arrResult[ item.x + "," + item.y ] = item;
+  // }
+  // var i = 0;
+  // var nonDuplicatedArray = [];
+  // for(var item in arrResult) {
+  //     nonDuplicatedArray[i++] = arrResult[item];
+  // }
+  // var points = nonDuplicatedArray.length;
   var points = road.tiles.length;
-  console.log("Closing the road was worth " + points + " points.");
+  // console.log("Closing the road was worth " + points + " points.");
   var players, winners;
-  road.meeples.forEach(function(meeple){
-    players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
-  });
+  // road.meeples.forEach(function(meeple){
+  //   // players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
+  // });
+  // //find the player with the most meeples
+  //   players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
+  // });
   //find the player with the most meeples
-  var max = 0;
-  for(var player in players){
-    if(players[player] > max){
-      max = players[player];
-    }
-  }
+  // var max = 0;
+  // for(var player in players){
+  //   if(players[player] > max){
+  //     max = players[player];
+  //   }
+  // }
+  //
 
-  for(var p in players){
-    if(players[p] == max){
-      playersObject[p].score += points;
-    }
-  }
+  // for(var p in players){
+  //   if(players[p] == max){
+  //     playersObject[p].score += points;
+  //   }
+  // }
 
+  // console.log(road.meepleGroup);
+  road.meepleGroup.destroy();
+  // scoringMeeples.destroy();
+  // console.log(road.meepleGroup);
 }
 
 function checkFinishedRoads(playersObject){
@@ -239,7 +257,7 @@ function checkFinishedRoads(playersObject){
   roads.forEach(function(road, index){
     if(road.edgeCount === 0){
       scoreRoad(road, playersObject);
-      console.log("Closed road!");
+      // console.log("Closed road!");
       roadsToRemove.push(road);
     }
   });
@@ -249,8 +267,12 @@ function checkFinishedRoads(playersObject){
   });
 }
 
+
+
 function Road(){
   this.tiles = [];
   this.meeples = [];
   this.edgeCount = 0;
+  this.meepleGroup = game.add.group();
+  game.add.existing(this.meepleGroup);
 }

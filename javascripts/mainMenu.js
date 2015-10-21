@@ -2,10 +2,10 @@ var CarcassoneGame = {};
 var startGameButton;
 
 CarcassoneGame.mainMenu = function(game) {
-  this.titleText;
-  this.startGameButton;
-  this.listener;
-  this.particleBurst;
+  // this.titleText;
+  // this.startGameButton;
+  // this.listener;
+  // this.particleBurst;
 };
 
 CarcassoneGame.mainMenu.prototype = {
@@ -48,6 +48,7 @@ CarcassoneGame.mainMenu.prototype = {
     });
     emitter.gravity = 200;
     game.input.onDown.add(this.particleBurst, this);
+
     // startGameButton.scale.setTo(0.20,0.20);
     
     // Changes state from the start screen to the main game
