@@ -218,7 +218,7 @@ function scoreCity(city, playerArray){
   // });
 
   // console.log(this.meepleGroup)
-  this.meepleGroup.destroy();
+  city.meepleGroup.destroy();
   // console.log(this.meepleGroup)
   //find the player with the most meeples
   // var max = 0;

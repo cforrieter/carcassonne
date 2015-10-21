@@ -87,9 +87,16 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
   // })
   var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType]
   var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType]
+  var monasteryCoords = Tile.MONASTERYMEEPLECOORDS[tile.tileType]
   // console.log('Road coords: ', roadCoords);
   // console.log('City coords: ', cityCoords);
 
+  if(monasteryCoords){
+    var monastery = new Monastery();
+    monastery.tile = tile;
+    // monastery.meeples = getCurrentPlayer();
+    monasteries.push(monastery)
+  } 
 
   // coords = mergeObjects(roadCoords, cityCoords);
   // console.log('Merged coords: ', coords);
@@ -98,6 +105,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
 
   checkPositions(roadCoords, roadEdges);
   checkPositions(cityCoords, cityEdges);
+  checkPositions(monasteryCoords, [{pos: 'typeCenter', scoringObject: monastery}])
 
   function checkPositions(coords, meepleEdges){
     var positions = allowablePositions(meepleEdges);
@@ -115,7 +123,6 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
 
         var button = tile.game.add.button(meeplePosition['ghostCoords'][0], meeplePosition['ghostCoords'][1], 'meepleGhost', addMeeple, meeplePosition);
         button.anchor.setTo(0.5);
-        // debugger;
         meepleButtons.add(button, false);
         }
       }

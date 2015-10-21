@@ -148,9 +148,9 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
               tile.showMeepleSpots(tile, roadEdges, cityEdges);
 
-              if (tile.centerMonastery){
-                monasteries.push(tile);
-              }
+              // if (tile.centerMonastery){
+              //   monasteries.push(tile);
+              // }
               checkMonasteries();
             // }
           }
