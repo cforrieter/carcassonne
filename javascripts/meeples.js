@@ -135,7 +135,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     confirm.destroy();
     meepleButtons.destroy();
     window.createTile();
-    checkFinishedCities(players);
+    checkFinishedCities();
   }
 
   function allowablePositions (meepleEdges) {
@@ -180,6 +180,12 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     }
     window.createTile();
     this.scoringObject.meeples.push('player');
+
+    // TODO: remove a meeple from the player when played and score points if points scored
+    // globalPlayers.player1.numMeeples -= 1;
+    // globalPlayers.player1.score += 50;
+    // ============================
+
     // console.log("Scoring object: ",this.scoringObject)
     this.scoringObject.meepleGroup.add(shadow, false);
     this.scoringObject.meepleGroup.add(meeple, false);
@@ -189,8 +195,8 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     game.world.bringToTop(this.scoringObject.meepleGroup);
 
     // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
-    checkFinishedRoads(players);
-    checkFinishedCities(players);
+    checkFinishedRoads();
+    checkFinishedCities();
   }
 
 

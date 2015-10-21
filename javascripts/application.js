@@ -1,38 +1,26 @@
 var screenWidth = 800;
 var screenHeight = 600;
 
-var players = {
-  player1: {turn: false, num: 0, color: "FF0000", score: '000', numMeeples: 7},
-  player2: {turn: false, num: 1, color: "00CCFF", score: '000', numMeeples: 3},
-  player3: {turn: true, num: 2, color: "FFFFCC", score: '000', numMeeples: 4},
-  player4: {turn: false, num: 3, color: "FF9900", score: '000', numMeeples: 2},
-  player5: {turn: false, num: 4, color: "CC0099", score: '000', numMeeples: 1}
+var globalPlayers = {
+  player1: {turn: true, num: 0, color: "FF0000", score: 0, numMeeples: 7},
+  player2: {turn: false, num: 1, color: "00CCFF", score: 0, numMeeples: 7},
+  player3: {turn: false, num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
+  player4: {turn: false, num: 3, color: "FF9900", score: 0, numMeeples: 7},
+  player5: {turn: false, num: 4, color: "CC0099", score: 0, numMeeples: 7}
 }
 
 CarcassoneGame.mainGame = function(game) {
-  // this.leftKey;
-  // this.rightKey;
-  // this.button;
-  // this.camera;
-  // this.spaceKey;
   this.tilesRemaining = 83;
   this.screenWidth = 800;
   this.screenHeight = 600;
-
-
   //This may not be necessary, and can possibly be removed
-  this.tilesGroup = new Phaser.Group(game);
-
+  // this.tilesGroup = new Phaser.Group(game);
   this.hudDisplay = new Phaser.Group(game)
-  // this.gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+
 };
 
 CarcassoneGame.mainGame.prototype = {
-  // var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
 
-
-
-  // var attachedToPointer = false;
   preload: function() {
 
     game.load.image('background', './assets/background.png');
@@ -50,7 +38,7 @@ CarcassoneGame.mainGame.prototype = {
   create: function() {
 
     game.world.setBounds(0, 0, 13000, 13000);
-    // game.add.tileSprite(0,0, 13000, 13000, 'background');
+    game.add.tileSprite(0,0, 13000, 13000, 'background');
 
     camera = new Phaser.Camera(game, 0 , 0, 0, this.screenWidth, this.screenHeight);
     this.game.camera.x = game.world.centerX;
@@ -67,10 +55,8 @@ CarcassoneGame.mainGame.prototype = {
     tile.y = Math.floor((tile.y + 45) / 90) * 90;
     tile.placeTile(tile, game.world.centerX, game.world.centerY);
     addToRoad(tile);
-    checkFinishedRoads();
     addToCity(tile);
     // console.log(cities);
-    checkFinishedCities();
 
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
@@ -81,8 +67,8 @@ CarcassoneGame.mainGame.prototype = {
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
 
-    var tileGroup = game.add.group();
-    tileGroup.z = 1
+    // var tileGroup = game.add.group();
+    // tileGroup.z = 1
 
     createHUD(this)
     game.add.existing(this.hudDisplay)
@@ -96,8 +82,8 @@ CarcassoneGame.mainGame.prototype = {
       var tilesLeftText = game.add.text(screenWidth - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
-      for (player in players) {
-        var player = players[player]
+      for (player in globalPlayers) {
+        var player = globalPlayers[player]
         player.meeples = game.add.group();
         gameState.hudDisplay.add(player.meeples)
         player.icon = game.add.graphics( 0, 0)
@@ -106,55 +92,11 @@ CarcassoneGame.mainGame.prototype = {
         player.icon.beginFill("0x" + player.color, 0.9)
         player.icon.drawRect(10, 10 + player.num * 50, 40, 40);
 
-        player.score = game.add.text(60, 7 + player.num * 50, "000", { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
-        gameState.hudDisplay.add(player.score)
+        player.scoreObject = game.add.text(60, 7 + player.num * 50, 0, { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
+        gameState.hudDisplay.add(player.scoreObject)
 
       };
 
-      updateHUD()
-
-      players.player1.numMeeples = 1
-      // debugger
-      updateHUD()
-        // icon.fixedToCamera = true;
-        // debugger;
-        // game.context.fillStyle = player.color
-        // game.context.fillRect(10, 10 + 60 * index, 50, 50)
-        // icon.fixedToCamera = true;
-
-        function updateHUD() {
-
-          for (player in players) {
-            var player = players[player];
-            if (player.turn) {
-              player.icon.alpha = 1;
-              player.score.alpha = 1;
-            } else {
-              player.icon.alpha = 1;
-              player.score.alpha = 1;
-            }
-            // player.score.text = "555"
-            drawMeeples(60, 34 + player.num * 50,  player.numMeeples)
-          // debugger;
-        }
-
-        function drawMeeples(x, y, quantity) {
-          player.meeples.destroy();
-          player.meeples = game.add.group();
-
-          for (var i = 0; i < quantity; i++) {
-            meep = game.add.sprite(x + 13 * i, y, 'meepleIcon', 0)
-            meep.tint = "0x" + player.color
-            meep.alpha = player.turn ? 1 : 1
-            player.meeples.add(meep)
-            // player.meep.z = 80
-            // player.meeples.add(player.meep)
-          }
-
-          gameState.hudDisplay.add(player.meeples)
-
-        }
-      }
     }
 
     function spaceKeyDown() {
@@ -177,11 +119,8 @@ CarcassoneGame.mainGame.prototype = {
   update: function() {
 
     game.world.bringToTop(this.hudDisplay);
-<<<<<<< HEAD
     game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + gameTiles.length
 
-=======
->>>>>>> 3d6b0ade6a4c74ee837168a5408de7ff20987d49
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
       if(this.game.input.activePointer.position.x > this.screenWidth - 25) {
@@ -198,6 +137,39 @@ CarcassoneGame.mainGame.prototype = {
 
       if(this.game.input.activePointer.position.y > this.screenHeight - 25) {
         this.game.camera.y += 8;
+      }
+
+      updateHUD()
+
+      function updateHUD() {
+
+        for (player in globalPlayers) {
+          var player = globalPlayers[player];
+          player.scoreObject.text = player.score
+          if (player.turn) {
+            player.icon.alpha = 1;
+            player.score.alpha = 1;
+          } else {
+            player.icon.alpha = 1;
+            player.score.alpha = 1;
+          }
+          drawMeeples(60, 34 + player.num * 50,  player.numMeeples)
+        }
+
+        function drawMeeples(x, y, quantity) {
+          player.meeples.destroy();
+          player.meeples = game.add.group();
+
+          for (var i = 0; i < quantity; i++) {
+            meep = game.add.sprite(x + 13 * i, y, 'meepleIcon', 0)
+            meep.tint = "0x" + player.color
+            meep.alpha = player.turn ? 1 : 1
+            player.meeples.add(meep)
+          }
+
+          game.state.states.mainGame.hudDisplay.add(player.meeples)
+
+        }
       }
     }
   },
