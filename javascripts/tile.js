@@ -127,7 +127,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
               var roadEdges = (addToRoad(tile));
               // console.log("Road edges: ", roadEdges)
-              checkFinishedRoads(players);
+              checkFinishedRoads();
 
               //TODO: get cities uncommented and tested *********
 

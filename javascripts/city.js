@@ -76,7 +76,7 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
       city.tiles.forEach(function(tile){
         if(!added){
           if(placedTile.neighbours[position] == tile.tile && tile.pos.indexOf(backwards[position]) != -1){
-            // console.log("existing " + position + " city");
+             console.log("existing " + position + " city");
             if(!single){
               city.edgeCount -= 1;
               allPos = position;
@@ -106,12 +106,12 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
                 //add newly merged city
                 citiesArray.push(originalCity);
                 if(originalCity.meeples.length === 0){
-                  validCities.push({ pos: 'typeCenter', scoringObject: newRoad });
+                  validCities.push({ pos: 'typeCenter', scoringObject: originalCity });
                 }
                 added = true;
                 counter = getEdges(placedTile, allPos);
                 updateEdgeCount(originalCity, counter);
-                // console.log("Newly merged city has edgecount = ", originalCity.edgeCount);
+                console.log("Newly merged city has edgecount = ", originalCity.edgeCount);
               }
               counter = getEdges(placedTile, allPos);
               updateEdgeCount(city, counter);
@@ -120,7 +120,7 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
           if(!added){
             city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
             added = true;
-            // console.log("city has edgecount = ", city.edgeCount);
+             console.log("city has edgecount = ", city.edgeCount);
             if(city.meeples.length === 0){
               if(single){
                 validCities.push({ pos: 'typeCenter', scoringObject: city });
@@ -135,7 +135,7 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
     });
     if(!added){
       if(!single){
-        // console.log("new " + position + " city");
+        console.log("new " + position + " city");
         newCity = new City();
         newCity.edgeCount = 1;
         allPos = position;
@@ -173,17 +173,8 @@ function addToCity(placedTile){
         added = returned[0];
         cityToAdd += returned[1];
         meeplePlaced = returned[2];
-        if(added){
-          // if(!meeplePlaced){
-            // if(single){
-            //   validCities.push("typeCenter");
-            // }else{
-            //   validCities.push(pos);
-            // }
-          // }
-          if(single){
-            done = true;
-          }
+        if(added && single){
+          done = true;
         }
       }
     });
@@ -209,37 +200,49 @@ function getEdges(tile, allPos){
   return counter;
 }
 
-function scoreCity(city, playerArray){
-  var points = city.tiles.length;
-  // console.log("The closing city was worth " + points + " points.");
-  var players, winners;
-  // city.meeples.forEach(function(meeple){
-  //   players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
-  // });
+function scoreCity(city){
 
+  var o = {}, i, l = city.tiles.length, c = [];
+  for(i=0; i<l;i+=1){
+    o[city.tiles[i].tile.x + "," + city.tiles[i].tile.y] = city.tiles[i];
+  }
+  for(i in o){
+    c.push(o[i]);
+  }
+
+  var points = c.length;
+  console.log("The closing city was worth " + points + " points.");
+  var playerMeeples = {};
+  city.meeples.forEach(function(meeple){
+    if(playerMeeples[meeple.name]){
+      playerMeeples[meeple.name] = playerMeeples[meeple.name] + 1;
+    }else{
+      playerMeeples[meeple.name] = 1;
+    }
+  });
   // console.log(this.meepleGroup)
-  this.meepleGroup.destroy();
-  // console.log(this.meepleGroup)
+
   //find the player with the most meeples
-  // var max = 0;
-  // for(var player in players){
-  //   if(players[player] > max){
-  //     max = players[player];
-  //   }
-  // }
-  // //aware points to all the people with the max # of meeples
-  // for(var p in players){
-  //   if(players[p] == max){
-  //     playerArray[p].score += points;
-  //   }
-  // }
-
+  var max = 0;
+  for(var p in playerMeeples){
+    if(playerMeeples[p] > max){
+      max = playerMeeples[p];
+    }
+  }
+  //award points to all the people with the max # of meeples
+  for(var p in playerMeeples){
+    if(playerMeeples[p] == max){
+      getPlayer(p).score += points;
+      console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
+    }
+  }
+  city.meepleGroup.destroy();
 }
 
 function checkFinishedCities(playerArray){
   var citiesToRemove = [];
   cities.forEach(function(city, index){
-    if(city.edgeCount === 0){
+    if(city.edgeCount <= 0){
       scoreCity(city, playerArray);
       // console.log("Closed city!");
       citiesToRemove.push(city);
@@ -255,5 +258,6 @@ function City(){
   this.tiles = [];
   this.meeples = [];
   this.meepleGroup = game.add.group();
+  game.add.existing(this.meepleGroup);
   this.edgeCount = 0;
 }

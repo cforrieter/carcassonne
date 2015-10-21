@@ -179,7 +179,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
       meeple.anchor.setTo(0.5);
     }
     window.createTile();
-    this.scoringObject.meeples.push('player');
+    this.scoringObject.meeples.push(getCurrentPlayer());
     // console.log("Scoring object: ",this.scoringObject)
     this.scoringObject.meepleGroup.add(shadow, false);
     this.scoringObject.meepleGroup.add(meeple, false);
