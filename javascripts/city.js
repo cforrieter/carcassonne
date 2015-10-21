@@ -216,14 +216,17 @@ function scoreCity(city, playerArray){
   // city.meeples.forEach(function(meeple){
   //   players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
   // });
-  // //find the player with the most meeples
+
+  // console.log(this.meepleGroup)
+  this.meepleGroup.destroy();
+  // console.log(this.meepleGroup)
+  //find the player with the most meeples
   // var max = 0;
   // for(var player in players){
   //   if(players[player] > max){
   //     max = players[player];
   //   }
   // }
-  //
   // //aware points to all the people with the max # of meeples
   // for(var p in players){
   //   if(players[p] == max){
@@ -251,5 +254,6 @@ function checkFinishedCities(playerArray){
 function City(){
   this.tiles = [];
   this.meeples = [];
+  this.meepleGroup = game.add.group();
   this.edgeCount = 0;
 }

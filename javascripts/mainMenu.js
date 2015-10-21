@@ -2,10 +2,10 @@ var CarcassoneGame = {};
 var startGameButton;
 
 CarcassoneGame.mainMenu = function(game) {
-  this.titleText;
-  this.startGameButton;
-  this.listener;
-  this.particleBurst;
+  // this.titleText;
+  // this.startGameButton;
+  // this.listener;
+  // this.particleBurst;
 };
 
 CarcassoneGame.mainMenu.prototype = {
@@ -67,7 +67,8 @@ CarcassoneGame.mainMenu.prototype = {
   },
 
   addTimer: function() {
-    this.game.time.events.add(3000, this.stateChange, this);
+    //changed delay to 0 for dev purposes ==================
+    this.game.time.events.add(0, this.stateChange, this);
   },
 
   stateChange: function() {
