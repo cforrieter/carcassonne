@@ -127,7 +127,6 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
               var roadEdges = (addToRoad(tile));
               // console.log("Road edges: ", roadEdges)
-              checkFinishedRoads();
 
               //TODO: get cities uncommented and tested *********
 
@@ -136,7 +135,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               // console.log("City edges: ", cityEdges)
               // console.log("Valid meeples for cities are " + meepleEdges);
               // console.log(cities);
-              // checkFinishedCities();
+
 
 
               //*********************
@@ -146,8 +145,9 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
 
-              tile.showMeepleSpots(tile, roadEdges, cityEdges);
 
+                tile.showMeepleSpots(tile, roadEdges, cityEdges);
+              
               if (tile.centerMonastery){
                 monasteries.push(tile);
               }
