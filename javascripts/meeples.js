@@ -180,10 +180,9 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     }
     window.createTile();
     this.scoringObject.meeples.push('player');
-    console.log("Scoring object: ",this.scoringObject)
+    // console.log("Scoring object: ",this.scoringObject)
     this.scoringObject.meepleGroup.add(shadow, false);
     this.scoringObject.meepleGroup.add(meeple, false);
-    this.scoringObject.meepleGroup.renderable = true;
     // console.log("SCORING OBJECT'S MEEPLE GROUP: ", this.scoringObject.meepleGroup)
     // var currentScoringObjectMeepGroup = this.scoringObject.meepleGroup
     game.add.existing(this.scoringObject.meepleGroup);

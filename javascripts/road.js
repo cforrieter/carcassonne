@@ -80,7 +80,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
       road.tiles.forEach(function(tile){
         if(!added){
           if(placedTile.neighbours[position] == tile.tile && tile.pos.indexOf(backwards[position]) != -1 && placedTile.neighbours[position][backwards[position]] ){
-            console.log("existing " + position + " road");
+            // console.log("existing " + position + " road");
             if(!single){
               road.edgeCount -= 1;
               allPos = position;
@@ -89,7 +89,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
               updateEdgeCount(road, counter);
               if(placedTile.numNeighbours("ROAD") > 1){
                 var roadToMerge, mergedRoad, originalRoad = road;
-                console.log("Merging roads");
+                // console.log("Merging roads");
 
                 //remove the current position from check since we're merging / accounting for it now
                 var index = allPos.indexOf(position);
@@ -134,7 +134,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
     });
     if(!added){
       if(!single){
-        console.log("new " + position + " road");
+        // console.log("new " + position + " road");
         newRoad = new Road();
         newRoad.edgeCount = 1;
         allPos = position;
@@ -223,7 +223,7 @@ function scoreRoad(road, playersObject){
   // }
   // var points = nonDuplicatedArray.length;
   var points = road.tiles.length;
-  console.log("Closing the road was worth " + points + " points.");
+  // console.log("Closing the road was worth " + points + " points.");
   var players, winners;
   // road.meeples.forEach(function(meeple){
   //   // players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
@@ -246,10 +246,10 @@ function scoreRoad(road, playersObject){
   //   }
   // }
 
-  console.log(road.meepleGroup);
+  // console.log(road.meepleGroup);
   road.meepleGroup.destroy();
   // scoringMeeples.destroy();
-  console.log(road.meepleGroup);
+  // console.log(road.meepleGroup);
 }
 
 function checkFinishedRoads(playersObject){

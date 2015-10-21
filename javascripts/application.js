@@ -201,13 +201,13 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWXOOOOO'.split('');
-// gameTiles = randomizeGameTiles(gameTiles);
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
     // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
   type = type || gameTiles.pop();
-  console.log(type);
+  // console.log('Tile type: ',type);
 
 
   // debugger;
@@ -240,7 +240,7 @@ function randomizeGameTiles(gameTiles) {
 // console.log(gameTiles);
 
 function swapTile(type){
-  console.log("swapping tile");
+  console.log("Broken tile! Swapping tile");
   var tempArray = [];
   tempArray.push(type);
   gameTiles.forEach(function(currentTile){

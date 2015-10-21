@@ -83,7 +83,7 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
             }else{
               if(placedTile.numNeighbours("CITY") > 1){
                 var cityToMerge, mergedCity, originalCity = city;
-                console.log("Merging cities");
+                // console.log("Merging cities");
 
                 //remove the current position from check since we're merging / accounting for it now
                 var index = allPos.indexOf(position);
@@ -111,7 +111,7 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
                 added = true;
                 counter = getEdges(placedTile, allPos);
                 updateEdgeCount(originalCity, counter);
-                console.log("Newly merged city has edgecount = ", originalCity.edgeCount);
+                // console.log("Newly merged city has edgecount = ", originalCity.edgeCount);
               }
               counter = getEdges(placedTile, allPos);
               updateEdgeCount(city, counter);
@@ -189,7 +189,7 @@ function addToCity(placedTile){
     });
 
     if(!added && single){
-      console.log("new " + cityToAdd + " city");
+      // console.log("new " + cityToAdd + " city");
       newCity = new City();
       newCity.edgeCount = getEdges(placedTile, allPos);
       newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
@@ -211,7 +211,7 @@ function getEdges(tile, allPos){
 
 function scoreCity(city, playerArray){
   var points = city.tiles.length;
-  console.log("The closing city was worth " + points + " points.");
+  // console.log("The closing city was worth " + points + " points.");
   var players, winners;
   // city.meeples.forEach(function(meeple){
   //   players[meeple] ? players[meeple] += 1 : players[meeple] = 1;
@@ -241,7 +241,7 @@ function checkFinishedCities(playerArray){
   cities.forEach(function(city, index){
     if(city.edgeCount === 0){
       scoreCity(city, playerArray);
-      console.log("Closed city!");
+      // console.log("Closed city!");
       citiesToRemove.push(city);
     }
   });
