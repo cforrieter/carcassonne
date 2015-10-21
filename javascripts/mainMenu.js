@@ -62,7 +62,9 @@ CarcassoneGame.mainMenu.prototype = {
   },
 
   addTimer: function() {
-    this.game.time.events.add(2000, this.stateChange, this);
+    // RESET this 0 delay to 1200 after development ****************
+    //***********************-V-********
+    this.game.time.events.add(0, this.stateChange, this);
   },
 
   stateChange: function() {

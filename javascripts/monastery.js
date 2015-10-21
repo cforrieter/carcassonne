@@ -43,7 +43,7 @@ function removeMonastery(monasteryToRemove){
   monasteries.forEach(function(arrayMonastery, index){
     if (arrayMonastery.tile.y === monasteryToRemove.tile.y && arrayMonastery.tile.x === monasteryToRemove.tile.x){
       monasteries[index].meepleGroup.destroy();
-      monasteries[index].player.score += 9; 
+      monasteries[index].meeples[0].score += 9; 
       monasteries.splice(index, 1);
     }
   })
