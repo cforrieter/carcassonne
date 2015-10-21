@@ -104,6 +104,10 @@ CarcassoneGame.mainGame.prototype = {
       };
 
       updateHUD()
+
+      players.player1.numMeeples = 1
+      // debugger
+      updateHUD()
         // icon.fixedToCamera = true;
         // debugger;
         // game.context.fillStyle = player.color
@@ -128,16 +132,17 @@ CarcassoneGame.mainGame.prototype = {
         function drawMeeples(x, y, quantity) {
           player.meeples.destroy();
           player.meeples = game.add.group();
-          player.meeples.fixedToCamera = true;
 
           for (var i = 0; i < quantity; i++) {
-            player.meep = game.add.sprite(x + 13 * i, y, 'meepleIcon', 0)
-            player.meep.tint = "0x" + player.color
-            player.meep.alpha = player.turn ? 1 : 1
+            meep = game.add.sprite(x + 13 * i, y, 'meepleIcon', 0)
+            meep.tint = "0x" + player.color
+            meep.alpha = player.turn ? 1 : 1
+            player.meeples.add(meep)
             // player.meep.z = 80
-            hudDisplay.add(player.meep)
-            player.meeples.add(player.meep)
+            // player.meeples.add(player.meep)
           }
+
+          hudDisplay.add(player.meeples)
 
         }
       }
