@@ -1,5 +1,13 @@
 
-var playedTiles = []
+var playedTiles = [];
+
+var players = {
+  player1: {
+    score: 0,
+    color: 'blue',
+    name: "Corey"
+  }
+};
 
 function Tile(game, x, y, type)
 {
@@ -128,8 +136,9 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
               var meepleEdges = addToRoad(tile);
               console.log("Valid meeples for roads are " + meepleEdges);
-              checkFinishedRoads();
-
+              console.log(roads);
+              checkFinishedRoads(players);
+              console.log(players);
               //TODO: get cities uncommented and tested *********
 
               // meepleEdges = addToCity(tile);
