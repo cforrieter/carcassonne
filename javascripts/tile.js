@@ -110,51 +110,50 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
   if(this.dragged){
 
-    tile.inputEnabled = false;
-
     if (tile.placementValid(tile, target)) {
-    // Stop dragged
+      tile.dragged = !tile.dragged;
+      // Stop dragged
       this.game.add.tween(this).to(target, 250).start().onComplete.add(addButtons, this);
-      tile.inputEnabled = true;
 
       function addButtons() {
-        tile.dragged = !tile.dragged;
-        confirmDrop(target, function(confirmed){
-          if (confirmed) {
-              // var meepleEdges = [];
-              // if (tile.placementValid (tile, target.x, target.y)){
-              tile.placeTile(tile, tile.x, tile.y);
+        if (!this.dragged) {
+          confirmDrop(target, function(confirmed){
+            if (confirmed) {
+                // var meepleEdges = [];
+                // if (tile.placementValid (tile, target.x, target.y)){
+                tile.placeTile(tile, tile.x, tile.y);
 
-              var roadEdges = (addToRoad(tile));
-              // console.log("Road edges: ", roadEdges)
-              checkFinishedRoads();
+                var roadEdges = (addToRoad(tile));
+                // console.log("Road edges: ", roadEdges)
+                checkFinishedRoads();
 
-              //TODO: get cities uncommented and tested *********
+                //TODO: get cities uncommented and tested *********
 
-              var cityEdges = (addToCity(tile));
-              // console.log(cities);
-              // console.log("City edges: ", cityEdges)
-              // console.log("Valid meeples for cities are " + meepleEdges);
-              // console.log(cities);
-              // checkFinishedCities();
+                var cityEdges = (addToCity(tile));
+                // console.log(cities);
+                // console.log("City edges: ", cityEdges)
+                // console.log("Valid meeples for cities are " + meepleEdges);
+                // console.log(cities);
+                // checkFinishedCities();
 
 
-              //*********************
-              // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
+                //*********************
+                // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
 
-              tile.inputEnabled = false;
-              game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
-              game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+                tile.inputEnabled = false;
+                game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+                game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
 
-              tile.showMeepleSpots(tile, roadEdges, cityEdges);
+                tile.showMeepleSpots(tile, roadEdges, cityEdges);
 
-              if (tile.centerMonastery){
-                monasteries.push(tile);
-              }
-              checkMonasteries();
-            // }
-          }
-        }, this);
+                if (tile.centerMonastery){
+                  monasteries.push(tile);
+                }
+                checkMonasteries();
+              // }
+            }
+          }, this);
+        }
       }
     }
   } else {
