@@ -1,10 +1,10 @@
 var CarcassoneGame = {};
 
 CarcassoneGame.mainMenu = function(game) {
-  this.titleText;
-  this.startGameButton;
-  this.listener;
-  this.particleBurst;
+  // this.titleText;
+  // this.startGameButton;
+  // this.listener;
+  // this.particleBurst;
 };
 
 CarcassoneGame.mainMenu.prototype = {
