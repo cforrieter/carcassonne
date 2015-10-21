@@ -1,16 +1,28 @@
 var screenWidth = 800;
 var screenHeight = 600;
 
+var players = {
+  player1: {turn: false, num: 0, color: "FF0000", score: '000', numMeeples: 7},
+  player2: {turn: false, num: 1, color: "00CCFF", score: '000', numMeeples: 3},
+  player3: {turn: true, num: 2, color: "FFFFCC", score: '000', numMeeples: 4},
+  player4: {turn: false, num: 3, color: "FF9900", score: '000', numMeeples: 2},
+  player5: {turn: false, num: 4, color: "CC0099", score: '000', numMeeples: 1}
+}
+
 CarcassoneGame.mainGame = function(game) {
-  this.leftKey;
-  this.rightKey;
-  this.button;
-  this.camera;
-  this.spaceKey;
+  // this.leftKey;
+  // this.rightKey;
+  // this.button;
+  // this.camera;
+  // this.spaceKey;
   this.screenWidth = 800;
   this.screenHeight = 600;
+
+  //This may not be necessary, and can possibly be removed
   this.tilesGroup = new Phaser.Group(game);
-  this.gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+
+  this.hudDisplay = new Phaser.Group(game)
+  // this.gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 };
 
 CarcassoneGame.mainGame.prototype = {
@@ -29,18 +41,11 @@ CarcassoneGame.mainGame.prototype = {
     game.load.image('tileBorder', 'assets/border.png')
     game.load.image('blueMeeple', 'assets/blueMeeple2.png')
     game.load.image('meepleFarmer', 'assets/meepleFarmer.png')
+    game.load.image('meepleIcon', 'assets/meeple-flat.png')
 
   },
 
   create: function() {
-
-    var players = [
-      {color: "FF0000"},
-      {color: "0000FF"},
-      {color: "00CC00"},
-      {color: "FF9900"},
-      {color: "CC0099"}
-    ]
 
     game.world.setBounds(0, 0, 13000, 13000);
     // game.add.tileSprite(0,0, 13000, 13000, 'background');
@@ -74,100 +79,99 @@ CarcassoneGame.mainGame.prototype = {
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
 
-    createHUD()
+    var tileGroup = game.add.group();
+    tileGroup.z = 1
 
-    function createHUD() {
+    createHUD(this.hudDisplay)
+    game.add.existing(this.hudDisplay)
 
-      // console.log('adding hud')
-      var playersDisplay = game.add.group();
-      playersDisplay.fixedToCamera = true;
+    function createHUD(hudDisplay) {
 
-      players.forEach(function(player, index){
+      console.log('adding hud')
+      hudDisplay.fixedToCamera = true;
+      hudDisplay.render = true;
+      hudDisplay.z = 100;
+
+      for (player in players) {
+        var player = players[player]
+        player.meeples = game.add.group();
+        hudDisplay.add(player.meeples)
         player.icon = game.add.graphics( 0, 0)
-        playersDisplay.add(player.icon)
+        hudDisplay.add(player.icon)
         player.icon.lineStyle(2, "0x" + player.color, 1);
-        player.icon.beginFill("0x" + player.color, 0.6)
-        player.icon.drawRect(10, 10 + index * 50, 40, 40);
+        player.icon.beginFill("0x" + player.color, 0.9)
+        player.icon.drawRect(10, 10 + player.num * 50, 40, 40);
 
-        player.score = game.add.text(60, 7 + index * 50, "123", { font: "26px Lindsay", fill: "#" + player.color, align: "Left", fontWeight: "bold"});
-        player.score.fixedToCamera = true;
+        player.score = game.add.text(60, 7 + player.num * 50, "000", { font: "26px Lindsay", fill: "#" + player.color, align: "Left"});
+        hudDisplay.add(player.score)
 
-        player.score.text = '456'
+      };
 
+      updateHUD()
 
+      players.player1.numMeeples = 1
+      // debugger
+      updateHUD()
         // icon.fixedToCamera = true;
         // debugger;
         // game.context.fillStyle = player.color
         // game.context.fillRect(10, 10 + 60 * index, 50, 50)
         // icon.fixedToCamera = true;
-      });
+
+        function updateHUD() {
+          for (player in players) {
+            var player = players[player];
+            if (player.turn) {
+              player.icon.alpha = 1;
+              player.score.alpha = 1;
+            } else {
+              player.icon.alpha = 1;
+              player.score.alpha = 1;
+            }
+            // player.score.text = "555"
+            drawMeeples(60, 34 + player.num * 50,  player.numMeeples)
+          // debugger;
+        }
+
+        function drawMeeples(x, y, quantity) {
+          player.meeples.destroy();
+          player.meeples = game.add.group();
+
+          for (var i = 0; i < quantity; i++) {
+            meep = game.add.sprite(x + 13 * i, y, 'meepleIcon', 0)
+            meep.tint = "0x" + player.color
+            meep.alpha = player.turn ? 1 : 1
+            player.meeples.add(meep)
+            // player.meep.z = 80
+            // player.meeples.add(player.meep)
+          }
+
+          hudDisplay.add(player.meeples)
+
+        }
+      }
     }
 
     function spaceKeyDown() {
       this.game.camera.x = game.world.centerX;
       this.game.camera.y = game.world.centerY;
     }
+
   },
 
   randomizeGameTiles: function(gameTiles) {
     for (var i = gameTiles.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = this.gameTiles[i];
-        this.gameTiles[i] = this.gameTiles[j];
-        this.gameTiles[j] = temp;
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = this.gameTiles[i];
+      this.gameTiles[i] = this.gameTiles[j];
+      this.gameTiles[j] = temp;
     }
     return gameTiles;
   },
 
-  // this.gameTiles = randomizeGameTiles(gameTiles);
-  // console.log(gameTiles);
-
-// <<<<<<< HEAD
-//   createTile: function(type) {
-//     if (typeof type != 'string') {
-//       //var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-//       var type = this.gameTiles.pop();
-//     }
-//
-//     // console.log(type);
-//     // console.log('CreateTiles', arguments);
-//
-//     tile = new Tile(game, 50, 50,  type);
-//
-//     if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
-//       if (gameTiles.length === 0){
-//         //TODO -- handle this shit
-//         alert("Game over.");
-//       }
-//       swapTile(type);
-//     }
-//     this.game.add.existing(tile);
-//     // console.log('Possible moves: ',tile.getValidMoves());
-//   },
-//
-//   swapTile: function(type){
-//     console.log("swapping tile")
-//     var tempArray = [];
-//     tempArray.push(type);
-//     gameTiles.forEach(function(currentTile){
-//       tempArray.push(currentTile);
-//     });
-//     gameTiles = tempArray;
-//     type = gameTiles.pop();
-//     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
-//     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-//     tile = new Tile(game, 50, 50, type);
-//   },
-//
-//   spaceKeyDown: function() {
-//     this.game.camera.x = game.world.centerX;
-//     this.game.camera.y = game.world.centerY;
-//   },
-//
-// =======
-// >>>>>>> 12447a26c5624eb6112e4648a02d57b00b52f307
   update: function() {
-    game.world.sendToBack(this.tilesGroup);
+
+    game.world.bringToTop(this.hudDisplay);
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
       if(this.game.input.activePointer.position.x > this.screenWidth - 25) {
@@ -192,7 +196,7 @@ CarcassoneGame.mainGame.prototype = {
 
     // game.debug.cameraInfo(game.camera, 32, 32, 'rgb(150, 0, 0)');
     // game.debug.pointer(game.input.activePointer, 32, 32);
-  }
+  },
 };
 
 
@@ -204,27 +208,30 @@ function createTile(type) {
   type = type || gameTiles.pop();
   console.log(type);
 
-  tile = new Tile(game, screenWidth - 50, screenHeight - 50,  type);
-  // debugger;
-  game.state.states.mainGame.tilesGroup.add(tile);
 
-  if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
-    if (gameTiles.length === 0){
+  // debugger;
+  // game.state.states.mainGame.tilesGroup.add(tile);
+
+    tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50,  type);
+
+    if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
+      if (gameTiles.length === 0){
       //TODO -- handle this shit
       alert("Game over.");
     }
     swapTile(type);
   }
+
   this.game.add.existing(tile);
   // console.log('Possible moves: ',tile.getValidMoves());
 }
 
 function randomizeGameTiles(gameTiles) {
   for (var i = gameTiles.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = gameTiles[i];
-      gameTiles[i] = gameTiles[j];
-      gameTiles[j] = temp;
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = gameTiles[i];
+    gameTiles[i] = gameTiles[j];
+    gameTiles[j] = temp;
   }
   return gameTiles;
 }
@@ -242,18 +249,6 @@ function swapTile(type){
   type = gameTiles.pop();
   game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
   game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-  tile = new Tile(game, screenWidth - 50, screenHeight - 50, type);
+  tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50, type);
 }
 
-// function createTile(type) {
-//   if (typeof type != 'string') {
-//     var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-//   }
-
-//   // console.log(type);
-//   // console.log('CreateTiles', arguments);
-
-//   tile = new Tile(game, screenWidth - 50, screenHeight - 50,  type);
-//   this.game.add.existing(tile);
-//   // console.log('Possible moves: ',tile.getValidMoves());
-// }

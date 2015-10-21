@@ -1,14 +1,5 @@
 var playedTiles = [];
 
-var players = {
-  player1: {
-    score: 0,
-    color: 'blue',
-    name: "Corey"
-  }
-};
-
-
 function Tile(game, x, y, type)
 {
   // console.log('Tile ctor', arguments);
