@@ -15,6 +15,7 @@ CarcassoneGame.mainGame = function(game) {
   // this.button;
   // this.camera;
   // this.spaceKey;
+  this.tilesRemaining = 83;
   this.screenWidth = 800;
   this.screenHeight = 600;
   this.hudDisplay = new Phaser.Group(game)
@@ -78,28 +79,30 @@ CarcassoneGame.mainGame.prototype = {
     var tileGroup = game.add.group();
     tileGroup.z = 1
 
-    createHUD(this.hudDisplay)
+    createHUD(this)
     game.add.existing(this.hudDisplay)
 
-    function createHUD(hudDisplay) {
+    function createHUD(gameState) {
 
-      console.log('adding hud')
-      hudDisplay.fixedToCamera = true;
-      hudDisplay.render = true;
-      hudDisplay.z = 100;
+      gameState.hudDisplay.fixedToCamera = true;
+      gameState.hudDisplay.render = true;
+      gameState.hudDisplay.z = 100;
+
+      var tilesLeftText = game.add.text(screenWidth - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
+      gameState.hudDisplay.add(tilesLeftText)
 
       for (player in players) {
         var player = players[player]
         player.meeples = game.add.group();
-        hudDisplay.add(player.meeples)
+        gameState.hudDisplay.add(player.meeples)
         player.icon = game.add.graphics( 0, 0)
-        hudDisplay.add(player.icon)
+        gameState.hudDisplay.add(player.icon)
         player.icon.lineStyle(2, "0x" + player.color, 1);
         player.icon.beginFill("0x" + player.color, 0.9)
         player.icon.drawRect(10, 10 + player.num * 50, 40, 40);
 
-        player.score = game.add.text(60, 7 + player.num * 50, "000", { font: "26px Lindsay", fill: "#" + player.color, align: "Left"});
-        hudDisplay.add(player.score)
+        player.score = game.add.text(60, 7 + player.num * 50, "000", { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
+        gameState.hudDisplay.add(player.score)
 
       };
 
@@ -115,6 +118,7 @@ CarcassoneGame.mainGame.prototype = {
         // icon.fixedToCamera = true;
 
         function updateHUD() {
+
           for (player in players) {
             var player = players[player];
             if (player.turn) {
@@ -142,7 +146,7 @@ CarcassoneGame.mainGame.prototype = {
             // player.meeples.add(player.meep)
           }
 
-          hudDisplay.add(player.meeples)
+          gameState.hudDisplay.add(player.meeples)
 
         }
       }
@@ -168,6 +172,7 @@ CarcassoneGame.mainGame.prototype = {
   update: function() {
 
     game.world.bringToTop(this.hudDisplay);
+    game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + gameTiles.length
 
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
