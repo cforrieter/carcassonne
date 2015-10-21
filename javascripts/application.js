@@ -3,7 +3,7 @@ var screenHeight = 600;
 
 
 var globalPlayers = {
-  player1: {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 3},
+  player1: {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
   player2: {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
   player3: {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
   player4: {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
@@ -203,7 +203,7 @@ CarcassoneGame.mainGame.prototype = {
 
 
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-// gameTiles = randomizeGameTiles(gameTiles);
+gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
     // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
