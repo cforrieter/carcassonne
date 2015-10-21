@@ -143,7 +143,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
         validRoads.push({ pos: position, scoringObject: newRoad });
         added = true;
       }else{
-        console.log("new road to add at " + position + " road");
+        // console.log("new road to add at " + position + " road");
         roadToAdd = position;
       }
     }

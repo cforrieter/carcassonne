@@ -9,8 +9,8 @@ Tile.ROADMEEPLECOORDS = {
   A: {p7: [0, 35]},
   T: {p7: [0, 25]},
   S: {p7: [0, 25]},
-  P: {p4: [-28, -28]},
-  O: {p4: [-28, -28]},
+  P: {p4: [5, 30]},
+  O: {p4: [5, 30]},
   G: {p4: [0, -5]},
   F: {p4: [0, -5]},
   I: {p1: [0, -35], p3: [-35, 0]},
@@ -34,7 +34,7 @@ Tile.CITYMEEPLECOORDS = {
   S: {p4: [0, -25]},
   N: {p4: [-30, -30]},
   M: {p4: [-30, -30]},
-  P: {p4: [5, 30]},
+  P: {p4: [-28, -28]},
   O: {p4: [-28, -28]},
   G: {p4: [0, -5]},
   F: {p4: [0, -5]},
@@ -184,8 +184,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     this.scoringObject.meepleGroup.add(shadow, false);
     this.scoringObject.meepleGroup.add(meeple, false);
     this.scoringObject.meepleGroup.renderable = true;
-    console.log("SCORING OBJECT'S RENDERABLE PROPERTY = ", this.scoringObject.meepleGroup.renderable)
-    console.log("SCORING OBJECT'S MEEPLE GROUP: ", this.scoringObject.meepleGroup)
+    // console.log("SCORING OBJECT'S MEEPLE GROUP: ", this.scoringObject.meepleGroup)
     // var currentScoringObjectMeepGroup = this.scoringObject.meepleGroup
     game.add.existing(this.scoringObject.meepleGroup);
     game.world.bringToTop(this.scoringObject.meepleGroup);

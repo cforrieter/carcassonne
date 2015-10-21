@@ -48,7 +48,7 @@ CarcassoneGame.mainMenu.prototype = {
     });
     emitter.gravity = 200;
     game.input.onDown.add(this.particleBurst, this);
-    console.log(String(this.randomRupees()));
+    // console.log(String(this.randomRupees()));
     // startGameButton.scale.setTo(0.20,0.20);
     
     // Changes state from the start screen to the main game

@@ -88,7 +88,7 @@ CarcassoneGame.mainGame.prototype = {
 
     function createHUD(hudDisplay) {
 
-      console.log('adding hud')
+      // console.log('adding hud')
       hudDisplay.fixedToCamera = true;
       hudDisplay.render = true;
       hudDisplay.z = 100;
@@ -201,8 +201,8 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-gameTiles = randomizeGameTiles(gameTiles);
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWXOOOOO'.split('');
+// gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
     // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));

@@ -76,7 +76,7 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
       city.tiles.forEach(function(tile){
         if(!added){
           if(placedTile.neighbours[position] == tile.tile && tile.pos.indexOf(backwards[position]) != -1){
-            console.log("existing " + position + " city");
+            // console.log("existing " + position + " city");
             if(!single){
               city.edgeCount -= 1;
               allPos = position;
@@ -120,7 +120,7 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
           if(!added){
             city.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
             added = true;
-            console.log("city has edgecount = ", city.edgeCount);
+            // console.log("city has edgecount = ", city.edgeCount);
             if(city.meeples.length === 0){
               if(single){
                 validCities.push({ pos: 'typeCenter', scoringObject: city });
@@ -135,7 +135,7 @@ function checkCityPosition(placedTile, position, single, allPos, validCities){
     });
     if(!added){
       if(!single){
-        console.log("new " + position + " city");
+        // console.log("new " + position + " city");
         newCity = new City();
         newCity.edgeCount = 1;
         allPos = position;

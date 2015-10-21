@@ -132,7 +132,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               //TODO: get cities uncommented and tested *********
 
               var cityEdges = (addToCity(tile));
-              console.log(cities);
+              // console.log(cities);
               // console.log("City edges: ", cityEdges)
               // console.log("Valid meeples for cities are " + meepleEdges);
               // console.log(cities);
