@@ -267,8 +267,6 @@ function checkFinishedRoads(playersObject){
   });
 }
 
-
-
 function Road(){
   this.tiles = [];
   this.meeples = [];

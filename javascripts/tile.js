@@ -1,4 +1,5 @@
 var playedTiles = [];
+var gameOver = false;
 
 function Tile(game, x, y, type)
 {
