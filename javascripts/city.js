@@ -264,4 +264,5 @@ function City(){
   this.meepleGroup = game.add.group();
   game.add.existing(this.meepleGroup);
   this.edgeCount = 0;
+  this.bannerCount = 0;
 }
