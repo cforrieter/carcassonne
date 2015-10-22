@@ -214,6 +214,7 @@ function scoreCity(city){
   console.log("The closing city was worth " + points + " points.");
   var playerMeeples = {};
   city.meeples.forEach(function(meeple){
+    meeple.numMeeples += 1;
     if(playerMeeples[meeple.name]){
       playerMeeples[meeple.name] = playerMeeples[meeple.name] + 1;
     }else{

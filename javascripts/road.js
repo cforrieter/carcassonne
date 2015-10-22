@@ -225,6 +225,7 @@ function scoreRoad(road, playersObject){
   var playerMeeples = {};
 
   road.meeples.forEach(function(meeple){
+    meeple.numMeeples += 1;
     if(playerMeeples[meeple.name]){
       playerMeeples[meeple.name] = playerMeeples[meeple.name] + 1;
     }else{

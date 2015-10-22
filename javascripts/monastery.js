@@ -49,8 +49,7 @@ function scoreAndRemoveMonastery(monasteryToRemove){
 }
 
 function endGameMonasteryCount(){
-  console.log('end game monastery stuff...')
-  var neighbours = 1;
+  var neighbours = 1; //starts at one, because score includes monastery tile
   monasteries.forEach(function(monastery, index){
     if (monastery.tile.neighbours.typeTop){
       neighbours += 1;
