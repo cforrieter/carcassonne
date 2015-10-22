@@ -56,9 +56,10 @@ function mergeCities(city1, city2){
     return city1;
   }else if(city2){
     var newCity = new City();
-    newCity.tiles = city1.tiles.concat(city2.tiles);
-    newCity.meeples = city1.meeples.concat(city2.meeples);
+    newCity.tiles = (city1.tiles).concat(city2.tiles);
+    newCity.meeples = (city1.meeples).concat(city2.meeples);
     newCity.edgeCount = city1.edgeCount + city2.edgeCount - 1;
+    newCity.meepleGroup.addMultiple(city1.meepleGroup.children.concat(city2.meepleGroup.children));
     return newCity;
   }else{
     return city1;
@@ -210,6 +211,7 @@ function scoreCity(city){
     c.push(o[i]);
   }
 
+
   var points = c.length;
   console.log("The closing city was worth " + points + " points.");
   var playerMeeples = {};
@@ -244,6 +246,7 @@ function checkFinishedCities(playerArray){
   var citiesToRemove = [];
   cities.forEach(function(city, index){
     if(city.edgeCount <= 0){
+
       scoreCity(city, playerArray);
       // console.log("Closed city!");
       citiesToRemove.push(city);

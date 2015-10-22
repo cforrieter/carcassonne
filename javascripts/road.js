@@ -30,6 +30,7 @@ function mergeRoads(road1, road2) {
   var newRoad = new Road();
   newRoad.tiles = road1.tiles.concat(road2.tiles);
   newRoad.meeples = road1.meeples.concat(road2.meeples);
+  newRoad.meepleGroup.addMultiple(road1.meepleGroup.children.concat(road2.meepleGroup.children));
   newRoad.edgeCount = road1.edgeCount + road2.edgeCount - 1;
   return newRoad;
 }
