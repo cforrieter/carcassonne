@@ -14,6 +14,7 @@ function Tile(game, x, y, type)
   this.events.onInputDown.add(this.onClick, this, 0);
   this.dragged = false;
   this.dropped = false;
+  this.grabbed = false;
 
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -103,7 +104,7 @@ Tile.prototype = Object.create(Phaser.Sprite.prototype);
 // This function addes the tile placement box and confirmation dialog
 Tile.prototype.onClick = function onClick(draggable, pointer){
   this.currentPointer = pointer;
-  // tile.grabbed = true;
+  tile.grabbed = true;
 
   var target = { x: Math.floor((this.x + 45) / 90) * 90,
                  y: Math.floor((this.y + 45) / 90) * 90
