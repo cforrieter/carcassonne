@@ -58,7 +58,7 @@ CarcassoneGame.mainGame.prototype = {
   preload: function() {
 
     game.load.image('background', './assets/background.png');
-    game.load.spritesheet('tiles', 'assets/zelda-tilesprite.png', 88, 88, 24);
+    game.load.spritesheet('tiles', 'assets/tiles_sprite.png', 88, 88, 24);
     game.load.image('meeple', 'assets/MEEPLE.png')
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
     game.load.image('check', 'assets/check.png')

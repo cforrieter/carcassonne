@@ -133,8 +133,9 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
               var cityEdges = (addToCity(tile));
 
+              // console.log("Cities:");
               // cities.forEach(function(city){
-              //   console.log("Banner count: ",city.bannerCount);
+              //   console.log(city);
               // });
               // console.log(cities);
               // console.log("City edges: ", cityEdges)
