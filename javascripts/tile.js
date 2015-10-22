@@ -15,6 +15,7 @@ function Tile(game, x, y, type)
   this.dragged = false;
   this.dropped = false;
   this.grabbed = false;
+  this.numRotations = 0;
 
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -33,6 +34,7 @@ function Tile(game, x, y, type)
     typeTop: null,
     typeBottom: null
   };
+
 
   var kind = Tile.KINDS[type];
   // if(!kind){

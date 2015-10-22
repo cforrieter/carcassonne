@@ -2,13 +2,12 @@ var screenWidth = 800;
 var screenHeight = 600;
 
 
-var globalPlayers = [
-  {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
-  {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
-  {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
-  {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
-  {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
-];
+ // {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
+  // {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
+  // {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
+  // {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
+  // {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
+var globalPlayers = [];
 
 
 function getCurrentPlayer(){
@@ -92,6 +91,9 @@ CarcassoneGame.mainGame.prototype = {
     addToCity(tile);
     // console.log(cities);
 
+    var tileGroup = game.add.group();
+    this.game.add.existing(tileGroup);
+
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
@@ -101,7 +103,7 @@ CarcassoneGame.mainGame.prototype = {
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
     // spaceKey.onUp.add(spaceKeyUp, this, 0, tile);
-    // var tileGroup = game.add.group();
+
     // tileGroup.z = 1
 
     createHUD(this);
@@ -248,7 +250,6 @@ function createTile(type) {
   type = type || gameTiles.pop();
   // console.log('Tile type: ',type);
 
-
   // debugger;
   // game.state.states.mainGame.tilesGroup.add(tile);
 
@@ -299,3 +300,49 @@ function endGame(){
   checkFinishedRoads();
   console.log("GAME OVER, MAN. GAME OVER.")
 }
+
+var io = io();
+io.on('msg', function(msg){
+  console.log(msg);
+  console.log(io.io.engine.id)
+});
+
+io.on('newGame', function(msg){
+  console.log(msg)
+  var name = prompt('What is your name?');
+  io.emit('name', name);
+});
+
+io.on('gameStart', function(msg){
+
+});
+
+io.on('newTurn', function(msg){
+  console.log(msg)
+  globalPlayers = msg.players;
+  //{lastMove, tile}
+  //if(!mysocketid == currentPlayer socketid){
+  //  rotate tile{
+  //    if negative, add 4
+  //  }
+  //  play tile
+  //  center camera on tile
+  //}
+  //nextTurn()
+  //
+  //if(mysocketid == currentPlayer socketid){
+  // draw tile
+  //}
+})
+
+function endTurnServer(){
+  console.log('Sending to server...')
+  io.emit('turnEnd', {tileType: tile.tileType, tileX: tile.x, tileY: tile.y, rotations: tile.numRotations})
+}
+
+
+
+
+
+
+

@@ -20,6 +20,8 @@ rotate = {
         rotate.right();
       }      
     }
+    tile.numRotations = (tile.numRotations + 1) % 4;
+    console.log("Rotations: ",tile.numRotations)
   },
 
   left: function(){
@@ -43,6 +45,8 @@ rotate = {
         rotate.left();
       }
     }
+    tile.numRotations = (tile.numRotations - 1) % 4 ;
+    console.log("Rotations: ",tile.numRotations)
   }
 };
 

@@ -226,8 +226,6 @@ function endTurn(){
   if (gameTiles.length === 0){ 
     endGame();
   } else {
-    window.createTile();
-    nextTurn();
+    endTurnServer();
   }
-
 }
