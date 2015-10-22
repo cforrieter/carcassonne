@@ -13,8 +13,9 @@
         <script src="javascripts/city.js"></script>
         <script src="javascripts/meeples.js"></script>
         <script src="javascripts/monastery.js"></script>
+        <script src='javascripts/splashScreen.js'></script>
+        <script src='javascripts/zeldaSplash.js'></script>
         <script src='javascripts/mainMenu.js'></script>
-        <script src='javascripts/splashScreen.js'></script> 
         <script src='javascripts/application.js'></script>
     </head>
     <body>
@@ -34,6 +35,7 @@
           var game = window.game = new Phaser.Game(800, 600, Phaser.AUTO);
           // Add gamestates to Phaser
           game.state.add('splashScreen', CarcassoneGame.splashScreen);
+          game.state.add('zeldaSplash', CarcassoneGame.zeldaSplash);
           game.state.add('mainMenu', CarcassoneGame.mainMenu);
           game.state.add('mainGame', CarcassoneGame.mainGame);
           game.state.start('splashScreen');

@@ -1,14 +1,17 @@
-// var CarcassoneGame = {};
+var CarcassoneGame = {};
 
 CarcassoneGame.splashScreen = function(game) {
   this.phaserLogo;
-  this.stateSwapTimer
+  this.stateSwapTimer;
 };
 
 var stateSwapTimer;
-var bmd;
-var area;
-var dropTime = 0;
+var slices;
+var waveform;
+
+var xl;
+var cx = 0;
+
 
 CarcassoneGame.splashScreen.prototype = {
 
@@ -18,6 +21,10 @@ CarcassoneGame.splashScreen.prototype = {
     game.load.image('lhl-logo', 'assets/lhl-logo.png');
     game.load.image('node-logo', 'assets/node-logo.png');
     game.load.audio('secret', 'assets/secret.mp3');
+    game.load.audio('rupee-gained', 'assets/rupee-gained.mp3');
+    game.load.audio('sword-spin-complete', 'assets/sword-spin-complete.mp3');
+    game.load.audio('world-warp', 'assets/world-warp.mp3');
+    game.load.audio('zelda-theme', 'assets/zelda-theme.mp3');
   },
 
   create:  function() {
@@ -37,20 +44,15 @@ CarcassoneGame.splashScreen.prototype = {
     var node = game.add.sprite(575, 500, 'node-logo');
     node.scale.setTo(0.5,0.5);
 
-
-    bmd = game.make.bitmapData(800,600);
-    bmd.addToWorld();
-    area = new Phaser.Rectangle(20, 550, 400, 16);
-    bmd.copyRect('lhl-logo', area, 20, 550);
-
   },
 
   goToZelda: function () {
     var navi = this.game.add.audio('secret');
-    navi.allowMultiple = true;
+    navi.allowMultiple = false;
     navi.addMarker('secret', 0, 2);
     navi.play('secret');
     this.game.time.events.remove(stateSwapTimer);
+    stateSwapTimer = this.game.time.events.add(5000, this.goToZeldaSplash, this);
   },
 
   introTimer: function() {
@@ -61,15 +63,7 @@ CarcassoneGame.splashScreen.prototype = {
     this.state.start('mainMenu');
   },
 
-  update: function() {
-    if (area.y > 0 && game.time.now > dropTime) {
-      for (var y = 0; y < area.y; y++)
-      {
-        bmd.copyRect('lhl-logo', area, 20, y);
-      }
-
-      area.y--;
-      dropTime = game.time.now + 25;
-    }
+  goToZeldaSplash: function() {
+    this.state.start('zeldaSplash');
   }
 };
