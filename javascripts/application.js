@@ -217,8 +217,7 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-var gameTiles = 'EVE'.split('');
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
