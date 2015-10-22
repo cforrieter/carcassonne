@@ -197,7 +197,7 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
       var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
       meeple.anchor.setTo(0.5);
     }
-    window.createTile();
+
     var currentPlayer = getCurrentPlayer();
     this.scoringObject.meeples.push(currentPlayer);
     currentPlayer.numMeeples -= 1;
@@ -217,6 +217,12 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
     // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
     checkFinishedRoads();
     checkFinishedCities();
+
+    if (gameTiles.length === 0){ 
+      endGame();
+    } else {
+      window.createTile();
+    }
   }
 
 

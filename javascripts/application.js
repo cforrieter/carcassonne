@@ -201,7 +201,6 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
@@ -214,15 +213,15 @@ function createTile(type) {
   // debugger;
   // game.state.states.mainGame.tilesGroup.add(tile);
 
-    tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50,  type);
+  tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50,  type);
 
-    if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
-      if (gameTiles.length === 0){
-      //TODO -- handle this shit
-      alert("Game over.");
+  if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
+    if (gameTiles.length === 0){
+    //TODO -- handle this shit
+    alert("Game over.");
     }
     swapTile(type);
-  }
+  } 
 
   this.game.add.existing(tile);
   // console.log('Possible moves: ',tile.getValidMoves());
@@ -252,4 +251,9 @@ function swapTile(type){
   game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
   game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
   tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50, type);
+}
+
+function endGame(){
+  endGameMonasteryCount();
+  console.log("GAME OVER, MAN. GAME OVER.")
 }
