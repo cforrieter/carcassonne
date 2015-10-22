@@ -211,8 +211,13 @@ function scoreCity(city){
     c.push(o[i]);
   }
 
-
-  var points = c.length;
+  var points;
+  if (gameOver){
+    points = c.length;
+  } else {
+    points = c.length * 2;
+  }
+  
   console.log("The closing city was worth " + points + " points.");
   var playerMeeples = {};
   city.meeples.forEach(function(meeple){
@@ -245,7 +250,8 @@ function scoreCity(city){
 function checkFinishedCities(playerArray){
   var citiesToRemove = [];
   cities.forEach(function(city, index){
-    if(city.edgeCount <= 0){
+    if(city.edgeCount <= 0 || gameOver){
+      console.log("Is game over? ", gameOver)
 
       scoreCity(city, playerArray);
       // console.log("Closed city!");

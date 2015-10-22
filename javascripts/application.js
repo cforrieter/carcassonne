@@ -217,7 +217,8 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+var gameTiles = 'EVE'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
@@ -272,5 +273,7 @@ function swapTile(type){
 function endGame(){
   gameOver = true;
   endGameMonasteryCount();
+  checkFinishedCities();
+  checkFinishedRoads();
   console.log("GAME OVER, MAN. GAME OVER.")
 }

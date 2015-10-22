@@ -227,5 +227,7 @@ function endTurn(){
     endGame();
   } else {
     window.createTile();
+    nextTurn();
   }
+
 }

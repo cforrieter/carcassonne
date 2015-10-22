@@ -255,7 +255,7 @@ function scoreRoad(road, playersObject){
 function checkFinishedRoads(playersObject){
   var roadsToRemove = [];
   roads.forEach(function(road, index){
-    if(road.edgeCount === 0){
+    if(road.edgeCount === 0 || gameOver){
       scoreRoad(road, playersObject);
       // console.log("Closed road!");
       roadsToRemove.push(road);
