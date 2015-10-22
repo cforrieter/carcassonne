@@ -147,7 +147,8 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
               tile.showMeepleSpots(tile, roadEdges, cityEdges);
 
-              
+
+
             // }
           }
         }, this);

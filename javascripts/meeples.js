@@ -155,6 +155,8 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
     checkFinishedRoads();
     checkFinishedCities();
     checkMonasteries();
+    nextTurn();
+
   }
 
   function allowablePositions (meepleEdges) {
@@ -218,9 +220,10 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
     checkFinishedRoads();
     checkFinishedCities();
 
-    if (gameTiles.length === 0){ 
+    if (gameTiles.length === 0){
       endGame();
     } else {
+      nextTurn();
       window.createTile();
     }
   }

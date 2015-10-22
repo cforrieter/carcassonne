@@ -2,13 +2,13 @@ var screenWidth = 800;
 var screenHeight = 600;
 
 
-var globalPlayers = {
-  player1: {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
-  player2: {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
-  player3: {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
-  player4: {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
-  player5: {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
-}
+var globalPlayers = [
+  {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
+  {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
+  {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
+  {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
+  {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
+];
 
 
 function getCurrentPlayer(){
@@ -23,6 +23,21 @@ function getPlayer(name){
   for(var player in globalPlayers){
     if(globalPlayers[player].name == name){
       return globalPlayers[player];
+    }
+  }
+}
+
+function nextTurn(){
+
+  for(var i = 0; i < globalPlayers.length; i++){
+    if(globalPlayers[i].turn){
+      globalPlayers[i].turn = false;
+      if(globalPlayers[i+1]){
+        globalPlayers[i+1].turn = true;
+      }else{
+        globalPlayers[0].turn = true;
+      }
+      break;
     }
   }
 }
@@ -89,8 +104,8 @@ CarcassoneGame.mainGame.prototype = {
     // var tileGroup = game.add.group();
     // tileGroup.z = 1
 
-    createHUD(this)
-    game.add.existing(this.hudDisplay)
+    createHUD(this);
+    game.add.existing(this.hudDisplay);
 
     function createHUD(gameState) {
 
@@ -101,20 +116,18 @@ CarcassoneGame.mainGame.prototype = {
       var tilesLeftText = game.add.text(screenWidth - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
-      for (player in globalPlayers) {
-        var player = globalPlayers[player]
+      globalPlayers.forEach(function(player, index){
         player.meeples = game.add.group();
-        gameState.hudDisplay.add(player.meeples)
-        player.icon = game.add.graphics( 0, 0)
-        gameState.hudDisplay.add(player.icon)
+        gameState.hudDisplay.add(player.meeples);
+        player.icon = game.add.graphics( 0, 0);
+        gameState.hudDisplay.add(player.icon);
         player.icon.lineStyle(2, "0x" + player.color, 1);
-        player.icon.beginFill("0x" + player.color, 0.9)
-        player.icon.drawRect(10, 10 + player.num * 50, 40, 40);
+        player.icon.beginFill("0x" + player.color, 0.9);
+        player.icon.drawRect(10, 10 + index * 50, 40, 40);
 
         player.scoreObject = game.add.text(60, 7 + player.num * 50, 0, { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
-        gameState.hudDisplay.add(player.scoreObject)
-
-      };
+        gameState.hudDisplay.add(player.scoreObject);
+      });
 
     }
 
@@ -221,7 +234,7 @@ function createTile(type) {
     alert("Game over.");
     }
     swapTile(type);
-  } 
+  }
 
   this.game.add.existing(tile);
   // console.log('Possible moves: ',tile.getValidMoves());
