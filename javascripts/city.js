@@ -53,12 +53,9 @@ function findAdjacentCity(searchTile, pos){
 function mergeCities(city1, city2){
 
   if(city1 == city2){
-    console.log("city1 = city2");
     city1.edgeCount -= 2;
     return city1;
   }else if(city2){
-    console.log("Merging city");
-  
     var newCity = new City();
     newCity.tiles = (city1.tiles).concat(city2.tiles);
     newCity.meeples = (city1.meeples).concat(city2.meeples);
@@ -67,7 +64,6 @@ function mergeCities(city1, city2){
     newCity.meepleGroup.addMultiple(city1.meepleGroup.children.concat(city2.meepleGroup.children));
     return newCity;
   }else{
-    console.log("only 1 city");
     return city1;
   }
 
