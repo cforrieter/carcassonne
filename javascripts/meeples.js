@@ -151,10 +151,7 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
     if(meepleButtons){
         meepleButtons.destroy();
     }
-    window.createTile();
-    checkFinishedRoads();
-    checkFinishedCities();
-    checkMonasteries();
+    endTurn();
   }
 
   function allowablePositions (meepleEdges) {
@@ -215,16 +212,18 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
     game.world.bringToTop(this.scoringObject.meepleGroup);
 
     // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
-    checkFinishedRoads();
-    checkFinishedCities();
-
-    if (gameTiles.length === 0){ 
-      endGame();
-    } else {
-      window.createTile();
-    }
+    endTurn();
   }
 
-
-
 };
+
+function endTurn(){
+  checkFinishedRoads();
+  checkFinishedCities();
+  checkMonasteries();
+  if (gameTiles.length === 0){ 
+    endGame();
+  } else {
+    window.createTile();
+  }
+}

@@ -254,6 +254,7 @@ function swapTile(type){
 }
 
 function endGame(){
+  gameOver = true;
   endGameMonasteryCount();
   console.log("GAME OVER, MAN. GAME OVER.")
 }
