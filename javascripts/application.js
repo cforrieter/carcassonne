@@ -142,53 +142,56 @@ CarcassoneGame.mainGame.prototype = {
 
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
-      if(this.game.input.activePointer.position.x > this.screenWidth - 25) {
-        this.game.camera.x += 8;
+      var scrollWidth = 50;
+      var scrollSpeed = 20;
+
+      if(this.game.input.activePointer.position.x > this.screenWidth - scrollWidth) {
+        this.game.camera.x += Math.max(0, (this.game.input.activePointer.position.x - (this.screenWidth - scrollWidth))) / scrollWidth * scrollSpeed;
       }
 
-      if(this.game.input.activePointer.position.x < 25) {
-        this.game.camera.x -= 8;
+      if(this.game.input.activePointer.position.x < scrollWidth) {
+        this.game.camera.x -= Math.max(0, (scrollWidth - this.game.input.activePointer.position.x)) / scrollWidth * scrollSpeed;
       }
 
-      if(this.game.input.activePointer.position.y < 25) {
-        this.game.camera.y -= 8;
+      if(this.game.input.activePointer.position.y < scrollWidth) {
+        this.game.camera.y -= Math.max(0, (scrollWidth - this.game.input.activePointer.position.y)) / scrollWidth * scrollSpeed;
       }
 
-      if(this.game.input.activePointer.position.y > this.screenHeight - 25) {
-        this.game.camera.y += 8;
+      if(this.game.input.activePointer.position.y > this.screenHeight - scrollWidth) {
+        this.game.camera.y += Math.max(0, (this.game.input.activePointer.position.y - (this.screenHeight - scrollWidth))) / scrollWidth * scrollSpeed;
+      }
+    }
+
+    updateHUD()
+
+    function updateHUD() {
+
+      for (player in globalPlayers) {
+        var player = globalPlayers[player];
+        player.scoreObject.text = player.score
+        if (player.turn) {
+          player.icon.alpha = 1;
+          player.score.alpha = 1;
+        } else {
+          player.icon.alpha = 1;
+          player.score.alpha = 1;
+        }
+        drawMeeples(60, 34 + player.num * 50,  player.numMeeples)
       }
 
-      updateHUD()
+      function drawMeeples(x, y, quantity) {
+        player.meeples.destroy();
+        player.meeples = game.add.group();
 
-      function updateHUD() {
-
-        for (player in globalPlayers) {
-          var player = globalPlayers[player];
-          player.scoreObject.text = player.score
-          if (player.turn) {
-            player.icon.alpha = 1;
-            player.score.alpha = 1;
-          } else {
-            player.icon.alpha = 1;
-            player.score.alpha = 1;
-          }
-          drawMeeples(60, 34 + player.num * 50,  player.numMeeples)
+        for (var i = 0; i < quantity; i++) {
+          meep = game.add.sprite(x + 13 * i, y, 'meepleIcon', 0)
+          meep.tint = "0x" + player.color
+          meep.alpha = player.turn ? 1 : 1
+          player.meeples.add(meep)
         }
 
-        function drawMeeples(x, y, quantity) {
-          player.meeples.destroy();
-          player.meeples = game.add.group();
+        game.state.states.mainGame.hudDisplay.add(player.meeples)
 
-          for (var i = 0; i < quantity; i++) {
-            meep = game.add.sprite(x + 13 * i, y, 'meepleIcon', 0)
-            meep.tint = "0x" + player.color
-            meep.alpha = player.turn ? 1 : 1
-            player.meeples.add(meep)
-          }
-
-          game.state.states.mainGame.hudDisplay.add(player.meeples)
-
-        }
       }
     }
 
