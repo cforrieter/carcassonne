@@ -28,7 +28,7 @@ function checkMonasteries(){
       }
     };
     if(monasteryNeighbours === 8){
-      scoreAndRemoveMonastery();
+      scoreAndRemoveMonastery(monastery);
     };
     monasteryNeighbours = 0;
   });
