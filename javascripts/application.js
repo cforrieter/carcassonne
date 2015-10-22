@@ -125,7 +125,7 @@ CarcassoneGame.mainGame.prototype = {
         player.icon.beginFill("0x" + player.color, 0.9);
         player.icon.drawRect(10, 10 + index * 50, 40, 40);
 
-        player.scoreObject = game.add.text(60, 7 + player.num * 50, 0, { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
+        player.scoreObject = game.add.text(60, 7 + player.num * 50, player.name + '(0)', { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
         gameState.hudDisplay.add(player.scoreObject);
       });
 
@@ -181,7 +181,7 @@ CarcassoneGame.mainGame.prototype = {
 
       for (player in globalPlayers) {
         var player = globalPlayers[player];
-        player.scoreObject.text = player.score
+        player.scoreObject.text = player.name + '(' + player.score + ')';
         if (player.turn) {
           player.icon.alpha = 1;
           player.score.alpha = 1;
@@ -189,7 +189,7 @@ CarcassoneGame.mainGame.prototype = {
           player.icon.alpha = 1;
           player.score.alpha = 1;
         }
-        drawMeeples(60, 34 + player.num * 50,  player.numMeeples)
+        drawMeeples(60, 38 + player.num * 50,  player.numMeeples)
       }
 
       function drawMeeples(x, y, quantity) {
