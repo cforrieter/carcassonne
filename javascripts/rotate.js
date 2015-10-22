@@ -15,7 +15,7 @@ rotate = {
     tile.typeRight = z;
     tile.typeBottom = w;
 
-    if (!tile.dragged && tile.grabbed) {
+    if (tile.dropped) {
       if (!(tile.placementValid(tile, tile))) {
         rotate.right();
       }      
@@ -38,7 +38,7 @@ rotate = {
     tile.typeRight = x;
     tile.typeBottom = y;
 
-    if (!tile.dragged && tile.grabbed) {
+    if (tile.dropped) {
       if (!(tile.placementValid(tile, tile))) {
         rotate.left();
       }
