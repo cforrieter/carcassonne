@@ -48,7 +48,7 @@ CarcassoneGame.mainGame.prototype = {
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
     game.load.image('check', 'assets/check.png')
     game.load.image('tileBorder', 'assets/border.png')
-    game.load.image('blueMeeple', 'assets/MEEPLE.png')
+    game.load.image('meeple', 'assets/MEEPLE.png')
     game.load.image('meepleFarmer', 'assets/meepleFarmer.png')
     game.load.image('meepleIcon', 'assets/meeple-flat.png')
 
