@@ -185,14 +185,15 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
       var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
       meeple.anchor.setTo(0.5);
     } else {
-      var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
+      var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meeple')
       shadow.anchor.setTo(0.5);
       shadow.x += 3;
       shadow.y += 3;
       shadow.tint = 0x000000;
       shadow.alpha = 0.6;
-      var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'blueMeeple')
+      var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meeple')
       meeple.anchor.setTo(0.5);
+      meeple.tint = "0x" + getCurrentPlayer().color
     }
 
     var currentPlayer = getCurrentPlayer();
