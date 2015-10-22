@@ -138,6 +138,7 @@ CarcassoneGame.mainGame.prototype = {
   update: function() {
 
     game.world.bringToTop(this.hudDisplay);
+    game.world.bringToTop(this.scoringObject.meepleGroup);
     game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + gameTiles.length
 
     // TODO: dry this out
