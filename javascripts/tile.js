@@ -36,8 +36,9 @@ function Tile(game, x, y, type)
   this.farms = [];
 
   for(var f in farmEdges){
-    var farm = {edges: []}
+    var farm = {edges: [], hasCity: false}
     farm.edges = farmEdges[f].edges;
+    farm.hasCity = farmEdges[f].hasCity;
     this.farms.push(farm);
   }
 

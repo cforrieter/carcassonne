@@ -19,30 +19,30 @@ var farms = []
 // }
 
 Tile.FARMS = {
-  B: [{edges: 'ABCDEFGH'.split('')}],
-  A: [{edges: 'ABCDEFGH'.split('')}],
+  B: [{edges: 'ABCDEFGH'.split(''), hasCity: false}],
+  A: [{edges: 'ABCDEFGH'.split(''), hasCity: false}],
   C: [],
-  R: [{edges: 'FE'.split('')}],
-  Q: [{edges: 'FE'.split('')}],
-  T: [{edges: 'F'.split('')}, {edges: 'E'.split('')}],
-  S: [{edges: 'F'.split('')}, {edges: 'E'.split('')}],
-  N: [{edges: 'FEDC'.split('')}],
-  M: [{edges: 'FEDC'.split('')}],
-  P: [{edges: 'FC'.split('')}, {edges: 'ED'.split('')}],
-  O: [{edges: 'FC'.split('')}, {edges: 'ED'.split('')}],
-  G: [{edges: 'FE'.split('')}, {edges: 'AB'.split('')}],
-  F: [{edges: 'FE'.split('')}, {edges: 'AB'.split('')}],
-  I: [{edges: 'FEDC'.split('')}],
-  H: [{edges: 'CDHG'.split('')}],
-  E: [{edges: 'HGFEDC'.split('')}],
-  K: [{edges: 'GF'.split('')}, {edges: 'HCDE'.split('')}],
-  J: [{edges: 'HGFC'.split('')}, {edges: 'DE'.split('')}],
-  L: [{edges: 'HC'.split('')}, {edges: 'GF'.split('')}, {edges: 'ED'.split('')}],
-  U: [{edges: 'AHGF'.split('')}, {edges: 'BCDE'.split('')}],
-  V: [{edges: 'GF'.split('')}, {edges: 'HABCDE'.split('')}],
-  W: [{edges: 'HABC'.split('')}, {edges: 'GF'.split('')}, {edges: 'ED'.split('')}],
-  X: [{edges: 'AH'.split('')}, {edges: 'BC'.split('')}, {edges: 'DE'.split('')}, {edges: 'GF'.split('')}],
-  D: [{edges: 'HC'.split('')}, {edges: 'GFED'.split('')}]
+  R: [{edges: 'FE'.split(''), hasCity: true}],
+  Q: [{edges: 'FE'.split(''), hasCity: true}],
+  T: [{edges: 'F'.split(''), hasCity: true}, {edges: 'E'.split(''), hasCity: true}],
+  S: [{edges: 'F'.split(''), hasCity: true}, {edges: 'E'.split(''), hasCity: true}],
+  N: [{edges: 'FEDC'.split(''), hasCity: true}],
+  M: [{edges: 'FEDC'.split(''), hasCity: true}],
+  P: [{edges: 'FC'.split(''), hasCity: true}, {edges: 'ED'.split(''), hasCity: false}],
+  O: [{edges: 'FC'.split(''), hasCity: true}, {edges: 'ED'.split(''), hasCity: false}],
+  G: [{edges: 'FE'.split(''), hasCity: true}, {edges: 'AB'.split(''), hasCity: true}],
+  F: [{edges: 'FE'.split(''), hasCity: true}, {edges: 'AB'.split(''), hasCity: true}],
+  I: [{edges: 'FEDC'.split(''), hasCity: true}],
+  H: [{edges: 'CDHG'.split(''), hasCity: true}],
+  E: [{edges: 'HGFEDC'.split(''), hasCity: true}],
+  K: [{edges: 'GF'.split(''), hasCity: false}, {edges: 'HCDE'.split(''), hasCity: true}],
+  J: [{edges: 'HGFC'.split(''), hasCity: true}, {edges: 'DE'.split(''), hasCity: false}],
+  L: [{edges: 'HC'.split(''), hasCity: true}, {edges: 'GF'.split(''), hasCity: false}, {edges: 'ED'.split(''), hasCity: false}],
+  U: [{edges: 'AHGF'.split(''), hasCity: false}, {edges: 'BCDE'.split(''), hasCity: false}],
+  V: [{edges: 'GF'.split(''), hasCity: false}, {edges: 'HABCDE'.split(''), hasCity: false}],
+  W: [{edges: 'HABC'.split(''), hasCity: false}, {edges: 'GF'.split(''), hasCity: false}, {edges: 'ED'.split(''), hasCity: false}],
+  X: [{edges: 'AH'.split(''), hasCity: false}, {edges: 'BC'.split(''), hasCity: false}, {edges: 'DE'.split(''), hasCity: false}, {edges: 'GF'.split(''), hasCity: false}],
+  D: [{edges: 'HC'.split(''), hasCity: true}, {edges: 'GFED'.split(''), hasCity: false}]
 }
 
 Tile.prototype.edgeConnection = function edgeConnection(side, tile, isNeighbour) {
@@ -174,12 +174,12 @@ function addFarmNodes(tile) {
                 if (tFarm.parent == undefined) {//if current tile doesn't have a parent take it from the neighbour
                   tFarm.parent = nFarm.parent;
                   nFarm.parent.children.push(tFarm);
-                  console.log('adding new farm to neighbour')
+                  // console.log('adding new farm to neighbour')
                 } else if(tFarm.parent == nFarm.parent) {
-                  console.log('farms already connected')
+                  // console.log('farms already connected')
                   return;
                 } else {
-                  console.log('incorporating neighbour farms to tile farm')
+                  // console.log('incorporating neighbour farms to tile farm')
                   var toDelete = nFarm.parent
                   nFarm.parent.children.forEach (function(farm) {
                     farm.parent = tFarm.parent
@@ -199,7 +199,7 @@ function addFarmNodes(tile) {
 
   tile.farms.forEach (function(farm) {
     if (farm.parent == undefined) {
-      console.log('creating new farm')
+      // console.log('creating new farm')
       var farmObject = {}
       farms.push(farmObject);
       farmObject.name = Math.random();
@@ -208,8 +208,8 @@ function addFarmNodes(tile) {
     }
   })
 
-  console.log(farms)
-  console.log('=========================================')
+  // console.log(farms)
+  // console.log('=========================================')
 
   // var x = tile.x;
   // var y = tile.y;
