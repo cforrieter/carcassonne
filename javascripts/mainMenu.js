@@ -66,6 +66,7 @@ CarcassoneGame.mainMenu.prototype = {
     // RESET this 0 delay to 1200 after development ****************
     //***********************-V-********
     this.game.time.events.add(0, this.stateChange, this);
+    io.emit('startingGame');
   },
 
   stateChange: function() {

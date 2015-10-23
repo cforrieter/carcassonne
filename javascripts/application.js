@@ -99,6 +99,7 @@ CarcassoneGame.mainGame.prototype = {
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
     // console.log(game.world.centerX, game.world.centerY)
     // createTile();
+    io.emit('gameReady');
 
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
@@ -264,7 +265,7 @@ function createTile(type) {
   }
 
   this.game.add.existing(tile);
-  console.log('Possible moves: ',tile.getValidMoves());
+  // console.log('Possible moves: ',tile.getValidMoves());
 }
 
 function randomizeGameTiles(gameTiles) {
@@ -313,9 +314,12 @@ io.on('newGame', function(msg){
   io.emit('name', name);
 });
 
+io.on('playersReady', function(msg){
+  globalPlayers = msg;
+})
+
 io.on('gameStart', function(msg){
-  console.log(msg)
-  globalPlayers = msg.players;
+  console.log('recevied game start call:', msg)
   var currentPlayer = getCurrentPlayer();
   if(currentPlayer.id == io.io.engine.id){
     console.log("It's your turn! Creating tile!")
