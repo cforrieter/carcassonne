@@ -330,13 +330,33 @@ io.on('gameStart', function(msg){
 io.on('newTurn', function(msg){
   console.log("New Turn!");
   var currentPlayer = getCurrentPlayer();
-  // if currentPlayer.id == 
+  if(!(currentPlayer.id == io.io.engine.id)){
+    console.log("Placing other player's tile")
+    window.createTile(msg.tileType);
+    var rotations = msg.rotations;
+    if(rotations < 0){
+      rotations += 4;
+    }
+    for(var x = 0; x < rotations; x++){
+      tile.rotateRight();
+    }
+    tile.fixedToCamera = false;
+    tile.x = msg.tileX;
+    tile.y = msg.tileY;
+    tile.placeTile(tile, msg.tileX, msg.tileY);
+    addToRoad(tile);
+    addToCity(tile);
+    tile.inputEnabled = false;
+    game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+    game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+  }
   //{lastMove, tile}
   //if(!mysocketid == currentPlayer socketid){
   //  rotate tile{
   //    if negative, add 4
   //  }
-  //  play tile
+  //  
+  //  currentTile.placeTile(currentTile, msg.tileX, msg.tileY);
   //  center camera on tile
   //}
   //nextTurn()
@@ -349,6 +369,7 @@ io.on('newTurn', function(msg){
 function endTurnServer(){
   console.log('Sending to server...')
   // do we need to add meeple to this object?
+  console.log('tile x: ' + tile.x + ' tile y: ' + tile.y);
   io.emit('turnEnd', {tileType: tile.tileType, tileX: tile.x, tileY: tile.y, rotations: tile.numRotations})
 }
 
