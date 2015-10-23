@@ -45,6 +45,7 @@ Tile.prototype.placeTile = function placeTile(newTile, x, y) {
       }
     });
 
+  addFarmNodes(newTile);
   playedTiles.push(newTile);
   // console.log(playedTiles);
 }

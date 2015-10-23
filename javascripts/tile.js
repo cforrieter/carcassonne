@@ -32,6 +32,15 @@ function Tile(game, x, y, type)
     typeBottom: null
   };
 
+  var farmEdges = Tile.FARMS[type];
+  this.farms = [];
+
+  for(var f in farmEdges){
+    var farm = {edges: []}
+    farm.edges = farmEdges[f].edges;
+    this.farms.push(farm);
+  }
+
   var kind = Tile.KINDS[type];
   // if(!kind){
   //   throw new Error('Invalid tile type: ' + type);
@@ -42,58 +51,6 @@ function Tile(game, x, y, type)
   }
 
 }
-
-
-
-// // TILE COORD POINTS
-// // xA   xB   xC
-// // xD   xE   xF
-// // xG   xH   xI
-// // -------------------
-
-// Tile.PTS = {
-//   xA: [0 + 90 * sin(degToRad(this.angle)), 90 - 90 * cos(degToRad(this.angle))],
-//   xB: [45 + 45 * sin(degToRad(this.angle)), 45 - 45 * cos(degToRad(this.angle))],
-//   xC: [0 + 90 * sin(degToRad(this.angle + 90)), 90 - 90 * cos(degToRad(this.angle + 90))],
-
-//   xD: [45 + 45 * sin(degToRad(this.angle + 270)), 45 - 45 * cos(degToRad(this.angle + 270))],
-//   xE: [45, 45],
-//   xF: [45 + 45 * sin(degToRad(this.angle + 90)), 45 - 45 * cos(degToRad(this.angle + 90))],
-
-//   xG: [0 + 90 * sin(degToRad(this.angle + 270)), 90 - 90 * cos(degToRad(this.angle + 270))],
-//   xH: [45 + 45 * sin(degToRad(this.angle + 180)), 45 - 45 * cos(degToRad(this.angle + 180))],
-//   xI: [0 + 90 * sin(degToRad(this.angle + 180)), 90 - 90 * cos(degToRad(this.angle + 180))]
-//   };
-
-// Tile.ROADS = {
-//   B: [],
-//   A: [[xE, xH]],
-//   C: [],
-//   R: [],
-//   Q: [],
-//   T: [[xE, xH]],
-//   S: [[xE, xH]],
-//   N: [],
-//   M: [],
-//   P: [[xH, xF]],
-//   O: [[xH, xF]],
-//   G: [],
-//   F: [],
-//   I: [],
-//   H: [],
-//   E: [],
-//   K: [[xD, xH]],
-//   J: [[xH, xF]],
-//   L: [[xD, xE], [xE, xF], [xE, xH]],
-//   U: [[xB, xH]],
-//   V: [[xD, xH]],
-//   W: [[xD, xE], [xE, xF], [xE, xH]],
-//   X: [[xD, xE], [xB, xE], [xF, xE], [xH, xE]],
-//   D: [[xD, xF]]
-
-// };
-
-
 
 Tile.prototype = Object.create(Phaser.Sprite.prototype);
 
