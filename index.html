@@ -15,6 +15,7 @@
         <script src="javascripts/monastery.js"></script>
         <script src='javascripts/splashScreen.js'></script>
         <script src='javascripts/zeldaSplash.js'></script>
+        <script src='javascripts/mainMenuZelda.js'></script>
         <script src='javascripts/mainMenu.js'></script>
         <script src='javascripts/application.js'></script>
     </head>
@@ -36,6 +37,7 @@
           // Add gamestates to Phaser
           game.state.add('splashScreen', CarcassoneGame.splashScreen);
           game.state.add('zeldaSplash', CarcassoneGame.zeldaSplash);
+          game.state.add('mainMenuZelda', CarcassoneGame.mainMenuZelda);
           game.state.add('mainMenu', CarcassoneGame.mainMenu);
           game.state.add('mainGame', CarcassoneGame.mainGame);
           game.state.start('splashScreen');

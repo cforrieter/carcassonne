@@ -77,7 +77,7 @@ CarcassoneGame.zeldaSplash.prototype = {
   },
 
   goToMainMenu: function() {
-    this.state.start('mainMenu');
+    this.state.start('mainMenuZelda');
   },
 
   update: function() {
