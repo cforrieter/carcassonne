@@ -1,11 +1,7 @@
-var CarcassoneGame = {};
 var startGameButton;
 
 CarcassoneGame.mainMenu = function(game) {
-  // this.titleText;
-  // this.startGameButton;
-  // this.listener;
-  // this.particleBurst;
+
 };
 
 CarcassoneGame.mainMenu.prototype = {
@@ -25,9 +21,14 @@ CarcassoneGame.mainMenu.prototype = {
   },
 
   create: function() {
-
+    
     var background = game.add.sprite(0,0, 'background');
     var header = game.add.sprite(10, 32, 'header');
+    zeldaTheme = this.game.add.audio('zelda-theme');
+    zeldaTheme.onDecoded.add(this.playTheme, this);
+    rupeeBurst = this.game.add.audio('rupee-gained');
+    swordSpin = this.game.add.audio('sword-spin-complete');
+
 
     // Sprite for start button and animation
     startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'link-spin');
@@ -36,8 +37,6 @@ CarcassoneGame.mainMenu.prototype = {
     startGameButton.scale.y = 3;
     startGameButton.inputEnabled = true;
     
-    
-
     // Used for rupee burst on click
     game.physics.startSystem(Phaser.Physics.ARCADE);
     emitter = game.add.emitter(0, 0, 100);
@@ -47,16 +46,56 @@ CarcassoneGame.mainMenu.prototype = {
     singleParticle.animations.play('particleAnim', 4, true);
     });
     emitter.gravity = 200;
-    game.input.onDown.add(this.particleBurst, this);
 
+    this.prepareRupeeSound();
+    this.prepareSwordSpin();
+    game.input.onDown.add(this.particleBurst, this);
+    game.input.onDown.add(this.playRupeeSound, this);
     // startGameButton.scale.setTo(0.20,0.20);
     
     // Changes state from the start screen to the main game
-    startGameButton.events.onInputDown.add(this.addTimer, this);
-    startGameButton.events.onInputDown.add(this.changeSprite, this);
+    startGameButton.events.onInputDown.addOnce(this.prepareForStateChange, this);
+  },
+
+  prepareForStateChange: function() {
+    this.addTimer();
+    this.changeSprite();
+    this.fadeMusic();
+  },
+
+  fadeMusic: function() {
+    this.game.time.events.add(1900, this.stopTheme, this);
+    zeldaTheme.fadeOut(1900);
+  },
+
+  prepareRupeeSound: function() { 
+    rupeeBurst.allowMultiple = false;
+    rupeeBurst.addMarker('rupee-gained',0,1);
+  },
+
+  prepareSwordSpin: function() {
+    swordSpin.allowMultiple = false;
+    swordSpin.addMarker('sword-spin-complete',0,2);
+  },
+
+  playRupeeSound: function() {
+    rupeeBurst.play('rupee-gained');
+  },
+
+  playSwordSpin: function() {
+    swordSpin.play('sword-spin-complete');
+  },
+
+  playTheme: function() {
+    zeldaTheme.fadeIn(4000);
+  },
+
+  stopTheme: function() {
+    zeldaTheme.stop();
   },
 
   changeSprite: function() {
+    this.playSwordSpin();
     startGameButton.animations.add('spin');
     startGameButton.animations.play('spin', 20, false);
   },
@@ -82,5 +121,5 @@ CarcassoneGame.mainMenu.prototype = {
     //  The third is ignored when using burst/explode mode
     //  The final parameter (10) is how many particles will be emitted in this single burst
     emitter.start(true, 4000, null, 5);
-  }
+  },
 };

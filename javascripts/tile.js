@@ -1,4 +1,5 @@
 var playedTiles = [];
+var gameOver = false;
 
 function Tile(game, x, y, type)
 {
@@ -13,6 +14,7 @@ function Tile(game, x, y, type)
   this.events.onInputDown.add(this.onClick, this, 0);
   this.dragged = false;
   this.dropped = false;
+  this.grabbed = false;
 
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -60,7 +62,7 @@ Tile.prototype = Object.create(Phaser.Sprite.prototype);
 // This function addes the tile placement box and confirmation dialog
 Tile.prototype.onClick = function onClick(draggable, pointer){
   this.currentPointer = pointer;
-  // tile.grabbed = true;
+  tile.grabbed = true;
 
   var target = { x: Math.floor((this.x + 45) / 90) * 90,
                  y: Math.floor((this.y + 45) / 90) * 90
@@ -89,6 +91,11 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               //TODO: get cities uncommented and tested *********
 
               var cityEdges = (addToCity(tile));
+
+              // console.log("Cities:");
+              // cities.forEach(function(city){
+              //   console.log(city);
+              // });
               // console.log(cities);
               // console.log("City edges: ", cityEdges)
               // console.log("Valid meeples for cities are " + meepleEdges);
@@ -105,7 +112,8 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
               tile.showMeepleSpots(tile, roadEdges, cityEdges);
 
-              
+
+
             // }
           }
         }, this);

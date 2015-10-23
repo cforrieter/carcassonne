@@ -2,13 +2,13 @@ var screenWidth = 800;
 var screenHeight = 600;
 
 
-var globalPlayers = {
-  player1: {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
-  player2: {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
-  player3: {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
-  player4: {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
-  player5: {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
-}
+var globalPlayers = [
+  {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
+  {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
+  {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
+  {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
+  {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
+];
 
 
 function getCurrentPlayer(){
@@ -23,6 +23,21 @@ function getPlayer(name){
   for(var player in globalPlayers){
     if(globalPlayers[player].name == name){
       return globalPlayers[player];
+    }
+  }
+}
+
+function nextTurn(){
+
+  for(var i = 0; i < globalPlayers.length; i++){
+    if(globalPlayers[i].turn){
+      globalPlayers[i].turn = false;
+      if(globalPlayers[i+1]){
+        globalPlayers[i+1].turn = true;
+      }else{
+        globalPlayers[0].turn = true;
+      }
+      break;
     }
   }
 }
@@ -43,7 +58,7 @@ CarcassoneGame.mainGame.prototype = {
   preload: function() {
 
     game.load.image('background', './assets/background.png');
-    game.load.spritesheet('tiles', 'assets/zelda-tilesprite.png', 88, 88, 24);
+    game.load.spritesheet('tiles', 'assets/tiles_sprite.png', 88, 88, 24);
     game.load.image('meeple', 'assets/MEEPLE.png')
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
     game.load.image('check', 'assets/check.png')
@@ -85,12 +100,12 @@ CarcassoneGame.mainGame.prototype = {
 
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
-
+    // spaceKey.onUp.add(spaceKeyUp, this, 0, tile);
     // var tileGroup = game.add.group();
     // tileGroup.z = 1
 
-    createHUD(this)
-    game.add.existing(this.hudDisplay)
+    createHUD(this);
+    game.add.existing(this.hudDisplay);
 
     function createHUD(gameState) {
 
@@ -101,28 +116,46 @@ CarcassoneGame.mainGame.prototype = {
       var tilesLeftText = game.add.text(screenWidth - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
-      for (player in globalPlayers) {
-        var player = globalPlayers[player]
+      
+      //hud box draw
+      var hudBox = game.add.graphics(0,0);
+      hudBox.lineStyle(2, 0x505050, 0.2);
+      hudBox.beginFill(0x505050, 0.8);
+      hudBox.drawRect(5, 5, 190, 250);
+      gameState.hudDisplay.add(hudBox);
+
+      globalPlayers.forEach(function(player, index){
         player.meeples = game.add.group();
-        gameState.hudDisplay.add(player.meeples)
-        player.icon = game.add.graphics( 0, 0)
-        gameState.hudDisplay.add(player.icon)
+        gameState.hudDisplay.add(player.meeples);
+        player.icon = game.add.graphics( 0, 0);
+        gameState.hudDisplay.add(player.icon);
         player.icon.lineStyle(2, "0x" + player.color, 1);
-        player.icon.beginFill("0x" + player.color, 0.9)
-        player.icon.drawRect(10, 10 + player.num * 50, 40, 40);
+        player.icon.beginFill("0x" + player.color, 0.9);
+        player.icon.drawRect(10, 10 + index * 50, 40, 40)
 
-        player.scoreObject = game.add.text(60, 7 + player.num * 50, 0, { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
-        gameState.hudDisplay.add(player.scoreObject)
-
-      };
+        player.scoreObject = game.add.text(60, 7 + player.num * 50, player.name + '(0)', { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
+        gameState.hudDisplay.add(player.scoreObject);
+      });
 
     }
 
     function spaceKeyDown() {
       this.game.camera.x = game.world.centerX;
       this.game.camera.y = game.world.centerY;
+      
+      // This stuff for zoom out
+      // var lastTile = (playedTiles.length - 1) 
+      // this.game.world.scale.setTo(0.4,0.4);
+      // this.game.camera.x = playedTiles[lastTile].x / 2.5 - 400;
+      // this.game.camera.y = playedTiles[lastTile].y / 2.5 - 300;
     }
 
+    // function spaceKeyUp(){
+    //   var lastTile = (playedTiles.length -1)
+    //   this.game.world.scale.setTo(1,1);
+    //   this.game.camera.x = playedTiles[lastTile].x - 400;
+    //   this.game.camera.y = playedTiles[lastTile].y - 300;
+    // }
   },
 
   randomizeGameTiles: function(gameTiles) {
@@ -168,15 +201,17 @@ CarcassoneGame.mainGame.prototype = {
 
       for (player in globalPlayers) {
         var player = globalPlayers[player];
-        player.scoreObject.text = player.score
+        player.scoreObject.text = player.name + '(' + player.score + ')';
         if (player.turn) {
           player.icon.alpha = 1;
-          player.score.alpha = 1;
+          player.scoreObject.alpha = 1;
+          player.meeples.alpha = 1;
         } else {
-          player.icon.alpha = 1;
-          player.score.alpha = 1;
+          player.icon.alpha = 0.05;
+          // player.scoreObject.alpha = 0.3;
+          // player.scoreObject.fill = "#FFFFFF";
         }
-        drawMeeples(60, 34 + player.num * 50,  player.numMeeples)
+        drawMeeples(60, 38 + player.num * 50,  player.numMeeples)
       }
 
       function drawMeeples(x, y, quantity) {
@@ -186,7 +221,8 @@ CarcassoneGame.mainGame.prototype = {
         for (var i = 0; i < quantity; i++) {
           meep = game.add.sprite(x + 13 * i, y, 'meepleIcon', 0)
           meep.tint = "0x" + player.color
-          meep.alpha = player.turn ? 1 : 1
+          // meep.alpha = player.turn ? 1 : 0.2
+          meep.alpha = 1;
           player.meeples.add(meep)
         }
 
@@ -224,7 +260,7 @@ function createTile(type) {
     alert("Game over.");
     }
     swapTile(type);
-  } 
+  }
 
   this.game.add.existing(tile);
   // console.log('Possible moves: ',tile.getValidMoves());
@@ -257,6 +293,9 @@ function swapTile(type){
 }
 
 function endGame(){
+  gameOver = true;
   endGameMonasteryCount();
+  checkFinishedCities();
+  checkFinishedRoads();
   console.log("GAME OVER, MAN. GAME OVER.")
 }
