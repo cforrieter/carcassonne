@@ -1,4 +1,3 @@
-var io = io();
 var CarcassoneGame = {};
 var startGameButton;
 
@@ -54,7 +53,7 @@ CarcassoneGame.mainMenu.prototype = {
     // startGameButton.scale.setTo(0.20,0.20);
     
     // Changes state from the start screen to the main game
-    // startGameButton.events.onInputDown.add(this.addTimer, this);
+    startGameButton.events.onInputDown.add(this.addTimer, this);
     startGameButton.events.onInputDown.add(this.changeSprite, this);
   },
 
@@ -66,7 +65,7 @@ CarcassoneGame.mainMenu.prototype = {
   addTimer: function() {
     // RESET this 0 delay to 1200 after development ****************
     //***********************-V-********
-    // this.game.time.events.add(0, this.stateChange, this);
+    this.game.time.events.add(0, this.stateChange, this);
   },
 
   stateChange: function() {
@@ -84,12 +83,5 @@ CarcassoneGame.mainMenu.prototype = {
     //  The third is ignored when using burst/explode mode
     //  The final parameter (10) is how many particles will be emitted in this single burst
     emitter.start(true, 4000, null, 5);
-  },
-
-  update: function() {
-    io.on('gameStart', function(){
-      console.log("Game starting???")
-      this.game.time.events.add(0, this.stateChange, this);
-    })
   }
 };

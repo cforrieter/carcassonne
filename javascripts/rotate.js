@@ -21,7 +21,7 @@ rotate = {
       }      
     }
     tile.numRotations = (tile.numRotations + 1) % 4;
-    console.log("Rotations: ",tile.numRotations)
+    // console.log("Rotations: ",tile.numRotations)
   },
 
   left: function(){
@@ -46,7 +46,7 @@ rotate = {
       }
     }
     tile.numRotations = (tile.numRotations - 1) % 4 ;
-    console.log("Rotations: ",tile.numRotations)
+    // console.log("Rotations: ",tile.numRotations)
   }
 };
 

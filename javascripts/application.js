@@ -98,7 +98,7 @@ CarcassoneGame.mainGame.prototype = {
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
     // console.log(game.world.centerX, game.world.centerY)
-    createTile();
+    // createTile();
 
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
@@ -264,7 +264,7 @@ function createTile(type) {
   }
 
   this.game.add.existing(tile);
-  // console.log('Possible moves: ',tile.getValidMoves());
+  console.log('Possible moves: ',tile.getValidMoves());
 }
 
 function randomizeGameTiles(gameTiles) {
@@ -314,12 +314,19 @@ io.on('newGame', function(msg){
 });
 
 io.on('gameStart', function(msg){
-
+  console.log(msg)
+  globalPlayers = msg.players;
+  var currentPlayer = getCurrentPlayer();
+  if(currentPlayer.id == io.io.engine.id){
+    console.log("It's your turn! Creating tile!")
+    createTile(msg.nextTileType);
+  }
 });
 
 io.on('newTurn', function(msg){
-  console.log(msg)
-  globalPlayers = msg.players;
+  console.log("New Turn!");
+  var currentPlayer = getCurrentPlayer();
+  // if currentPlayer.id == 
   //{lastMove, tile}
   //if(!mysocketid == currentPlayer socketid){
   //  rotate tile{
@@ -337,12 +344,7 @@ io.on('newTurn', function(msg){
 
 function endTurnServer(){
   console.log('Sending to server...')
+  // do we need to add meeple to this object?
   io.emit('turnEnd', {tileType: tile.tileType, tileX: tile.x, tileY: tile.y, rotations: tile.numRotations})
 }
-
-
-
-
-
-
 

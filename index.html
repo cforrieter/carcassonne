@@ -30,16 +30,16 @@
 
   <script>
     (function() {
-          var socket = io();
+          // var socket = io();
           // Initialize Phaser
           var game = window.game = new Phaser.Game(800, 600, Phaser.AUTO);
           // Add gamestates to Phaser
           game.state.add('mainMenu', CarcassoneGame.mainMenu);
           game.state.add('mainGame', CarcassoneGame.mainGame);  
           game.state.start('mainMenu');
-          socket.on('gameStart', function(){
-            game.state.start('mainGame');
-          })
+          // socket.on('gameStart', function(){
+          //   game.state.start('mainGame');
+          // })
         })();
       </script>
 
