@@ -86,7 +86,10 @@ io.on('connection', function(socket){
     var tileType = gameTiles.pop();
     msg.nextTileType = tileType;
     console.log(tileType)
-    io.sockets.emit('newTurn', msg);
+    io.sockets.emit('newTurnCleanUp', msg);
+
+    var tile = gameTiles.pop();
+    io.sockets.emit('newTurnTile', {nextTileType: tile});
   })
 });
 

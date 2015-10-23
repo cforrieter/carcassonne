@@ -327,7 +327,7 @@ io.on('gameStart', function(msg){
   }
 });
 
-io.on('newTurn', function(msg){
+io.on('newTurnCleanUp', function(msg){
   console.log("New Turn!");
   var currentPlayer = getCurrentPlayer();
   if(!(currentPlayer.id == io.io.engine.id)){
@@ -349,6 +349,26 @@ io.on('newTurn', function(msg){
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+
+    var scoringObject;
+    
+    if(msg.scoringObjectType == 'road'){
+      scoringObject = findRoadById(msg.scoringObjectId);
+    }
+    if(msg.scoringObjectType == 'city'){
+      scoringObject = findCityById(msg.scoringObjectId)
+    }
+
+    console.log('Adding meeple');
+    debugger;
+    var meepObject = {};
+    meepObject.ghostCoords = msg.meepleCoords;
+    meepObject.scoringObject = scoringObject
+    if(msg.scoringObjectType){
+      addMeeple(meepObject);
+    }else{
+      endTurnServer();
+    }
   }
   //{lastMove, tile}
   //if(!mysocketid == currentPlayer socketid){
@@ -366,10 +386,39 @@ io.on('newTurn', function(msg){
   //}
 })
 
-function endTurnServer(){
+io.on('newTurnTile', function(msg){
+  nextTurn();
+  var currentPlayer = getCurrentPlayer();
+  if(currentPlayer.id == io.io.engine.id){
+    console.log("It's your turn! Creating tile!")
+    createTile(msg.nextTileType);
+  }
+})
+
+var scoringObjectType;
+
+function endTurnServer(meepObject){
+  var message = {tileType: tile.tileType, tileX: tile.x, tileY: tile.y, rotations: tile.numRotations};
+  if(meepObject){
+    scoringObjectType = getScoringObjectType(meepObject.scoringObject);
+    message.meepleCoords = meepObject.ghostCoords;
+    message.scoringObjectId = meepObject.scoringObject.id  
+    message.scoringObjectType = scoringObjectType
+  }
   console.log('Sending to server...')
-  // do we need to add meeple to this object?
-  console.log('tile x: ' + tile.x + ' tile y: ' + tile.y);
-  io.emit('turnEnd', {tileType: tile.tileType, tileX: tile.x, tileY: tile.y, rotations: tile.numRotations})
+  //meeples need to be added to this object...
+  // console.log('object in endTurnServer function: ', meepObject.scoringObject)
+  io.emit('turnEnd', message);
 }
 
+function getScoringObjectType(scoringObject){
+  if (scoringObject instanceof City){
+    return 'city';
+  }
+  if (scoringObject instanceof Road){
+    return 'road';
+  }
+  if (scoringObject instanceof Monastery){
+    return 'monastery';
+  }
+}

@@ -1,4 +1,5 @@
 var cities = [];
+var cityCount = 0;
 
 var backwards = {
   typeTop: "typeBottom",
@@ -113,7 +114,7 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
                 //add newly merged city
                 citiesArray.push(originalCity);
                 if(originalCity.meeples.length === 0){
-                  validCities.push({ pos: 'typeCenter', scoringObject: originalCity });
+                  validCities.push({ pos: 'typeCenter', scoringId: originalCity.id });
                 }
                 added = true;
                 counter = getEdges(placedTile, allPos);
@@ -131,9 +132,9 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
             //  console.log("city has edgecount = ", city.edgeCount);
             if(city.meeples.length === 0){
               if(single){
-                validCities.push({ pos: 'typeCenter', scoringObject: city });
+                validCities.push({ pos: 'typeCenter', scoringId: city.id });
               }else{
-                validCities.push({ pos: position, scoringObject: city });
+                validCities.push({ pos: position, scoringId: city.id });
               }
             }
           }
@@ -150,7 +151,7 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
         newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
         if(banner) { newCity.bannerCount += 1; }
         cities.push(newCity);
-        validCities.push({ pos: position, scoringObject: newCity });
+        validCities.push({ pos: position, scoringId: newCity.id });
         added = true;
         meeples = false;
       }else{
@@ -200,7 +201,7 @@ function addToCity(placedTile){
       newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
       if(banner) { newCity.bannerCount += 1; }
       cities.push(newCity);
-      validCities.push({ pos: 'typeCenter', scoringObject: newCity });
+      validCities.push({ pos: 'typeCenter', scoringId: newCity.id });
     }
   return validCities;
 }
@@ -280,6 +281,8 @@ function checkFinishedCities(playerArray){
 }
 
 function City(){
+  this.id = cityCount;
+  cityCount ++;
   this.tiles = [];
   this.meeples = [];
   this.meepleGroup = game.add.group();
