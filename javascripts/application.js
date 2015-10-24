@@ -360,14 +360,13 @@ io.on('newTurnCleanUp', function(msg){
     }
 
     console.log('Adding meeple');
-    debugger;
     var meepObject = {};
     meepObject.ghostCoords = msg.meepleCoords;
     meepObject.scoringObject = scoringObject
     if(msg.scoringObjectType){
       addMeeple(meepObject);
     }else{
-      endTurnServer();
+      endTurn();
     }
   }
   //{lastMove, tile}

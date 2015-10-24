@@ -122,30 +122,30 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
 
   if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.length === 0 && !tile.centerMonastery)){
 
-  var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType];
-  var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType];
-  var monasteryCoords = Tile.MONASTERYMEEPLECOORDS[tile.tileType];
-  // console.log('Road coords: ', roadCoords);
-  // console.log('City coords: ', cityCoords);
+    var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType];
+    var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType];
+    var monasteryCoords = Tile.MONASTERYMEEPLECOORDS[tile.tileType];
+    // console.log('Road coords: ', roadCoords);
+    // console.log('City coords: ', cityCoords);
 
-  if(monasteryCoords){
-    var monastery = new Monastery();
-    monastery.tile = tile;
-    // monastery.meeples = getCurrentPlayer();
-    monasteries.push(monastery);
-  }
+    if(monasteryCoords){
+      var monastery = new Monastery();
+      monastery.tile = tile;
+      // monastery.meeples = getCurrentPlayer();
+      monasteries.push(monastery);
+    }
 
     // coords = mergeObjects(roadCoords, cityCoords);
     // console.log('Merged coords: ', coords);
 
-  meepleButtons = game.add.group();
+    meepleButtons = game.add.group();
 
-  checkPositions(roadCoords, roadEdges);
-  checkPositions(cityCoords, cityEdges);
-  checkPositions(monasteryCoords, [{pos: 'typeCenter', scoringObject: monastery}]);
-}else{
-  confirmFunc();
-}
+    checkPositions(roadCoords, roadEdges);
+    checkPositions(cityCoords, cityEdges);
+    checkPositions(monasteryCoords, [{pos: 'typeCenter', scoringObject: monastery}]);
+  }else{
+    confirmFunc();
+  }
   
   function checkPositions(coords, meepleEdges){
     var positions = allowablePositions(meepleEdges);
@@ -252,7 +252,6 @@ function addMeeple(meepObject, coords) {
   }
 
 function endTurn(meepObject){
-  debugger;
   checkFinishedRoads();
   checkFinishedCities();
   checkMonasteries();
