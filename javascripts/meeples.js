@@ -264,7 +264,7 @@ function endTurn(meepObject){
   checkFinishedRoads();
   checkFinishedCities();
   checkMonasteries();
-  if (gameTiles.length === 0){ 
+  if (playedTiles.length === 72){ 
     endGame();
   } else {
     if(newTile){

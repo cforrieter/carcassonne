@@ -85,11 +85,14 @@ io.on('connection', function(socket){
     console.log('End turn message from client: ', msg)
     var tileType = gameTiles.pop();
     msg.nextTileType = tileType;
-    console.log(tileType)
+    console.log('New tile: ',tileType)
     io.sockets.emit('newTurnCleanUp', msg);
+    io.sockets.emit('newTurnTile', {nextTileType: tileType});
+  })
 
-    var tile = gameTiles.pop();
-    io.sockets.emit('newTurnTile', {nextTileType: tile});
+  socket.on('brokenTile', function(msg){
+    var tileType = swapTile(msg);
+    socket.emit('replaceTile', {nextTileType: tileType});
   })
 });
 
@@ -108,4 +111,19 @@ function randomizeGameTiles(gameTiles) {
     gameTiles[j] = temp;
   }
   return gameTiles;
+}
+
+function swapTile(type){
+  console.log("Broken tile! Swapping tile");
+  var tempArray = [];
+  tempArray.push(type);
+  gameTiles.forEach(function(currentTile){
+    tempArray.push(currentTile);
+  });
+  gameTiles = tempArray;
+  type = gameTiles.pop();
+  return type;
+//   game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+//   game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+//   tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50, type);
 }

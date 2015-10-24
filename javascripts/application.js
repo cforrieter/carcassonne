@@ -116,7 +116,7 @@ CarcassoneGame.mainGame.prototype = {
       gameState.hudDisplay.render = true;
       gameState.hudDisplay.z = 100;
 
-      var tilesLeftText = game.add.text(screenWidth - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
+      var tilesLeftText = game.add.text(screenWidth - 100, 10, "Tiles: " + 71 - playedTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
       
@@ -174,7 +174,7 @@ CarcassoneGame.mainGame.prototype = {
   update: function() {
 
     game.world.bringToTop(this.hudDisplay);
-    game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + gameTiles.length
+    game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + (71 - playedTiles.length);
 
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
@@ -243,12 +243,12 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-gameTiles = randomizeGameTiles(gameTiles);
+// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+// gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
     // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-  type = type || gameTiles.pop();
+  // type = type || gameTiles.pop();
   // console.log('Tile type: ',type);
 
   // debugger;
@@ -257,14 +257,15 @@ function createTile(type) {
   tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50,  type);
 
   if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
-    if (gameTiles.length === 0){
+    if (playedTiles.length === 72){
     //TODO -- handle this shit
     alert("Game over.");
+    } else {
+      io.emit('brokenTile', type);
     }
-    swapTile(type);
+  } else {
+    this.game.add.existing(tile);
   }
-
-  this.game.add.existing(tile);
   // console.log('Possible moves: ',tile.getValidMoves());
 }
 
@@ -279,20 +280,6 @@ function randomizeGameTiles(gameTiles) {
 }
 
 // console.log(gameTiles);
-
-function swapTile(type){
-  console.log("Broken tile! Swapping tile");
-  var tempArray = [];
-  tempArray.push(type);
-  gameTiles.forEach(function(currentTile){
-    tempArray.push(currentTile);
-  });
-  gameTiles = tempArray;
-  type = gameTiles.pop();
-  game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
-  game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-  tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50, type);
-}
 
 function endGame(){
   gameOver = true;
@@ -401,6 +388,10 @@ io.on('newTurnTile', function(msg){
     console.log("It's your turn! Creating tile!")
     createTile(msg.nextTileType);
   }
+})
+
+io.on('replaceTile', function(msg){
+  createTile(msg.nextTileType);
 })
 
 var scoringObjectType;
