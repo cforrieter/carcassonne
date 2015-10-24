@@ -346,6 +346,12 @@ io.on('newTurnCleanUp', function(msg){
     tile.placeTile(tile, msg.tileX, msg.tileY);
     addToRoad(tile);
     addToCity(tile);
+    if(msg.scoringObjectType == 'monastery'){
+      var monastery = new Monastery();
+      monastery.tile = tile;
+      // monastery.meeples = getCurrentPlayer();
+      monasteries.push(monastery);
+    }
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
@@ -356,13 +362,16 @@ io.on('newTurnCleanUp', function(msg){
       scoringObject = findRoadById(msg.scoringObjectId);
     }
     if(msg.scoringObjectType == 'city'){
-      scoringObject = findCityById(msg.scoringObjectId)
+      scoringObject = findCityById(msg.scoringObjectId);
+    }
+    if(msg.scoringObjectType == 'monastery'){
+      scoringObject = findMonasteryById(msg.scoringObjectId);
     }
 
     console.log('Adding meeple');
     var meepObject = {};
     meepObject.ghostCoords = msg.meepleCoords;
-    meepObject.scoringObject = scoringObject
+    meepObject.scoringObject = scoringObject;
     if(msg.scoringObjectType){
       addMeeple(meepObject);
     }else{

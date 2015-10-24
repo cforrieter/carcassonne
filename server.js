@@ -97,8 +97,8 @@ http.listen(8080, function(){
   console.log('listening on *:8080');
 });
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-gameTiles = randomizeGameTiles(gameTiles);
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWXA'.split('');
+// gameTiles = randomizeGameTiles(gameTiles);
 
 function randomizeGameTiles(gameTiles) {
   for (var i = gameTiles.length - 1; i > 0; i--) {

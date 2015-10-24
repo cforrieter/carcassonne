@@ -83,19 +83,28 @@ var meepleButtons;
 var confirm; 
 
 function findRoadById(id){
-  for (var i = 0; i < roads.length; i ++){
+  for (var i = 0; i < roads.length; i++){
     var road = roads[i];
-    if(road.id == id){
+    if(road.id === id){
       return road;
     }
   }
 }
 
 function findCityById(id){
- for (var i = 0; i < cities.length; i ++){
+ for (var i = 0; i < cities.length; i++){
     var city = cities[i];
-    if(city.id == id){
+    if(city.id === id){
       return city;
+    }
+  }
+}
+
+function findMonasteryById(id){
+  for (var i = 0; i < monasteries.length; i++){
+    var monastery = monasteries[i];
+    if(monastery.id === id){
+      return monastery;
     }
   }
 }
@@ -200,7 +209,7 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
   }
 };
 
-function addMeeple(meepObject, coords) {
+function addMeeple(meepObject) {
     if (meepObject instanceof Phaser.Button){
       meepObject = this;
     }

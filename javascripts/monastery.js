@@ -1,4 +1,5 @@
 var monasteries = [];
+var monastery_count = 0;
 var monasteryNeighbours = 0;
 
 function checkMonasteries(){
@@ -40,7 +41,7 @@ function scoreMonastery(){
 
 function scoreAndRemoveMonastery(monasteryToRemove){
   monasteries.forEach(function(arrayMonastery, index){
-    if (arrayMonastery.tile.y === monasteryToRemove.tile.y && arrayMonastery.tile.x === monasteryToRemove.tile.x){
+    if (arrayMonastery.id === monasteryToRemove.id){
       monasteries[index].meepleGroup.destroy();
       monasteries[index].meeples[0].score += 9; 
       monasteries[index].meeples[0].numMeeples += 1;
@@ -83,6 +84,8 @@ function endGameMonasteryCount(){
 }
 
 function Monastery(){
+  this.id = monastery_count;
+  monastery_count ++;   
   this.tile;
   this.meeples = [];
   this.meepleGroup = game.add.group();
