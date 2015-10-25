@@ -52,7 +52,6 @@ function findAdjacentCity(searchTile, pos){
 }
 
 function mergeCities(city1, city2){
-
   if(city1 == city2){
     city1.edgeCount -= 2;
     return city1;
