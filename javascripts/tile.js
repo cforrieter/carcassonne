@@ -19,8 +19,8 @@ function Tile(game, x, y, type)
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
 
-  leftKey.onDown.add(this.leftKeyDown, this, 0)
-  rightKey.onDown.add(this.rightKeyDown, this, 0)
+  leftKey.onDown.add(this.leftKeyDown, this, 0);
+  rightKey.onDown.add(this.rightKeyDown, this, 0);
 
   this.tileType = type;
   this.typeLeft = null;
@@ -39,8 +39,9 @@ function Tile(game, x, y, type)
 
   for(var f in farmEdges){
     var farm = {edges: [], hasCity: false}
-    farm.edges = farmEdges[f].edges;
+    farm.edges = farmEdges[f].edges.split('');
     farm.hasCity = farmEdges[f].hasCity;
+    farm.position = farmEdges[f].position;
     this.farms.push(farm);
   }
 
@@ -91,6 +92,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               //TODO: get cities uncommented and tested *********
 
               var cityEdges = (addToCity(tile));
+              var farmerEdges = (addFarms(tile));
 
               // console.log("Cities:");
               // cities.forEach(function(city){
@@ -105,12 +107,11 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
               //*********************
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
-
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
 
-              tile.showMeepleSpots(tile, roadEdges, cityEdges);
+              tile.showMeepleSpots(tile, roadEdges, cityEdges, farmerEdges);
 
 
 

@@ -1,59 +1,41 @@
-var farms = []
-
-// Tile.prototype.localCoords = function localCoords(node, angle) {
-//   //angle is in degrees
-
-//   var coords = {
-//   'xA': [-45, -45], 'xB': [0 , -45], 'xC': [45, -45],
-//   'xD': [-45, 0], 'xEa': [0, -20], 'xE': [0, 0], 'xEb': [0, 20], 'xF': [45 , 0],
-//   'xG': [-45, 45], 'xH': [0, 45], 'xI': [45, 45]
-//   }
-
-//   var localX = coords[node][0];
-//   var localY = coords[node][1];
-
-//   var xcoord = localX * Math.cos(Phaser.Math.degToRad(angle)) - localY * Math.sin(Phaser.Math.degToRad(angle));
-//   var ycoord = localX * Math.sin(Phaser.Math.degToRad(angle)) + localY * Math.cos(Phaser.Math.degToRad(angle));
-
-//   return {x: xcoord, y: ycoord};
-// }
+var farms = [];
 
 Tile.FARMS = {
-  B: [{edges: 'ABCDEFGH'.split(''), hasCity: false}],
-  A: [{edges: 'ABCDEFGH'.split(''), hasCity: false}],
+  B: [{edges: 'ABCDEFGH', hasCity: false, position: 'typeCenter'}],
+  A: [{edges: 'ABCDEFGH', hasCity: false, position: 'typeCenter'}],
   C: [],
-  R: [{edges: 'FE'.split(''), hasCity: true}],
-  Q: [{edges: 'FE'.split(''), hasCity: true}],
-  T: [{edges: 'F'.split(''), hasCity: true}, {edges: 'E'.split(''), hasCity: true}],
-  S: [{edges: 'F'.split(''), hasCity: true}, {edges: 'E'.split(''), hasCity: true}],
-  N: [{edges: 'FEDC'.split(''), hasCity: true}],
-  M: [{edges: 'FEDC'.split(''), hasCity: true}],
-  P: [{edges: 'FC'.split(''), hasCity: true}, {edges: 'ED'.split(''), hasCity: false}],
-  O: [{edges: 'FC'.split(''), hasCity: true}, {edges: 'ED'.split(''), hasCity: false}],
-  G: [{edges: 'FE'.split(''), hasCity: true}, {edges: 'AB'.split(''), hasCity: true}],
-  F: [{edges: 'FE'.split(''), hasCity: true}, {edges: 'AB'.split(''), hasCity: true}],
-  I: [{edges: 'FEDC'.split(''), hasCity: true}],
-  H: [{edges: 'CDHG'.split(''), hasCity: true}],
-  E: [{edges: 'HGFEDC'.split(''), hasCity: true}],
-  K: [{edges: 'GF'.split(''), hasCity: false}, {edges: 'HCDE'.split(''), hasCity: true}],
-  J: [{edges: 'HGFC'.split(''), hasCity: true}, {edges: 'DE'.split(''), hasCity: false}],
-  L: [{edges: 'HC'.split(''), hasCity: true}, {edges: 'GF'.split(''), hasCity: false}, {edges: 'ED'.split(''), hasCity: false}],
-  U: [{edges: 'AHGF'.split(''), hasCity: false}, {edges: 'BCDE'.split(''), hasCity: false}],
-  V: [{edges: 'GF'.split(''), hasCity: false}, {edges: 'HABCDE'.split(''), hasCity: false}],
-  W: [{edges: 'HABC'.split(''), hasCity: false}, {edges: 'GF'.split(''), hasCity: false}, {edges: 'ED'.split(''), hasCity: false}],
-  X: [{edges: 'AH'.split(''), hasCity: false}, {edges: 'BC'.split(''), hasCity: false}, {edges: 'DE'.split(''), hasCity: false}, {edges: 'GF'.split(''), hasCity: false}],
-  D: [{edges: 'HC'.split(''), hasCity: true}, {edges: 'GFED'.split(''), hasCity: false}]
-}
+  R: [{edges: 'FE'    , hasCity: true,  position: 'typeCenter'}],
+  Q: [{edges: 'FE'    , hasCity: true,  position: 'typeCenter'}],
+  T: [{edges: 'F'     , hasCity: true,  position: 'typeLeft'  }, {edges: 'E', hasCity: true, position: 'typeRight'}],
+  S: [{edges: 'F'     , hasCity: true,  position: 'typeLeft'  }, {edges: 'E', hasCity: true, position: 'typeRight'}],
+  N: [{edges: 'FEDC'  , hasCity: true,  position: 'typeCenter'}],
+  M: [{edges: 'FEDC'  , hasCity: true,  position: 'typeCenter'}],
+  P: [{edges: 'FC'    , hasCity: true,  position: 'typeCenter'}, {edges: 'ED', hasCity: false, position: 'typeRight'}],
+  O: [{edges: 'FC'    , hasCity: true,  position: 'typeCenter'}, {edges: 'ED', hasCity: false, position: 'typeRight'}],
+  G: [{edges: 'FE'    , hasCity: true,  position: 'typeBottom'}, {edges: 'AB', hasCity: true,  position: 'typeTop'}],
+  F: [{edges: 'FE'    , hasCity: true,  position: 'typeBottom'}, {edges: 'AB', hasCity: true,  position: 'typeTop'}],
+  I: [{edges: 'FEDC'  , hasCity: true,  position: 'typeCenter'}],
+  H: [{edges: 'CDHG'  , hasCity: true,  position: 'typeCenter'}],
+  E: [{edges: 'HGFEDC', hasCity: true,  position: 'typeCenter'}],
+  K: [{edges: 'GF'    , hasCity: false, position: 'typeLeft'  }, {edges: 'HCDE'  , hasCity: true,  position: 'typeCenter'}],
+  J: [{edges: 'HGFC'  , hasCity: true,  position: 'typeCenter'}, {edges: 'DE'    , hasCity: false, position: 'typeRight' }],
+  L: [{edges: 'HC'    , hasCity: true,  position: 'typeCenter'}, {edges: 'GF'    , hasCity: false, position: 'typeLeft'  }, {edges: 'ED', hasCity: false, position: 'typeRight'}],
+  U: [{edges: 'AHGF'  , hasCity: false, position: 'typeLeft'  }, {edges: 'BCDE'  , hasCity: false, position: 'typeRight' }],
+  V: [{edges: 'GF'    , hasCity: false, position: 'typeLeft'  }, {edges: 'HABCDE', hasCity: false, position: 'typeCenter'}],
+  W: [{edges: 'HABC'  , hasCity: false, position: 'typeCenter'}, {edges: 'GF'    , hasCity: false, position: 'typeLeft'  }, {edges: 'ED', hasCity: false, position: 'typeRight'}],
+  X: [{edges: 'AH'    , hasCity: false, position: 'typeTop'   }, {edges: 'BC'    , hasCity: false, position: 'typeRight' }, {edges: 'DE', hasCity: false, position: 'typeBottom'}, {edges: 'GF', hasCity: false, position: 'typeLeft'}],
+  D: [{edges: 'HC'    , hasCity: true,  position: 'typeTop'   }, {edges: 'GFED'  , hasCity: false, position: 'typeBottom'}]
+};
 
 Tile.prototype.edgeConnection = function edgeConnection(side, tile, isNeighbour) {
   if (isNeighbour) {
 
     var EDGES = {
-      '0':    { typeLeft: ['C', 'D'], typeRight: ['H', 'G'], typeTop: ['F','E'], typeBottom: ['A', 'B'] },      
+      '0':    { typeLeft: ['C', 'D'], typeRight: ['H', 'G'], typeTop: ['F','E'], typeBottom: ['A', 'B'] },
       '90':   { typeLeft: ['A', 'B'], typeRight: ['F', 'E'], typeTop: ['D','C'], typeBottom: ['G', 'H'] },
       '-180': { typeLeft: ['H', 'G'], typeRight: ['C', 'D'], typeTop: ['A','B'], typeBottom: ['F', 'E'] },
       '-90':  { typeLeft: ['F', 'E'], typeRight: ['A', 'B'], typeTop: ['G','H'], typeBottom: ['D', 'C'] }
-    }
+    };
 
     // console.log('connecting on neighbour ', EDGES[tile.angle.toString()][side])
     return EDGES[tile.angle.toString()][side];
@@ -61,93 +43,34 @@ Tile.prototype.edgeConnection = function edgeConnection(side, tile, isNeighbour)
   } else {
 
     var EDGES = {
-      '0':    { typeRight: ['C', 'D'], typeLeft: ['H', 'G'], typeBottom: ['F','E'], typeTop: ['A', 'B'] },      
+      '0':    { typeRight: ['C', 'D'], typeLeft: ['H', 'G'], typeBottom: ['F','E'], typeTop: ['A', 'B'] },
       '90':   { typeRight: ['A', 'B'], typeLeft: ['F', 'E'], typeBottom: ['D','C'], typeTop: ['G', 'H'] },
       '-180': { typeRight: ['H', 'G'], typeLeft: ['C', 'D'], typeBottom: ['A','B'], typeTop: ['F', 'E'] },
       '-90':  { typeRight: ['F', 'E'], typeLeft: ['A', 'B'], typeBottom: ['G','H'], typeTop: ['D', 'C'] }
-    }
+    };
 
     // console.log('connecting on current ', EDGES[tile.angle.toString()][side])
     return EDGES[tile.angle.toString()][side];
   }
 
-}
+};
 
 Tile.FARMConnections = {
-  A: ['B', 'F', 'C', 'H'], B: ['A', 'E', 'C', 'G'], C: ['D', 'H', 'B', 'F'], D: ['C', 'A', 'E', 'G'], E: ['F', 'B', 'H', 'D'], F: ['E','A', 'C', 'G'], G: ['H', 'F', 'B', 'D'], H: ['G', 'C', 'A', 'E']
-}
+  A: ['B', 'F', 'C', 'H'],
+  B: ['A', 'E', 'C', 'G'],
+  C: ['D', 'H', 'B', 'F'],
+  D: ['C', 'A', 'E', 'G'],
+  E: ['F', 'B', 'H', 'D'],
+  F: ['E', 'A', 'C', 'G'],
+  G: ['H', 'F', 'B', 'D'],
+  H: ['G', 'C', 'A', 'E']
+};
 
-// Tile.ROADS = {
-//   B: [],
-//   A: [['xE', 'xH']],
-//   C: [],
-//   R: [],
-//   Q: [],
-//   T: [['xE', 'xH']],
-//   S: [['xE', 'xH']],
-//   N: [],
-//   M: [],
-//   P: [['xH', 'xF']],
-//   O: [['xH', 'xF']],
-//   G: [],
-//   F: [],
-//   I: [],
-//   H: [],
-//   E: [],
-//   K: [['xD', 'xH']],
-//   J: [['xH', 'xF']],
-//   L: [['xD', 'xE'], ['xE', 'xF'], ['xE', 'xH']],
-//   U: [['xB', 'xH']],
-//   V: [['xD', 'xH']],
-//   W: [['xD', 'xE'], ['xE', 'xF'], ['xE', 'xH']],
-//   X: [['xD', 'xE'], ['xB', 'xE'], ['xF', 'xE'], ['xH', 'xE']],
-//   D: [['xD', 'xF']]
-// };
-
-// // TILE COORD POINTS
-// // 'xA'   'xB'   'xC'
-// //      'xEa'
-// // 'xD'   'xE'   'xF'
-// //      'xEb'
-// // 'xG'   'xH'   'xI'
-// // -------------------
-
-// Tile.CITY = {
-//   B: [],
-//   A: [],
-//   C: [],
-//   R: [['xG', 'xE'], ['xE','xI']],
-//   Q: [['xG', 'xE'], ['xE','xI']],
-//   T: [['xG', 'xE'], ['xE','xI']],
-//   S: [['xG', 'xE'], ['xE','xI']],
-//   N: [['xG', 'xC']],
-//   M: [['xG', 'xC']],
-//   P: [['xG', 'xC']],
-//   O: [['xG', 'xC']],
-//   G: [['xG', 'xEb'], ['xEb','xI'], ['xC', 'xEa'], ['xEa', 'xA']],
-//   F: [['xG', 'xEb'], ['xEb','xI'], ['xC', 'xEa'], ['xEa', 'xA']],
-//   I: [['xG', 'xE'], ['xE', 'xA'], ['xA', 'xEa'], ['xEa', 'xC']],
-//   H: [['xI', 'xEb'], ['xEb', 'xG'], ['xA', 'xEa'], ['xEa', 'xC']],
-//   E: [['xA', 'xEa'], ['xEa', 'xC']],
-//   K: [['xA', 'xEa'], ['xEa', 'xC']],
-//   J: [['xA', 'xEa'], ['xEa', 'xC']],
-//   L: [['xA', 'xEa'], ['xEa', 'xC']],
-//   U: [],
-//   V: [],
-//   W: [],
-//   X: [],
-//   D: [['xA', 'xEa'], ['xEa', 'xC']]
-// }
-
-var roadNodePairs = []
-var cityNodePairs = []
-var roadEndPoints = []
-
-function addFarmNodes(tile) {
+function addFarms(tile) {
 
   //variables prefixed with 'n' for neighbour property, 't' for current tile property
   //for each neighbour of the placed tile
-  for (side in tile.neighbours) {
+  for (var side in tile.neighbours) {
     neighbour = tile.neighbours[side];
     if (neighbour) {
       //for each farm of the current neighbour we are checking
@@ -171,7 +94,7 @@ function addFarmNodes(tile) {
               //take the neighbour edges and compare with placed tile edges after converting their edge letter to acceptable connection letters
               // console.log(nEdge, 'inside', Tile.FARMConnections[tEdge], '?', Tile.FARMConnections[tEdge].indexOf(nEdge) >= 0)
               if (Tile.FARMConnections[tEdge].indexOf(nEdge) >= 0) {
-                if (tFarm.parent == undefined) {//if current tile doesn't have a parent take it from the neighbour
+                if (tFarm.parent === undefined) {   //if current tile doesn't have a parent take it from the neighbour
                   tFarm.parent = nFarm.parent;
                   nFarm.parent.children.push(tFarm);
                   // console.log('adding new farm to neighbour')
@@ -179,102 +102,82 @@ function addFarmNodes(tile) {
                   // console.log('farms already connected')
                   return;
                 } else {
-                  // console.log('incorporating neighbour farms to tile farm')
-                  var toDelete = nFarm.parent
+                  // console.log('incorporating neighbour farms to tile farms parent')
+                  var toDelete = nFarm.parent;
+                  tFarm.parent.meeples = tFarm.parent.meeples.concat(nFarm.parent.meeples);
+                  nFarm.parent.meepleGroup.moveAll(tFarm.parent.meepleGroup);
+                  game.world.bringToTop(tFarm.parent.meepleGroup);
                   nFarm.parent.children.forEach (function(farm) {
-                    farm.parent = tFarm.parent
-                    tFarm.parent.children.push(farm)
-                  })
+                    farm.parent = tFarm.parent;
+                    tFarm.parent.children.push(farm);
+                  });
                   farms.splice(farms.indexOf(toDelete), 1);
                 }
               } else {
                 return;
               }
-            })
-          })
-        })
-      })
+            });
+          });
+        });
+      });
     }
   }
 
+  var farmEdges = [];
+
   tile.farms.forEach (function(farm) {
-    if (farm.parent == undefined) {
+    if (farm.parent === undefined) {
       // console.log('creating new farm')
-      var farmObject = {}
+      var farmObject = {};
       farms.push(farmObject);
       farmObject.name = Math.random();
-      farm.parent = farmObject
-      farmObject.children = [farm]
+      farmObject.meeples = [];
+      farmObject.meepleGroup = game.add.group();
+      farm.parent = farmObject;
+      farmObject.children = [farm];
     }
-  })
 
-  // console.log(farms)
-  // console.log('=========================================')
+  // this array pre rotates the allowable sides to that when it is unrotated we end up at the original layout
+  var POSITION = {
+    '0': {typeTop: 'typeTop', typeRight: 'typeRight', typeBottom: 'typeBottom', typeLeft: 'typeLeft', typeCenter: 'typeCenter' },
+    '90': {typeTop: 'typeRight', typeRight: 'typeBottom', typeBottom: 'typeLeft', typeLeft: 'typeTop', typeCenter: 'typeCenter' },
+    '-180': {typeTop: 'typeBottom', typeRight: 'typeLeft', typeBottom: 'typeTop', typeLeft: 'typeRight', typeCenter: 'typeCenter' },
+    '-90': {typeTop: 'typeLeft', typeRight: 'typeTop', typeBottom: 'typeRight', typeLeft: 'typeBottom', typeCenter: 'typeCenter' }
+  };
 
-  // var x = tile.x;
-  // var y = tile.y;
-  // var angle = tile.angle;
+  if (farm.parent.meeples.length == 0) {
+    farmEdges.push({pos: POSITION[tile.angle.toString()][farm.position], scoringObject: farm.parent});
+  }
 
-  // Tile.ROADS[tile.tileType].forEach (function(pair) {
-  //   var points = tile.localCoords(pair[0], angle)
-  //   var firstNode = {x: tile.x + points.x, y: tile.y + points.y};
+  });
 
-  //   points = tile.localCoords(pair[1], angle)
-  //   var nextNode = {x: tile.x + points.x, y: tile.y + points.y};
-
-  //   var nodePair = {current: {x: firstNode.x, y: firstNode.y}, next: {x: nextNode.x, y: nextNode.y} }
-  //   roadNodePairs.push(nodePair);
-  // })
-
-  // Tile.CITY[tile.tileType].forEach (function(pair) {
-  //   var points = tile.localCoords(pair[0], angle)
-  //   var firstNode = {x: tile.x + points.x, y: tile.y + points.y};
-
-  //   points = tile.localCoords(pair[1], angle)
-  //   var nextNode = {x: tile.x + points.x, y: tile.y + points.y};
-
-  //   var nodePair = {current: {x: firstNode.x, y: firstNode.y}, next: {x: nextNode.x, y: nextNode.y} }
-  //   cityNodePairs.push(nodePair);
-  // })
+  return farmEdges;
 
 }
 
-
-function calculateFarms() {
-
-
-}
-
-
-
-
-function renderFarms() {
-
-  var graphics = game.add.graphics(0, 0);
-  graphics.lineStyle(0);
-
-  roadNodePairs.forEach (function(pair) {
-    graphics.beginFill(0xFFFF0B);
-    // line = new Phaser.Line(pair.current.x, pair.current.y, pair.next.x, pair.next.y)
-    // game.debug.geom(line, "#FFFF0B")
-    graphics.drawCircle(pair.current.x, pair.current.y, 10);
-    graphics.drawCircle(pair.next.x, pair.next.y, 10);
+function scoreFarms() {
+  completedCities.forEach(function(city) {
+    var farmsToScore = [];
+    city.tiles.forEach(function(tilePiece) {
+      tilePiece.tile.farms.forEach(function(farm){
+        if (farm.hasCity && farmsToScore.indexOf(farm.parent) == -1) {
+          farmsToScore.push(farm.parent)
+        }
+      })
+    })
+    farmsToScore.forEach(function(farm) {
+      var meepCount = [0, 0, 0, 0, 0];
+      farm.meeples.forEach(function(meep) {
+        meepCount[globalPlayers.indexOf(meep)] += 1;
+      })
+      for(var i = 0; i < globalPlayers.length; i++){
+        if(meepCount[i] == Math.max(meepCount[0], meepCount[1], meepCount[2], meepCount[3], meepCount[4]) && meepCount[i] > 0) {
+          globalPlayers[i].score += 3;
+        }
+      }
+    })
   })
-    graphics.endFill();
-
-  cityNodePairs.forEach (function(pair) {
-    graphics.beginFill(0xFF9900);
-    // line = new Phaser.Line(pair.current.x, pair.current.y, pair.next.x, pair.next.y)
-    // game.debug.geom(line, "#FF9900")
-    graphics.drawCircle(pair.current.x, pair.current.y, 10);
-    graphics.drawCircle(pair.next.x, pair.next.y, 10);
-  })
-
-  graphics.endFill();
-
 }
-
-
 
 
 

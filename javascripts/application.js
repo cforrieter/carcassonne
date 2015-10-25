@@ -90,6 +90,7 @@ CarcassoneGame.mainGame.prototype = {
     tile.placeTile(tile, game.world.centerX, game.world.centerY);
     addToRoad(tile);
     addToCity(tile);
+    addFarms(tile);
     // console.log(cities);
 
     tile.inputEnabled = false;
@@ -297,5 +298,6 @@ function endGame(){
   endGameMonasteryCount();
   checkFinishedCities();
   checkFinishedRoads();
+  scoreFarms();
   console.log("GAME OVER, MAN. GAME OVER.")
 }
