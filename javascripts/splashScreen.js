@@ -85,7 +85,7 @@ CarcassoneGame.splashScreen.prototype = {
   },
 
   introTimer: function() {
-    stateSwapTimer = this.game.time.events.add(10000, this.goToMainMenu, this);
+    stateSwapTimer = this.game.time.events.add(1000, this.goToMainMenu, this);
   },
 
   goToMainMenu: function() {

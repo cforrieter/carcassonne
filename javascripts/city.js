@@ -1,4 +1,5 @@
 var cities = [];
+var completedCities = [];
 
 var backwards = {
   typeTop: "typeBottom",
@@ -275,6 +276,7 @@ function checkFinishedCities(playerArray){
   });
 
   citiesToRemove.forEach(function(city){
+    completedCities.push(city);
     cities.splice(cities.indexOf(city), 1);
   });
 }

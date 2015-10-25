@@ -1,6 +1,3 @@
-var screenWidth = 800;
-var screenHeight = 600;
-
 
 var globalPlayers = [
   {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
@@ -32,21 +29,26 @@ function nextTurn(){
   for(var i = 0; i < globalPlayers.length; i++){
     if(globalPlayers[i].turn){
       globalPlayers[i].turn = false;
+      game.add.tween(globalPlayers[i].turnText).to( { alpha: 0 }, 100, "Linear", true);
+      globalPlayers[i].tileBox.alpha = 0;
       if(globalPlayers[i+1]){
         globalPlayers[i+1].turn = true;
+        game.add.tween(globalPlayers[i + 1].tileBox).to( { alpha: 1 }, 600, "Linear", true);
+        game.add.tween(globalPlayers[i + 1].turnText).to( { alpha: 1 }, 400, "Linear", true);
       }else{
         globalPlayers[0].turn = true;
+        game.add.tween(globalPlayers[0].tileBox).to( { alpha: 1 }, 600, "Linear", true);
+        game.add.tween(globalPlayers[0].turnText).to( { alpha: 1 }, 400, "Linear", true);
       }
       break;
     }
   }
 }
 
-
 CarcassoneGame.mainGame = function(game) {
   this.tilesRemaining = 83;
-  this.screenWidth = 800;
-  this.screenHeight = 600;
+  // this.game.width = 800;
+  // this.game.height = 600;
   //This may not be necessary, and can possibly be removed
   // this.tilesGroup = new Phaser.Group(game);
   this.hudDisplay = new Phaser.Group(game)
@@ -80,7 +82,7 @@ CarcassoneGame.mainGame.prototype = {
     game.world.setBounds(0, 0, 13000, 13000);
     game.add.tileSprite(0,0, 13000, 13000, 'background');
 
-    camera = new Phaser.Camera(game, 0 , 0, 0, this.screenWidth, this.screenHeight);
+    camera = new Phaser.Camera(game, 0 , 0, 0, game.width, game.height);
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
 
@@ -89,13 +91,14 @@ CarcassoneGame.mainGame.prototype = {
     tile.fixedToCamera = false;
 
     //TODO, dry this out--code from tile.js dropping a tile
-    tile.x = game.world.centerX + this.screenWidth/2;
-    tile.y = game.world.centerY + this.screenHeight/2;
+    tile.x = game.world.centerX + game.width/2;
+    tile.y = game.world.centerY + game.height/2;
     tile.x = Math.floor((tile.x + 45) / 90) * 90;
     tile.y = Math.floor((tile.y + 45) / 90) * 90;
     tile.placeTile(tile, game.world.centerX, game.world.centerY);
     addToRoad(tile);
     addToCity(tile);
+    addFarms(tile);
     // console.log(cities);
 
     tile.inputEnabled = false;
@@ -119,27 +122,38 @@ CarcassoneGame.mainGame.prototype = {
       gameState.hudDisplay.render = true;
       gameState.hudDisplay.z = 100;
 
-      var tilesLeftText = game.add.text(screenWidth - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
+      var tilesLeftText = game.add.text(game.width - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
-      
       //hud box draw
       var hudBox = game.add.graphics(0,0);
-      hudBox.lineStyle(2, 0x505050, 0.2);
-      hudBox.beginFill(0x505050, 0.8);
-      hudBox.drawRect(5, 5, 190, 250);
+      hudBox.lineStyle(3, 0x000000, 1);
+      hudBox.beginFill(0x000000, 0.4);
+      hudBox.drawRoundedRect(5, 5, 190, 255, 5);
       gameState.hudDisplay.add(hudBox);
 
       globalPlayers.forEach(function(player, index){
+        player.turnText = game.add.text(game.width / 2, 35, player.name + '\'s turn!', { font: "42px Lindsay", fill: "#" + player.color, align: "left"});
+        player.turnText.anchor.setTo(0.5);
+        player.turnText.alpha = player.turn ? 1 : 0;
+        gameState.hudDisplay.add(player.turnText);
+
+        player.tileBox = game.add.graphics(0, 0);
+        gameState.hudDisplay.add(player.tileBox);
+        player.tileBox.lineStyle(3, "0x" + player.color, 1);
+        player.tileBox.drawRoundedRect(tile.x - 45, tile.y - 45, 88, 88, 5);
+        player.tileBox.alpha = player.turn ? 1 : 0;
+
         player.meeples = game.add.group();
         gameState.hudDisplay.add(player.meeples);
-        player.icon = game.add.graphics( 0, 0);
+
+        player.icon = game.add.graphics(0, 0);
         gameState.hudDisplay.add(player.icon);
         player.icon.lineStyle(2, "0x" + player.color, 1);
         player.icon.beginFill("0x" + player.color, 0.9);
-        player.icon.drawRect(10, 10 + index * 50, 40, 40)
+        player.icon.drawRect(15, 15 + index * 50, 40, 40)
 
-        player.scoreObject = game.add.text(60, 7 + player.num * 50, player.name + '(0)', { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
+        player.scoreObject = game.add.text(60, 7 + player.num * 50, player.name + ' (0)', { font: "26px Lindsay", fill: "#" + player.color, align: "left"});
         gameState.hudDisplay.add(player.scoreObject);
       });
 
@@ -148,9 +162,9 @@ CarcassoneGame.mainGame.prototype = {
     function spaceKeyDown() {
       this.game.camera.x = game.world.centerX;
       this.game.camera.y = game.world.centerY;
-      
+
       // This stuff for zoom out
-      // var lastTile = (playedTiles.length - 1) 
+      // var lastTile = (playedTiles.length - 1)
       // this.game.world.scale.setTo(0.4,0.4);
       // this.game.camera.x = playedTiles[lastTile].x / 2.5 - 400;
       // this.game.camera.y = playedTiles[lastTile].y / 2.5 - 300;
@@ -184,8 +198,8 @@ CarcassoneGame.mainGame.prototype = {
       var scrollWidth = 50;
       var scrollSpeed = 20;
 
-      if(this.game.input.activePointer.position.x > this.screenWidth - scrollWidth) {
-        this.game.camera.x += Math.max(0, (this.game.input.activePointer.position.x - (this.screenWidth - scrollWidth))) / scrollWidth * scrollSpeed;
+      if(this.game.input.activePointer.position.x > game.width - scrollWidth) {
+        this.game.camera.x += Math.max(0, (this.game.input.activePointer.position.x - (game.width - scrollWidth))) / scrollWidth * scrollSpeed;
       }
 
       if(this.game.input.activePointer.position.x < scrollWidth) {
@@ -196,8 +210,8 @@ CarcassoneGame.mainGame.prototype = {
         this.game.camera.y -= Math.max(0, (scrollWidth - this.game.input.activePointer.position.y)) / scrollWidth * scrollSpeed;
       }
 
-      if(this.game.input.activePointer.position.y > this.screenHeight - scrollWidth) {
-        this.game.camera.y += Math.max(0, (this.game.input.activePointer.position.y - (this.screenHeight - scrollWidth))) / scrollWidth * scrollSpeed;
+      if(this.game.input.activePointer.position.y > game.height - scrollWidth) {
+        this.game.camera.y += Math.max(0, (this.game.input.activePointer.position.y - (game.height - scrollWidth))) / scrollWidth * scrollSpeed;
       }
     }
 
@@ -207,7 +221,8 @@ CarcassoneGame.mainGame.prototype = {
 
       for (player in globalPlayers) {
         var player = globalPlayers[player];
-        player.scoreObject.text = player.name + '(' + player.score + ')';
+        if(tile.dragged) { player.tileBox.alpha = 0; }
+        player.scoreObject.text = player.name + ' (' + player.score + ')';
         if (player.turn) {
           player.icon.alpha = 1;
           player.scoreObject.alpha = 1;
@@ -258,7 +273,9 @@ function createTile(type) {
   // debugger;
   // game.state.states.mainGame.tilesGroup.add(tile);
 
-  tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50,  type);
+  tile = new Tile(game, game.width / 2, 120,  type);
+  tile.alpha = 0;
+  game.add.tween(tile).to( { alpha: 1 }, 600, "Linear", true);
 
   if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
     if (gameTiles.length === 0){
@@ -295,7 +312,7 @@ function swapTile(type){
   type = gameTiles.pop();
   game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
   game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-  tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50, type);
+  tile = new Tile(game, game.width - 50, game.height - 50, type);
 }
 
 function endGame(){
@@ -303,5 +320,6 @@ function endGame(){
   endGameMonasteryCount();
   checkFinishedCities();
   checkFinishedRoads();
+  scoreFarms();
   console.log("GAME OVER, MAN. GAME OVER.")
 }

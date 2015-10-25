@@ -21,28 +21,36 @@
     </head>
     <body>
 
-    <style> 
-    h1 { 
-        font-family: Lindsay;
-        float: left;
-        margin-left: -100em;
-        };
-    </style>
-    <h1>Carcassonne</h1>
+      <style> 
+      h1 { 
+          font-family: Lindsay;
+          float: left;
+          margin-left: -100em;
+          };
+        #gameWindow {
+          width: 100%;
+          height: 100%;
+        }
+      </style>
+      <h1>Carcassonne</h1>
+      <div id='gameWindow'>
+        <script>
+            (function() {
+              // Initialize Phaser
+              var screenWidth = 1024;
+              var screenHeight = 768;
 
-    <script>
-        (function() {
-          // Initialize Phaser
-          var game = window.game = new Phaser.Game(800, 600, Phaser.AUTO);
-          // Add gamestates to Phaser
-          game.state.add('splashScreen', CarcassoneGame.splashScreen);
-          game.state.add('zeldaSplash', CarcassoneGame.zeldaSplash);
-          game.state.add('mainMenuZelda', CarcassoneGame.mainMenuZelda);
-          game.state.add('mainMenu', CarcassoneGame.mainMenu);
-          game.state.add('mainGame', CarcassoneGame.mainGame);
-          game.state.start('splashScreen');
-        })();
-    </script>
-
+              var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.AUTO);
+              // Add gamestates to Phaser
+              game.state.add('splashScreen', CarcassoneGame.splashScreen);
+              game.state.add)'mainMenuZelda', CarcassoneGame.mainMenuZelda);
+              game.state.add('zeldaSplash', CarcassoneGame.zeldaSplash);
+              game.state.add('mainMenu', CarcassoneGame.mainMenu);
+              game.state.add('mainGame', CarcassoneGame.mainGame);
+              // game.state.start('splashScreen');
+              game.state.start('mainGame');
+            })();
+        </script>
+       </div> 
     </body>
 </html>

@@ -48,29 +48,30 @@ Tile.CITYMEEPLECOORDS = {
 };
 
 Tile.FARMERMEEPLECOORDS = {
-  B: {p0: [-30, -30]},
-  A: {p0: [-30, -30]},
-  R: {p6: [0, 35]},
-  Q: {p6: [0, 35]},
-  T: {p6: [-30, 35], p8: [30, 35]},
-  S: {p6: [-30, 35], p8: [30, 35]},
+  B: {p4: [-30, -30]},
+  A: {p4: [-30, -30]},
+  C: {},
+  R: {p4: [0, 35]},
+  Q: {p4: [0, 35]},
+  T: {p3: [-30, 35], p5: [30, 35]},
+  S: {p3: [-30, 35], p5: [30, 35]},
   N: {p4: [15, 15]},
   M: {p4: [15, 15]},
-  P: {p4: [5, 0], p8: [35, 35]},
-  O: {p4: [5, 0], p8: [35, 35]},
-  G: {p0: [0, -38], p6: [0, 35]},
-  F: {p0: [0, -38], p6: [0, 35]},
+  P: {p4: [5, 0], p5: [35, 35]},
+  O: {p4: [5, 0], p5: [35, 35]},
+  G: {p1: [0, -38], p7: [0, 35]},
+  F: {p1: [0, -38], p7: [0, 35]},
   I: {p4: [5, 5]},
   H: {p4: [0, 0]},
   E: {p4: [0, 10]},
-  K: {p6: [-32, 30], p8: [20, 0]},
-  J: {p6: [-25, 0], p8: [30, 30]},
-  L: {p0: [0, -7], p6: [-30, 32], p8: [30, 32]},
-  U: {p0: [-28, -28], p2: [28, 28]},
-  V: {p0: [28, -28], p6: [-28, 28]},
-  W: {p0: [0, -30], p6: [-30, 30], p8: [30, 30]},
-  X: {p0: [-30, -30], p2: [30, -30], p6: [-30, 30], p8: [30, 30]},
-  D: {p0: [-35, -18], p6: [0, 35]}
+  K: {p3: [-32, 30], p4: [20, 0]},
+  J: {p4: [-25, 0], p5: [30, 30]},
+  L: {p4: [0, -7], p3: [-30, 32], p5: [30, 32]},
+  U: {p3: [-28, -28], p5: [28, 28]},
+  V: {p4: [28, -28], p3: [-28, 28]},
+  W: {p4: [0, -30], p3: [-30, 30], p5: [30, 30]},
+  X: {p1: [-30, -30], p5: [30, -30], p3: [-30, 30], p7: [30, 30]},
+  D: {p1: [-35, -18], p7: [0, 35]}
 };
 
 Tile.MONASTERYMEEPLECOORDS = {
@@ -79,17 +80,18 @@ Tile.MONASTERYMEEPLECOORDS = {
 };
 
 
-Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityEdges) {
+Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityEdges, farmerEdges) {
 
 var confirm = tile.game.add.button(tile.x + 60, tile.y - 30, 'check', confirmFunc, this, 23, 23, 23);
 confirm.scale.setTo(0.3);
 
 
-if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.length === 0 && !tile.centerMonastery)){
+if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.length === 0 && !tile.centerMonastery)){
 
   var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType];
   var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType];
   var monasteryCoords = Tile.MONASTERYMEEPLECOORDS[tile.tileType];
+  var farmerCoords = Tile.FARMERMEEPLECOORDS[tile.tileType];
   // console.log('Road coords: ', roadCoords);
   // console.log('City coords: ', cityCoords);
 
@@ -101,22 +103,25 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
     monasteries.push(monastery);
   }
 
-    // coords = mergeObjects(roadCoords, cityCoords);
-    // console.log('Merged coords: ', coords);
-
+  // coords = mergeObjects(roadCoords, cityCoords);
+  // console.log('Merged coords: ', coords);
 
   var meepleButtons = game.add.group();
 
-  checkPositions(roadCoords, roadEdges);
-  checkPositions(cityCoords, cityEdges);
-  checkPositions(monasteryCoords, [{pos: 'typeCenter', scoringObject: monastery}]);
+  checkPositions(roadCoords, roadEdges, false);
+  checkPositions(cityCoords, cityEdges, false);
+  checkPositions(monasteryCoords, [{pos: 'typeCenter', scoringObject: monastery}], false);
+  // checkPositions(farmerCoords, [{pos: 'typeCenter', scoringObject: farms}, {pos: 'typeLeft', scoringObject: farms}, {pos: 'typeRight', scoringObject: farms}, {pos: 'typeTop', scoringObject: farms}, {pos: 'typeBottom', scoringObject: farms}], true);
+  checkPositions(farmerCoords, farmerEdges, true);
 
-    checkPositions(roadCoords, roadEdges);
-    checkPositions(cityCoords, cityEdges);
-  }else{
+
+  // checkPositions(roadCoords, roadEdges);
+  // checkPositions(cityCoords, cityEdges);
+  } else {
     confirmFunc();
   }
-  function checkPositions(coords, meepleEdges){
+
+  function checkPositions(coords, meepleEdges, isFarmer){
     var positions = allowablePositions(meepleEdges);
     positions.forEach(function(position){
       for (var key in coords){
@@ -124,7 +129,7 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
           var meeplePosition = {
             positionKey: key,
             ghostCoords: tileRotationCoordTransform(tile, coords[key][0], coords[key][1]),
-            // farmer: coords[key][2],
+            farmer: isFarmer,
             scoringObject: position.scoringObject
           };
         // console.log('xCoord is: ', xCoord, 'yCoord is: ', yCoord, 'farmer is: ', farmer);
@@ -141,9 +146,6 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
   // console.log('MEEPLE BUTTONS',meepleButtons)
 
   // console.log('allowable spots ', positions)
-
-
-
 
 
   function confirmFunc() {
@@ -184,6 +186,7 @@ if(getCurrentPlayer().numMeeples !== 0 && !(roadEdges.length === 0 && cityEdges.
       shadow.alpha = 0.6;
       var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
       meeple.anchor.setTo(0.5);
+      meeple.tint = "0x" + getCurrentPlayer().color
     } else {
       var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meeple')
       shadow.anchor.setTo(0.5);

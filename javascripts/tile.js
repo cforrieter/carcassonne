@@ -19,8 +19,8 @@ function Tile(game, x, y, type)
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
 
-  leftKey.onDown.add(this.leftKeyDown, this, 0)
-  rightKey.onDown.add(this.rightKeyDown, this, 0)
+  leftKey.onDown.add(this.leftKeyDown, this, 0);
+  rightKey.onDown.add(this.rightKeyDown, this, 0);
 
   this.tileType = type;
   this.typeLeft = null;
@@ -34,6 +34,17 @@ function Tile(game, x, y, type)
     typeBottom: null
   };
 
+  var farmEdges = Tile.FARMS[type];
+  this.farms = [];
+
+  for(var f in farmEdges){
+    var farm = {edges: [], hasCity: false}
+    farm.edges = farmEdges[f].edges.split('');
+    farm.hasCity = farmEdges[f].hasCity;
+    farm.position = farmEdges[f].position;
+    this.farms.push(farm);
+  }
+
   var kind = Tile.KINDS[type];
   // if(!kind){
   //   throw new Error('Invalid tile type: ' + type);
@@ -44,58 +55,6 @@ function Tile(game, x, y, type)
   }
 
 }
-
-
-
-// // TILE COORD POINTS
-// // xA   xB   xC
-// // xD   xE   xF
-// // xG   xH   xI
-// // -------------------
-
-// Tile.PTS = {
-//   xA: [0 + 90 * sin(degToRad(this.angle)), 90 - 90 * cos(degToRad(this.angle))],
-//   xB: [45 + 45 * sin(degToRad(this.angle)), 45 - 45 * cos(degToRad(this.angle))],
-//   xC: [0 + 90 * sin(degToRad(this.angle + 90)), 90 - 90 * cos(degToRad(this.angle + 90))],
-
-//   xD: [45 + 45 * sin(degToRad(this.angle + 270)), 45 - 45 * cos(degToRad(this.angle + 270))],
-//   xE: [45, 45],
-//   xF: [45 + 45 * sin(degToRad(this.angle + 90)), 45 - 45 * cos(degToRad(this.angle + 90))],
-
-//   xG: [0 + 90 * sin(degToRad(this.angle + 270)), 90 - 90 * cos(degToRad(this.angle + 270))],
-//   xH: [45 + 45 * sin(degToRad(this.angle + 180)), 45 - 45 * cos(degToRad(this.angle + 180))],
-//   xI: [0 + 90 * sin(degToRad(this.angle + 180)), 90 - 90 * cos(degToRad(this.angle + 180))]
-//   };
-
-// Tile.ROADS = {
-//   B: [],
-//   A: [[xE, xH]],
-//   C: [],
-//   R: [],
-//   Q: [],
-//   T: [[xE, xH]],
-//   S: [[xE, xH]],
-//   N: [],
-//   M: [],
-//   P: [[xH, xF]],
-//   O: [[xH, xF]],
-//   G: [],
-//   F: [],
-//   I: [],
-//   H: [],
-//   E: [],
-//   K: [[xD, xH]],
-//   J: [[xH, xF]],
-//   L: [[xD, xE], [xE, xF], [xE, xH]],
-//   U: [[xB, xH]],
-//   V: [[xD, xH]],
-//   W: [[xD, xE], [xE, xF], [xE, xH]],
-//   X: [[xD, xE], [xB, xE], [xF, xE], [xH, xE]],
-//   D: [[xD, xF]]
-
-// };
-
-
 
 Tile.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -133,6 +92,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
               //TODO: get cities uncommented and tested *********
 
               var cityEdges = (addToCity(tile));
+              var farmerEdges = (addFarms(tile));
 
               // console.log("Cities:");
               // cities.forEach(function(city){
@@ -147,12 +107,11 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
               //*********************
               // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
-
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
 
-              tile.showMeepleSpots(tile, roadEdges, cityEdges);
+              tile.showMeepleSpots(tile, roadEdges, cityEdges, farmerEdges);
 
 
 
