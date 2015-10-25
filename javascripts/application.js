@@ -1,6 +1,3 @@
-var screenWidth = 800;
-var screenHeight = 600;
-
 
 var globalPlayers = [
   {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
@@ -45,8 +42,8 @@ function nextTurn(){
 
 CarcassoneGame.mainGame = function(game) {
   this.tilesRemaining = 83;
-  this.screenWidth = 800;
-  this.screenHeight = 600;
+  // this.game.width = 800;
+  // this.game.height = 600;
   //This may not be necessary, and can possibly be removed
   // this.tilesGroup = new Phaser.Group(game);
   this.hudDisplay = new Phaser.Group(game)
@@ -74,7 +71,7 @@ CarcassoneGame.mainGame.prototype = {
     game.world.setBounds(0, 0, 13000, 13000);
     game.add.tileSprite(0,0, 13000, 13000, 'background');
 
-    camera = new Phaser.Camera(game, 0 , 0, 0, this.screenWidth, this.screenHeight);
+    camera = new Phaser.Camera(game, 0 , 0, 0, game.width, game.height);
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
 
@@ -83,8 +80,8 @@ CarcassoneGame.mainGame.prototype = {
     tile.fixedToCamera = false;
 
     //TODO, dry this out--code from tile.js dropping a tile
-    tile.x = game.world.centerX + this.screenWidth/2;
-    tile.y = game.world.centerY + this.screenHeight/2;
+    tile.x = game.world.centerX + game.width/2;
+    tile.y = game.world.centerY + game.height/2;
     tile.x = Math.floor((tile.x + 45) / 90) * 90;
     tile.y = Math.floor((tile.y + 45) / 90) * 90;
     tile.placeTile(tile, game.world.centerX, game.world.centerY);
@@ -114,7 +111,7 @@ CarcassoneGame.mainGame.prototype = {
       gameState.hudDisplay.render = true;
       gameState.hudDisplay.z = 100;
 
-      var tilesLeftText = game.add.text(screenWidth - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
+      var tilesLeftText = game.add.text(game.width - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
       
@@ -179,8 +176,8 @@ CarcassoneGame.mainGame.prototype = {
       var scrollWidth = 50;
       var scrollSpeed = 20;
 
-      if(this.game.input.activePointer.position.x > this.screenWidth - scrollWidth) {
-        this.game.camera.x += Math.max(0, (this.game.input.activePointer.position.x - (this.screenWidth - scrollWidth))) / scrollWidth * scrollSpeed;
+      if(this.game.input.activePointer.position.x > game.width - scrollWidth) {
+        this.game.camera.x += Math.max(0, (this.game.input.activePointer.position.x - (game.width - scrollWidth))) / scrollWidth * scrollSpeed;
       }
 
       if(this.game.input.activePointer.position.x < scrollWidth) {
@@ -191,8 +188,8 @@ CarcassoneGame.mainGame.prototype = {
         this.game.camera.y -= Math.max(0, (scrollWidth - this.game.input.activePointer.position.y)) / scrollWidth * scrollSpeed;
       }
 
-      if(this.game.input.activePointer.position.y > this.screenHeight - scrollWidth) {
-        this.game.camera.y += Math.max(0, (this.game.input.activePointer.position.y - (this.screenHeight - scrollWidth))) / scrollWidth * scrollSpeed;
+      if(this.game.input.activePointer.position.y > game.height - scrollWidth) {
+        this.game.camera.y += Math.max(0, (this.game.input.activePointer.position.y - (game.height - scrollWidth))) / scrollWidth * scrollSpeed;
       }
     }
 
@@ -253,7 +250,7 @@ function createTile(type) {
   // debugger;
   // game.state.states.mainGame.tilesGroup.add(tile);
 
-  tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50,  type);
+  tile = new Tile(game, game.width - 50, game.height - 50,  type);
 
   if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
     if (gameTiles.length === 0){
@@ -290,7 +287,7 @@ function swapTile(type){
   type = gameTiles.pop();
   game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
   game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-  tile = new Tile(game, this.screenWidth - 50, this.screenHeight - 50, type);
+  tile = new Tile(game, game.width - 50, game.height - 50, type);
 }
 
 function endGame(){
