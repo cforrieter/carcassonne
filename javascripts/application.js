@@ -66,10 +66,16 @@ CarcassoneGame.mainGame.prototype = {
     game.load.image('meeple', 'assets/MEEPLE.png')
     game.load.image('meepleFarmer', 'assets/meepleFarmer.png')
     game.load.image('meepleIcon', 'assets/meeple-flat.png')
+    game.load.audio('game-music', 'assets/game-music.mp3');
 
   },
 
   create: function() {
+    gameMusic = this.game.add.audio('game-music');
+    gameMusic.onDecoded.add(function(){
+      gameMusic.play(0, 'game-music', true), this});
+    gameMusic.play();
+    gameMusic.loop = true;
 
     game.world.setBounds(0, 0, 13000, 13000);
     game.add.tileSprite(0,0, 13000, 13000, 'background');
