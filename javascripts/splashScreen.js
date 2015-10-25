@@ -1,8 +1,7 @@
 var CarcassoneGame = {};
 
 CarcassoneGame.splashScreen = function(game) {
-  this.phaserLogo;
-  this.stateSwapTimer;
+  this.addInput;
 };
 
 
@@ -15,6 +14,7 @@ var cx = 0;
 
 var KONAMI_CODE = ['up','up','down','down','left','right','left','right', 'b', 'a'];
 var userInputs = [];
+
 
 CarcassoneGame.splashScreen.prototype = {
 
@@ -47,22 +47,32 @@ CarcassoneGame.splashScreen.prototype = {
     var node = game.add.sprite(575, 500, 'node-logo');
     node.scale.setTo(0.5,0.5);
 
-    game.input.keyboard.addCallbacks(this, function() 
-    {
-      try 
-      {
-        if(game.input.keyboard && game.input.keyboard.lastChar) 
-        {
-          userInputs.unshift(game.input.keyboard.lastKey);
-          console.log(userInputs);
-        }
-      }
-      catch(ex)
-      {
-        console.log(ex);
-      }
-    });
 
+    upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    bKey = game.input.keyboard.addKey(Phaser.Keyboard.B);
+
+    upKey.onDown.add(function() {
+      userInputs.unshift('up')
+    }, this);
+    downKey.onDown.add(function() {
+      userInputs.unshift('down')
+    }, this);
+    leftKey.onDown.add(function() {
+      userInputs.unshift('left')
+    }, this);
+    rightKey.onDown.add(function() {
+      userInputs.unshift('right')
+    }, this);
+    aKey.onDown.add(function() {
+      userInputs.unshift('a')
+    }, this);
+    bKey.onDown.add(function() {
+      userInputs.unshift('b')
+    }, this);
   },
 
   goToZelda: function () {
@@ -87,19 +97,9 @@ CarcassoneGame.splashScreen.prototype = {
   },
 
   update: function() {
-    if(KONAMI_CODE.join('') == userInputs.slice(0,10).join('')) {
-      goToZelda();
+    if(KONAMI_CODE.join('') == userInputs.slice(0,10).reverse().join('')) {
+      this.goToZelda();
+      userInputs = [];
     }
-    // try
-    // // {
-    // if(game.input.keyboard && game.input.keyboard.lastChar) {
-    //   userInputs.unshift(game.input.keyboard.lastChar);
-    //   console.log(userInputs);
-    // }
-    // }
-    // catch(ex)
-    // {
-
-    // }
   }
 };
