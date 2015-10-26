@@ -52,7 +52,7 @@ function scoreAndRemoveMonastery(monasteryToRemove){
         { tile: mon.tile.neighbours.typeLeft }, 
         { tile: mon.tile.neighbours.typeLeft.neighbours.typeTop }
       ); 
-      scoreTilesAnimation(monasteries[index], 9);
+      scoreTilesAnimation(monasteries[index], 9, [monasteries[index].meeples[0].name]);
       // monasteries[index].meepleGroup.destroy();
       monasteries[index].meeples[0].score += 9; 
       monasteries[index].meeples[0].numMeeples += 1;
@@ -97,7 +97,7 @@ function endGameMonasteryCount(){
           neighbours += 1;
         }
       })
-      scoreTilesAnimation(monasteries[index], neighbours);
+      scoreTilesAnimation(monasteries[index], neighbours, [monasteries[index].meeples[0].name]);
       monastery.meeples[0].score += neighbours; 
     }
   })
