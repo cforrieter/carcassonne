@@ -7,6 +7,7 @@ CarcassoneGame.mainMenu = function(game) {
 CarcassoneGame.mainMenu.prototype = {
 
   preload: function() {
+    game.load.spritesheet('tiles', 'assets/tiles_sprite.png', 88, 88, 24);
     game.load.image('header', 'assets/carcassone-header.png');
     game.load.image('carcassonne-coat-of-arms', 'assets/carcassonne-coat-of-arms.png');
     game.load.image('meeple-blue-flat', 'assets/meeple-blue-flat.png');
@@ -17,8 +18,10 @@ CarcassoneGame.mainMenu.prototype = {
   create: function() {
     openingTheme = this.game.add.audio('opening-theme');
     openingTheme.onDecoded.add(this.playTheme, this);
-    var background = game.add.sprite(0,0, 'normal-background');
-    var header = game.add.sprite(10, 32, 'header');
+    var background = game.add.sprite(0,0,'normal-background');
+    background.scale.set(game.width/800, game.height/600);
+    var header = game.add.sprite(game.width/2, 32, 'header');
+    header.anchor.set(0.5,0);
 
 
     // Sprite for start button and animation

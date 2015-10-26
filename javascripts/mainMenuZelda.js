@@ -7,6 +7,7 @@ CarcassoneGame.mainMenuZelda = function(game) {
 CarcassoneGame.mainMenuZelda.prototype = {
 
   preload: function() {
+    game.load.spritesheet('tiles', 'assets/zelda-tilesprite.png', 88, 88, 24);
     game.load.spritesheet('link-spin', 'assets/link-spin-spritesheet.png',40,46,14);
     game.load.spritesheet('red-rupee', 'assets/zelda-red-rupee-spritesheet.png',8,14,3);
     game.load.spritesheet('blue-rupee', 'assets/zelda-blue-rupee-spritesheet.png',8,14,3);
