@@ -1,0 +1,43 @@
+body {
+  background-color: #89B7E9;
+  background-image: url('assets/Cite_de_Carcassonne.jpg');
+  background-position: 0% 50%;
+  background-repeat: no-repeat;
+}
+
+nav {
+  width: 100%;
+  background-color: 
+}
+
+@font-face { 
+  font-family: Lindsay; src: url('assets/lindsay-ef.ttf'); 
+}
+
+h1 { 
+    font-family: Lindsay;
+    color: #FFD633;
+    text-shadow: 2px 2px #000000;
+    text-align: center;
+    font-size: 72px;
+    margin-top: 0em;
+    margin-bottom: 0.5em;
+}
+
+canvas {
+  margin: auto;
+  border-style: 1px;
+  border-radius: 5px;
+}
+
+#carc-image {
+  position: absolute;
+  bottom: -10em;
+  left: -1em;
+  padding: 0;
+  margin: 0;
+}
+
+#gameWindow canvas{
+  z-index: 1000;
+}

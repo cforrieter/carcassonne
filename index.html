@@ -1,53 +1,52 @@
 <!doctype html>
 <html>
-    <head>
-      <meta charset="UTF-8" />
-      <title>hello carcassonne!</title>
-      <style> @font-face { font-family: Lindsay; src: url('assets/lindsay-ef.ttf'); } </style>
-      <script src="node_modules/phaser/build/phaser.js"></script>
-      <script src="javascripts/tile.js"></script>
-      <script src="javascripts/tileValidations.js"></script>
-      <script src="javascripts/rotate.js"></script>
-      <script src="javascripts/tileInfo.js"></script>
-      <script src="javascripts/road.js"></script>
-      <script src="javascripts/city.js"></script>
-      <script src="javascripts/meeples.js"></script>
-      <script src="javascripts/monastery.js"></script>
-      <script src="javascripts/farms.js"></script>
-      <script src='javascripts/splashScreen.js'></script>
-      <script src='javascripts/zeldaSplash.js'></script>
-      <script src='javascripts/mainMenuZelda.js'></script>
-      <script src='javascripts/mainMenu.js'></script>
-      <script src='javascripts/application.js'></script>
-    </head>
-    <body>
-
-      <style> 
-      h1 { 
-          font-family: Lindsay;
-          float: left;
-          margin-left: -100em;
-          };
-      </style>
+  <head>
+    <meta charset="UTF-8" />
+    <title>hello carcassonne!</title>
+    <link rel="stylesheet" type="text/css" href="application.css">
+    <script src="node_modules/phaser/build/phaser.js"></script>
+    <script src="javascripts/tile.js"></script>
+    <script src="javascripts/tileValidations.js"></script>
+    <script src="javascripts/rotate.js"></script>
+    <script src="javascripts/tileInfo.js"></script>
+    <script src="javascripts/road.js"></script>
+    <script src="javascripts/city.js"></script>
+    <script src="javascripts/meeples.js"></script>
+    <script src="javascripts/monastery.js"></script>
+    <script src="javascripts/farms.js"></script>
+    <script src='javascripts/splashScreen.js'></script>
+    <script src='javascripts/zeldaSplash.js'></script>
+    <script src='javascripts/mainMenuZelda.js'></script>
+    <script src='javascripts/mainMenu.js'></script>
+    <script src='javascripts/application.js'></script>
+  </head>
+    <nav>
       <h1>Carcassonne</h1>
-      <div>
-        <script>
-            (function() {
-              // Initialize Phaser
-              var screenWidth = 800;
-              var screenHeight = 600;
+    </nav>
+  <body>
+    <div id="gameWindow">
+    </div>
 
-              var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.AUTO);
-              // Add gamestates to Phaser
-              game.state.add('splashScreen', CarcassoneGame.splashScreen);
-              game.state.add('mainMenuZelda', CarcassoneGame.mainMenuZelda);
-              game.state.add('zeldaSplash', CarcassoneGame.zeldaSplash);
-              game.state.add('mainMenu', CarcassoneGame.mainMenu);
-              game.state.add('mainGame', CarcassoneGame.mainGame);
-              // game.state.start('splashScreen');
-              game.state.start('mainGame');
-            })();
-        </script>
-       </div> 
-    </body>
+    <div id='carc-image'>
+      <!-- <img src='assets/Cite_de_Carcassonne.jpg'> -->
+    </div>
+  </body>
+
+  <script>
+    (function() {
+      // Initialize Phaser
+      var screenWidth = 1024;
+      var screenHeight = 768;
+
+      var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.AUTO, 'gameWindow');
+      // Add gamestates to Phaser
+      game.state.add('splashScreen', CarcassoneGame.splashScreen);
+      game.state.add('mainMenuZelda', CarcassoneGame.mainMenuZelda);
+      game.state.add('zeldaSplash', CarcassoneGame.zeldaSplash);
+      game.state.add('mainMenu', CarcassoneGame.mainMenu);
+      game.state.add('mainGame', CarcassoneGame.mainGame);
+      game.state.start('splashScreen');
+      // game.state.start('mainGame');
+    })();
+  </script>
 </html>
