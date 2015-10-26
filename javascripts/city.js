@@ -259,7 +259,9 @@ function scoreCity(city){
       console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
     }
   }
-  city.meepleGroup.destroy();
+  // city.meepleGroup.destroy();
+  // scoreMeepAnimation(city.meepleGroup);
+  scoreTilesAnimation(city, points);
 }
 
 function checkFinishedCities(playerArray){

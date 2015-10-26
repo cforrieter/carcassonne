@@ -41,7 +41,8 @@ function scoreMonastery(){
 function scoreAndRemoveMonastery(monasteryToRemove){
   monasteries.forEach(function(arrayMonastery, index){
     if (arrayMonastery.tile.y === monasteryToRemove.tile.y && arrayMonastery.tile.x === monasteryToRemove.tile.x){
-      monasteries[index].meepleGroup.destroy();
+      scoreMeepAnimation(monasteries[index], 9);
+      // monasteries[index].meepleGroup.destroy();
       monasteries[index].meeples[0].score += 9; 
       monasteries[index].meeples[0].numMeeples += 1;
       monasteries.splice(index, 1);
