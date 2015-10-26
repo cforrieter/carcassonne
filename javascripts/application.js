@@ -7,7 +7,6 @@ var globalPlayers = [
   {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
 ];
 
-
 function getCurrentPlayer(){
   for(var player in globalPlayers){
     if(globalPlayers[player].turn){
@@ -164,29 +163,36 @@ CarcassoneGame.mainGame.prototype = {
     }
 
    function spaceKeyDown() {
+    if (!zoomedOut){
       var center = getBoardCenter();
       // this.game.camera.x = game.world.centerX;
       // this.game.camera.y = game.world.centerY;
       this.game.camera.x = center[0] - (screenWidth / 2);
       this.game.camera.y = center[1] - (screenHeight / 2);
     }
+  }
 
     var savedX;
     var savedY;
+    var zoomedOut = false;
 
     function tabKeyDown(){
-      // spaceKey.onDown.add(null);
+
       //ungrabbed new tile stays on screen, so make it invisible
       tile.visible = false;
+      zoomedOut = true;
 
       savedX = this.game.camera.x;
       savedY = this.game.camera.y;
 
       var center = getBoardCenter();
-      this.game.world.scale.setTo(0.4,0.4);
-
+      
       this.game.camera.x = (center[0] / 2.5) - (screenWidth / 2);
       this.game.camera.y = (center[1] / 2.5) - (screenHeight / 2);
+      game.state.states.mainGame.hudDisplay.fixedToCamera = true;
+
+      this.add.tween(this.game.world.scale).to({x: 0.4, y: 0.4}, 1, "Linear", true);
+      
     }
 
     function tabKeyUp(){
@@ -195,6 +201,7 @@ CarcassoneGame.mainGame.prototype = {
       this.game.camera.y = savedY;
 
       tile.visible = true;
+      zoomedOut = false;
     }
   },
 
@@ -282,8 +289,8 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-gameTiles = randomizeGameTiles(gameTiles);
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWVVVVVVXXXXD'.split('');
+// gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
     // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));

@@ -232,5 +232,15 @@ function endTurn(){
     window.createTile();
     nextTurn();
   }
+}
 
+
+function scoreMeepAnimation(meepleGroup){
+  game.world.bringToTop(meepleGroup);
+  var tween;
+  meepleGroup.children.forEach(function(child){
+    tween = game.add.tween(child.scale).to({x: 2, y: 2}, 1000, "Linear", true);
+    game.add.tween(child).to( { alpha: 0 }, 1000, "Linear", true);
+  })
+  tween.onComplete.add(function(){meepleGroup.destroy()});
 }
