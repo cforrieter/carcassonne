@@ -50,35 +50,34 @@ function scoreAndRemoveMonastery(monasteryToRemove){
 }
 
 function endGameMonasteryCount(){
-  var neighbours = 1; //starts at one, because score includes monastery tile
   monasteries.forEach(function(monastery, index){
-    if (monastery.tile.neighbours.typeTop){
-      neighbours += 1;
+    var neighbours = 1; //starts at one, because score includes monastery tile
+    if(monastery.meeples.length > 0) {
+      if (monastery.tile.neighbours.typeTop){
+        neighbours += 1;
+      }
+      if (monastery.tile.neighbours.typeRight){
+        neighbours += 1;
+      } 
+      if (monastery.tile.neighbours.typeBottom){
+        neighbours += 1;
+      } 
+      if (monastery.tile.neighbours.typeLeft){
+        neighbours += 1;
+      }
+      playedTiles.forEach(function(playedTile){
+        if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y){
+          neighbours += 1;
+        } else if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y) {
+          neighbours += 1;
+        } else if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y) {
+          neighbours += 1;
+        } else if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y) {
+          neighbours += 1;
+        }
+      })
+      monastery.meeples[0].score += neighbours; 
     }
-    if (monastery.tile.neighbours.typeRight){
-      neighbours += 1;
-    } 
-    if (monastery.tile.neighbours.typeBottom){
-      neighbours += 1;
-    } 
-    if (monastery.tile.neighbours.typeLeft){
-      neighbours += 1;
-    }
-    playedTiles.forEach(function(playedTile){
-      if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y){
-        neighbours += 1;
-      }
-      if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y){
-        neighbours += 1;
-      }
-      if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y){
-        neighbours += 1;
-      }
-      if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y){
-        neighbours += 1;
-      }
-    })
-    monasteries[index].meeples[0].score += neighbours; 
   })
 }
 
