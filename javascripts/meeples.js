@@ -248,8 +248,7 @@ function scoreMeepAnimation(meepleGroup){
 
 function scoreTilesAnimation(scoringGroup, pointsScored){
   // draw points scoring over meeples
-  scoringGroup.tiles.forEach(function(t){
-    for (var m = 1; m < scoringGroup.meepleGroup.children.length; m+= 2){
+  for (var m = 1; m < scoringGroup.meepleGroup.children.length; m+= 2){
     var points = game.add.text(
       scoringGroup.meepleGroup.children[m].x - 10,
       scoringGroup.meepleGroup.children[m].y - 70, 
@@ -257,12 +256,15 @@ function scoreTilesAnimation(scoringGroup, pointsScored){
         font: "42px Lindsay", 
         fill: "#" + scoringGroup.meepleGroup.children[m].tint.substring(
           2, scoringGroup.meepleGroup.children[m].tint.length
-        )
-      }
-    );
-    game.add.tween(points).to( {alpha: 0}, 1400, "Linear", true);
-  }
-    // slightly expand tile group scoring
+          )
+        }
+      );
+      game.add.tween(points).to( {alpha: 0}, 1400, "Linear", true);
+    }
+
+
+  // slightly expand tile group scoring
+  scoringGroup.tiles.forEach(function(t){
     var tween = game.add.tween(t.tile.scale).to({x: 1.05, y: 1.05}, 200, "Linear", true);
     tween.onComplete.add(function(){
       var tweenB = game.add.tween(t.tile. scale).to({x: 1, y: 1}, 200, "Linear", true)
