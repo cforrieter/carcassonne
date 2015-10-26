@@ -33,7 +33,7 @@ function findPlayer(id){
   players.forEach(function(player, index){
     console.log(player.id, id)
     if(player.id == id){
-      foundPlayerIndex = index;  
+      foundPlayerIndex = index;
     }
   })
   return foundPlayerIndex;
@@ -69,7 +69,7 @@ io.on('connection', function(socket){
     }
   })
 
-  
+
   socket.on('gameReady', function(){
     console.log("Game ready received");
     playersReady += 1;
@@ -96,8 +96,8 @@ io.on('connection', function(socket){
   })
 });
 
-http.listen(8080, function(){
-  console.log('listening on *:8080');
+http.listen(80, function(){
+  console.log('listening on *:80');
 });
 
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
