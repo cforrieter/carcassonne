@@ -7,7 +7,6 @@ var globalPlayers = [
   {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
 ];
 
-
 function getCurrentPlayer(){
   for(var player in globalPlayers){
     if(globalPlayers[player].turn){
@@ -46,7 +45,6 @@ function nextTurn(){
 }
 
 CarcassoneGame.mainGame = function(game) {
-  this.tilesRemaining = 83;
   // this.game.width = 800;
   // this.game.height = 600;
   //This may not be necessary, and can possibly be removed
@@ -113,6 +111,10 @@ CarcassoneGame.mainGame.prototype = {
     // var tileGroup = game.add.group();
     // tileGroup.z = 1
 
+    tabKey = game.input.keyboard.addKey(Phaser.Keyboard.TAB);
+    tabKey.onDown.add(tabKeyDown, this, 0, tile);
+    tabKey.onUp.add(tabKeyUp, this, 0, tile);
+
     createHUD(this);
     game.add.existing(this.hudDisplay);
 
@@ -159,23 +161,47 @@ CarcassoneGame.mainGame.prototype = {
 
     }
 
-    function spaceKeyDown() {
-      this.game.camera.x = game.world.centerX;
-      this.game.camera.y = game.world.centerY;
+   function spaceKeyDown() {
+    if (!zoomedOut){
+      var center = getBoardCenter();
+      // this.game.camera.x = game.world.centerX;
+      // this.game.camera.y = game.world.centerY;
+      this.game.camera.x = center[0] - (screenWidth / 2);
+      this.game.camera.y = center[1] - (screenHeight / 2);
+    }
+  }
 
-      // This stuff for zoom out
-      // var lastTile = (playedTiles.length - 1)
-      // this.game.world.scale.setTo(0.4,0.4);
-      // this.game.camera.x = playedTiles[lastTile].x / 2.5 - 400;
-      // this.game.camera.y = playedTiles[lastTile].y / 2.5 - 300;
+    var savedX;
+    var savedY;
+    var zoomedOut = false;
+
+    function tabKeyDown(){
+
+      //ungrabbed new tile stays on screen, so make it invisible
+      tile.visible = false;
+      zoomedOut = true;
+
+      savedX = this.game.camera.x;
+      savedY = this.game.camera.y;
+
+      var center = getBoardCenter();
+      
+      this.game.camera.x = (center[0] / 2.5) - (screenWidth / 2);
+      this.game.camera.y = (center[1] / 2.5) - (screenHeight / 2);
+      game.state.states.mainGame.hudDisplay.fixedToCamera = true;
+
+      this.add.tween(this.game.world.scale).to({x: 0.4, y: 0.4}, 1, "Linear", true);
+      
     }
 
-    // function spaceKeyUp(){
-    //   var lastTile = (playedTiles.length -1)
-    //   this.game.world.scale.setTo(1,1);
-    //   this.game.camera.x = playedTiles[lastTile].x - 400;
-    //   this.game.camera.y = playedTiles[lastTile].y - 300;
-    // }
+    function tabKeyUp(){
+      this.game.world.scale.setTo(1,1);
+      this.game.camera.x = savedX;
+      this.game.camera.y = savedY;
+
+      tile.visible = true;
+      zoomedOut = false;
+    }
   },
 
   randomizeGameTiles: function(gameTiles) {
@@ -195,7 +221,7 @@ CarcassoneGame.mainGame.prototype = {
 
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
-      var scrollWidth = 50;
+      var scrollWidth = 60;
       var scrollSpeed = 20;
 
       if(this.game.input.activePointer.position.x > game.width - scrollWidth) {
@@ -261,7 +287,6 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
@@ -313,14 +338,29 @@ function swapTile(type){
   type = gameTiles.pop();
   game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
   game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-  tile = new Tile(game, game.width - 50, game.height - 50, type);
+  tile = new Tile(game, game.width / 2, 120, type);
 }
 
 function endGame(){
   gameOver = true;
   endGameMonasteryCount();
-  checkFinishedCities();
-  checkFinishedRoads();
-  scoreFarms();
+  // checkFinishedCities();
+  // checkFinishedRoads();
+  // scoreFarms();
   console.log("GAME OVER, MAN. GAME OVER.")
+}
+
+function getBoardCenter(){
+  var totalX = 0;
+  var totalY = 0;
+  var avgX;
+  var avgY;
+  playedTiles.forEach(function(tile){
+    totalX += tile.x;
+    totalY += tile.y;
+  })
+  avgX = totalX / playedTiles.length;
+  avgY = totalY / playedTiles.length;
+
+  return([avgX, avgY]);
 }
