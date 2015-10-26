@@ -8,6 +8,7 @@ var screenHeight = 600;
   // {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
   // {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
 var globalPlayers = [];
+var gameID;
 
 
 function getCurrentPlayer(){
@@ -99,7 +100,7 @@ CarcassoneGame.mainGame.prototype = {
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
     // console.log(game.world.centerX, game.world.centerY)
     // createTile();
-    io.emit('gameReady');
+    io.emit('gameReady', { gameID: gameID});
 
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
@@ -119,7 +120,7 @@ CarcassoneGame.mainGame.prototype = {
       var tilesLeftText = game.add.text(screenWidth - 100, 10, "Tiles: " + 71 - playedTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
-      
+
       //hud box draw
       var hudBox = game.add.graphics(0,0);
       hudBox.lineStyle(2, 0x505050, 0.2);
@@ -145,9 +146,9 @@ CarcassoneGame.mainGame.prototype = {
     function spaceKeyDown() {
       this.game.camera.x = game.world.centerX;
       this.game.camera.y = game.world.centerY;
-      
+
       // This stuff for zoom out
-      // var lastTile = (playedTiles.length - 1) 
+      // var lastTile = (playedTiles.length - 1)
       // this.game.world.scale.setTo(0.4,0.4);
       // this.game.camera.x = playedTiles[lastTile].x / 2.5 - 400;
       // this.game.camera.y = playedTiles[lastTile].y / 2.5 - 300;
@@ -261,7 +262,7 @@ function createTile(type) {
     //TODO -- handle this shit
     alert("Game over.");
     } else {
-      io.emit('brokenTile', type);
+      io.emit('brokenTile', { type: type, gameID: gameID });
     }
   } else {
     this.game.add.existing(tile);
@@ -289,27 +290,29 @@ function endGame(){
   console.log("GAME OVER, MAN. GAME OVER.")
 }
 
-var io = io();
-io.on('msg', function(msg){
-  console.log(msg);
-  console.log(io.io.engine.id)
-});
 
-io.on('newGame', function(msg){
-  console.log(msg)
-  var name = prompt('What is your name?');
-  io.emit('name', name);
-});
+// io.on('msg', function(msg){
+//   console.log(msg);
+//   console.log(io.io.engine.id)
+// });
 
-io.on('playersReady', function(msg){
-  globalPlayers = msg;
-})
+// io.on('newGame', function(msg){
+//   console.log(msg)
+//   var name = prompt('What is your name?');
+//   io.emit('name', { name:name, gameID: msg.gameID, playerIndex: msg.playerIndex });
+// });
+
+// io.on('playersReady', function(msg){
+//   console.log("Players ready message", msg);
+//   gameID = msg.gameID;
+//   globalPlayers = msg.players;
+// });
 
 io.on('gameStart', function(msg){
-  console.log('recevied game start call:', msg)
+  console.log('recevied game start call:', msg);
   var currentPlayer = getCurrentPlayer();
   if(currentPlayer.id == io.io.engine.id){
-    console.log("It's your turn! Creating tile!")
+    console.log("It's your turn! Creating tile!");
     createTile(msg.nextTileType);
   }
 });
@@ -344,7 +347,7 @@ io.on('newTurnCleanUp', function(msg){
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
 
     var scoringObject;
-    
+
     if(msg.scoringObjectType == 'road'){
       scoringObject = findRoadById(msg.scoringObjectId);
     }
@@ -370,7 +373,7 @@ io.on('newTurnCleanUp', function(msg){
   //  rotate tile{
   //    if negative, add 4
   //  }
-  //  
+  //
   //  currentTile.placeTile(currentTile, msg.tileX, msg.tileY);
   //  center camera on tile
   //}
@@ -401,13 +404,13 @@ function endTurnServer(meepObject){
   if(meepObject){
     scoringObjectType = getScoringObjectType(meepObject.scoringObject);
     message.meepleCoords = meepObject.ghostCoords;
-    message.scoringObjectId = meepObject.scoringObject.id  
+    message.scoringObjectId = meepObject.scoringObject.id
     message.scoringObjectType = scoringObjectType
   }
   console.log('Sending to server...')
   //meeples need to be added to this object...
   // console.log('object in endTurnServer function: ', meepObject.scoringObject)
-  io.emit('turnEnd', message);
+  io.emit('turnEnd', { message: message, gameID: gameID });
 }
 
 function getScoringObjectType(scoringObject){

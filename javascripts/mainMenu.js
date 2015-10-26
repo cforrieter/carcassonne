@@ -36,8 +36,6 @@ CarcassoneGame.mainMenu.prototype = {
     startGameButton.scale.x = 3;
     startGameButton.scale.y = 3;
     startGameButton.inputEnabled = true;
-    
-    
 
     // Used for rupee burst on click
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -51,7 +49,7 @@ CarcassoneGame.mainMenu.prototype = {
     game.input.onDown.add(this.particleBurst, this);
 
     // startGameButton.scale.setTo(0.20,0.20);
-    
+
     // Changes state from the start screen to the main game
     startGameButton.events.onInputDown.add(this.addTimer, this);
     startGameButton.events.onInputDown.add(this.changeSprite, this);
@@ -69,8 +67,9 @@ CarcassoneGame.mainMenu.prototype = {
     io.emit('startingGame');
   },
 
-  stateChange: function() {
-    this.state.start('mainGame');
+  stateChange: function(arg) {
+    var obj = arg || this;
+    obj.state.start('mainGame');
   },
 
   particleBurst: function(pointer) {
@@ -86,3 +85,18 @@ CarcassoneGame.mainMenu.prototype = {
     emitter.start(true, 4000, null, 5);
   }
 };
+
+window.io = io();
+
+io.on('newGame', function(msg){
+  console.log(msg);
+  var name = prompt('What is your name?');
+  io.emit('name', { name:name, gameID: msg.gameID, playerIndex: msg.playerIndex });
+});
+
+io.on('playersReady', function(msg){
+  game.state.start("mainGame");
+  console.log("Players ready message", msg);
+  gameID = msg.gameID;
+  globalPlayers = msg.players;
+});
