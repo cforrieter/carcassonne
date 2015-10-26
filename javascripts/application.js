@@ -289,7 +289,7 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWVVVVVVXXXXUVU'.split('');
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 // gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {

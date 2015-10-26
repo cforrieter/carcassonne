@@ -256,7 +256,7 @@ function scoreRoad(road, playersObject){
       console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
     }
     // scoreMeepAnimation(road.meepleGroup);
-    scoreTilesAnimation(road);
+    scoreTilesAnimation(road, points);
   }
 }
 
