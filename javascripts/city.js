@@ -260,7 +260,8 @@ function scoreCity(city){
     }
   }
   // city.meepleGroup.destroy();
-  scoreMeepAnimation(city.meepleGroup);
+  // scoreMeepAnimation(city.meepleGroup);
+  scoreTilesAnimation(city);
 }
 
 function checkFinishedCities(playerArray){

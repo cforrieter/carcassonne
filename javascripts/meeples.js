@@ -238,9 +238,21 @@ function endTurn(){
 function scoreMeepAnimation(meepleGroup){
   game.world.bringToTop(meepleGroup);
   var tween;
-  meepleGroup.children.forEach(function(child){
-    tween = game.add.tween(child.scale).to({x: 2, y: 2}, 1000, "Linear", true);
-    game.add.tween(child).to( { alpha: 0 }, 1000, "Linear", true);
+  meepleGroup.children.forEach(function(meeple){
+    tween = game.add.tween(meeple.scale).to({x: 2, y: 2}, 1000, "Linear", true);
+    game.add.tween(meeple).to( { alpha: 0 }, 1000, "Linear", true);
   })
   tween.onComplete.add(function(){meepleGroup.destroy()});
+}
+
+function scoreTilesAnimation(scoringGroup){
+  scoringGroup.tiles.forEach(function(t){
+    tween = game.add.tween(t.tile.scale).to({x: 1.05, y: 1.05}, 200, "Linear", true);
+    tween.onComplete.add(function(){
+      tweenB = game.add.tween(t.tile. scale).to({x: 1, y: 1}, 200, "Linear", true)
+      tweenB.onComplete.add(function(){
+        scoreMeepAnimation(scoringGroup.meepleGroup);
+      })
+    });
+  }) 
 }
