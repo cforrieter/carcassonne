@@ -2,6 +2,7 @@ var express = require('express')
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var port = process.env.PORT || 5000;
 
 // app.get('/', function(req, res){
 //   res.sendfile('index.html');
@@ -96,8 +97,8 @@ io.on('connection', function(socket){
   })
 });
 
-http.listen(80, function(){
-  console.log('listening on *:80');
+http.listen(port, function(){
+  console.log('listening on *:' + port);
 });
 
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
