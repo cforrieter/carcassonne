@@ -103,20 +103,13 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     monasteries.push(monastery);
   }
 
-  // coords = mergeObjects(roadCoords, cityCoords);
-  // console.log('Merged coords: ', coords);
-
   var meepleButtons = game.add.group();
 
   checkPositions(roadCoords, roadEdges, false);
   checkPositions(cityCoords, cityEdges, false);
   checkPositions(monasteryCoords, [{pos: 'typeCenter', scoringObject: monastery}], false);
-  // checkPositions(farmerCoords, [{pos: 'typeCenter', scoringObject: farms}, {pos: 'typeLeft', scoringObject: farms}, {pos: 'typeRight', scoringObject: farms}, {pos: 'typeTop', scoringObject: farms}, {pos: 'typeBottom', scoringObject: farms}], true);
   checkPositions(farmerCoords, farmerEdges, true);
 
-
-  // checkPositions(roadCoords, roadEdges);
-  // checkPositions(cityCoords, cityEdges);
   } else {
     confirmFunc();
   }
