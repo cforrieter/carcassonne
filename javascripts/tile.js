@@ -119,6 +119,14 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
           }
         }, this);
       }
+    } else {
+      var invalidBox = game.add.sprite(target.x - 44, target.y - 44, 'tiles', Tile.FRAMES[tile.tileType])
+      invalidBox.tint = "0xFF3300";
+      game.add.tween(invalidBox).to( { alpha: 0 }, 2000, "Linear", true).onComplete.add(deleteBox, invalidBox);
+
+      function deleteBox() {
+        this.destroy;
+      }
     }
   } else {
     // Start dragged
