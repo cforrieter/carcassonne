@@ -184,13 +184,13 @@ CarcassoneGame.mainGame.prototype = {
       savedY = this.game.camera.y;
 
       var center = getBoardCenter();
-      
+
       this.game.camera.x = (center[0] / 2.5) - (screenWidth / 2);
       this.game.camera.y = (center[1] / 2.5) - (screenHeight / 2);
       game.state.states.mainGame.hudDisplay.fixedToCamera = true;
 
       this.add.tween(this.game.world.scale).to({x: 0.4, y: 0.4}, 1, "Linear", true);
-      
+
     }
 
     function tabKeyUp(){
