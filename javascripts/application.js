@@ -165,8 +165,8 @@ CarcassoneGame.mainGame.prototype = {
       var center = getBoardCenter();
       // this.game.camera.x = game.world.centerX;
       // this.game.camera.y = game.world.centerY;
-      this.game.camera.x = center[0] - (screenWidth / 2);
-      this.game.camera.y = center[1] - (screenHeight / 2);
+      this.game.camera.x = center[0] - (game.width / 2);
+      this.game.camera.y = center[1] - (game.height / 2);
     }
   }
 
@@ -287,6 +287,7 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+
 gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {

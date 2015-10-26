@@ -250,13 +250,14 @@ function scoreRoad(road, playersObject){
     }
   }
   //award points to all the people with the max # of meeples
+  var scoringPlayers = [];
   for(var p in playerMeeples){
     if(playerMeeples[p] == max){
+      scoringPlayers.push(p);
       getPlayer(p).score += points;
       console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
     }
-    // scoreMeepAnimation(road.meepleGroup);
-    scoreTilesAnimation(road, points);
+    scoreTilesAnimation(road, points, scoringPlayers);
   }
 }
 
