@@ -46,7 +46,6 @@ function nextTurn(){
 }
 
 CarcassoneGame.mainGame = function(game) {
-  this.tilesRemaining = 83;
   // this.game.width = 800;
   // this.game.height = 600;
   //This may not be necessary, and can possibly be removed
@@ -195,7 +194,7 @@ CarcassoneGame.mainGame.prototype = {
 
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
-      var scrollWidth = 50;
+      var scrollWidth = 60;
       var scrollSpeed = 20;
 
       if(this.game.input.activePointer.position.x > game.width - scrollWidth) {
@@ -261,7 +260,8 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+var gameTiles = 'AABBBBC'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
@@ -312,14 +312,14 @@ function swapTile(type){
   type = gameTiles.pop();
   game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
   game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-  tile = new Tile(game, game.width - 50, game.height - 50, type);
+  tile = new Tile(game, game.width / 2, 120, type);
 }
 
 function endGame(){
   gameOver = true;
   endGameMonasteryCount();
-  checkFinishedCities();
-  checkFinishedRoads();
-  scoreFarms();
+  // checkFinishedCities();
+  // checkFinishedRoads();
+  // scoreFarms();
   console.log("GAME OVER, MAN. GAME OVER.")
 }
