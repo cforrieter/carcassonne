@@ -39,9 +39,21 @@ function scoreMonastery(){
 }
 
 function scoreAndRemoveMonastery(monasteryToRemove){
-  monasteries.forEach(function(arrayMonastery, index){
-    if (arrayMonastery.tile.y === monasteryToRemove.tile.y && arrayMonastery.tile.x === monasteryToRemove.tile.x){
-      monasteries[index].meepleGroup.destroy();
+  monasteries.forEach(function(mon, index){
+    if (mon.tile.y === monasteryToRemove.tile.y && mon.tile.x === monasteryToRemove.tile.x){
+      mon.tiles.push(
+        { tile: mon.tile }, 
+        { tile: mon.tile.neighbours.typeTop }, 
+        { tile: mon.tile.neighbours.typeTop.neighbours.typeRight },
+        { tile: mon.tile.neighbours.typeRight }, 
+        { tile: mon.tile.neighbours.typeRight.neighbours.typeBottom },
+        { tile: mon.tile.neighbours.typeBottom }, 
+        { tile: mon.tile.neighbours.typeBottom.neighbours.typeLeft },
+        { tile: mon.tile.neighbours.typeLeft }, 
+        { tile: mon.tile.neighbours.typeLeft.neighbours.typeTop }
+      ); 
+      scoreTilesAnimation(monasteries[index], 9);
+      // monasteries[index].meepleGroup.destroy();
       monasteries[index].meeples[0].score += 9; 
       monasteries[index].meeples[0].numMeeples += 1;
       monasteries.splice(index, 1);
@@ -50,40 +62,50 @@ function scoreAndRemoveMonastery(monasteryToRemove){
 }
 
 function endGameMonasteryCount(){
-  var neighbours = 1; //starts at one, because score includes monastery tile
   monasteries.forEach(function(monastery, index){
-    if (monastery.tile.neighbours.typeTop){
-      neighbours += 1;
+    var neighbours = 1; //starts at one, because score includes monastery tile
+    if(monastery.meeples.length > 0) {
+      monastery.tiles.push(monastery.tile);
+      if (monastery.tile.neighbours.typeTop){
+        monastery.tiles.push(monastery.tile.neighbours.typeTop);
+        neighbours += 1;
+      }
+      if (monastery.tile.neighbours.typeRight){
+        monastery.tiles.push(monastery.tile.neighbours.typeRight);
+        neighbours += 1;
+      } 
+      if (monastery.tile.neighbours.typeBottom){
+        monastery.tiles.push(monastery.tile.neighbours.typeBottom);
+        neighbours += 1;
+      } 
+      if (monastery.tile.neighbours.typeLeft){
+        monastery.tiles.push(monastery.tile.neighbours.typeLeft)
+        neighbours += 1;
+      }
+      playedTiles.forEach(function(playedTile){
+        if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y){
+          monastery.tiles.push(playedTile);
+          neighbours += 1;
+        } else if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y) {
+          monastery.tiles.push(playedTile);
+          neighbours += 1;
+        } else if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y) {
+          monastery.tiles.push(playedTile);
+          neighbours += 1;
+        } else if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y) {
+          monastery.tiles.push(playedTile);
+          neighbours += 1;
+        }
+      })
+      scoreTilesAnimation(monasteries[index], neighbours);
+      monastery.meeples[0].score += neighbours; 
     }
-    if (monastery.tile.neighbours.typeRight){
-      neighbours += 1;
-    } 
-    if (monastery.tile.neighbours.typeBottom){
-      neighbours += 1;
-    } 
-    if (monastery.tile.neighbours.typeLeft){
-      neighbours += 1;
-    }
-    playedTiles.forEach(function(playedTile){
-      if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y){
-        neighbours += 1;
-      }
-      if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y){
-        neighbours += 1;
-      }
-      if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y){
-        neighbours += 1;
-      }
-      if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y){
-        neighbours += 1;
-      }
-    })
-    monasteries[index].meeples[0].score += neighbours; 
   })
 }
 
 function Monastery(){
   this.tile;
+  this.tiles = [];
   this.meeples = [];
   this.meepleGroup = game.add.group();
   game.add.existing(this.meepleGroup);
