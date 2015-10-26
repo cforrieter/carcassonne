@@ -253,15 +253,17 @@ function scoreCity(city){
     }
   }
   //award points to all the people with the max # of meeples
+  var scoringPlayers = [];
   for(var p in playerMeeples){
     if(playerMeeples[p] == max){
+      scoringPlayers.push(p);
       getPlayer(p).score += points;
       console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
     }
   }
   // city.meepleGroup.destroy();
   // scoreMeepAnimation(city.meepleGroup);
-  scoreTilesAnimation(city, points);
+  scoreTilesAnimation(city, points, scoringPlayers);
 }
 
 function checkFinishedCities(playerArray){
