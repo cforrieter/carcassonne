@@ -18,7 +18,7 @@ CarcassoneGame.zeldaSplash.prototype = {
 
   create:  function() {
     this.playWarpSound;
-    game.add.tileSprite(0,0,800,600,'space');
+    game.add.tileSprite(0,0,game.width,game.height,'space');
     var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'phaserLogo');
     logo.anchor.set(0.5);
     logo.alpha = 1;
@@ -27,10 +27,10 @@ CarcassoneGame.zeldaSplash.prototype = {
     tween.start();
     tween.onComplete.add(this.introTimer, this);
 
-    var lhl = game.add.sprite(20, 550, 'lhl-logo');
+    var lhl = game.add.sprite(20, game.height - 50, 'lhl-logo');
     lhl.scale.setTo(0.5, 0.5);
 
-    var node = game.add.sprite(575, 500, 'node-logo');
+    var node = game.add.sprite(game.width -225, game.height - 100, 'node-logo');
     node.scale.setTo(0.5,0.5);
 
     
@@ -50,7 +50,7 @@ CarcassoneGame.zeldaSplash.prototype = {
 
     for (var y = 0; y < Math.floor(picHeight/ys); y++)
     {
-        var star = game.add.sprite(game.world.centerX, 135 + (y * ys), 'phaserLogo');
+        var star = game.add.sprite(game.world.centerX, game.world.centerY - 150 + (y * ys), 'phaserLogo');
 
         star.crop(new Phaser.Rectangle(0, y * ys, picWidth, ys));
 

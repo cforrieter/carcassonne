@@ -32,8 +32,8 @@
       <h1>Carcassonne</h1>
       <div>
         <script>
-            var screenWidth = 800;
-              var screenHeight = 600;
+            var screenWidth = 1024;
+              var screenHeight = 768;
             (function() {
               // Initialize Phaser
               
@@ -45,8 +45,8 @@
               game.state.add('zeldaSplash', CarcassoneGame.zeldaSplash);
               game.state.add('mainMenu', CarcassoneGame.mainMenu);
               game.state.add('mainGame', CarcassoneGame.mainGame);
-              // game.state.start('splashScreen');
-              game.state.start('mainGame');
+              game.state.start('splashScreen');
+              // game.state.start('mainGame');
             })();
         </script>
        </div> 

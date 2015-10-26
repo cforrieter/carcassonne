@@ -31,7 +31,7 @@ CarcassoneGame.splashScreen.prototype = {
   },
 
   create:  function() {
-    game.add.tileSprite(0,0,800,600,'space');
+    game.add.tileSprite(0,0, game.width, game.height,'space');
     var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'phaserLogo');
     logo.anchor.set(0.5);
     logo.alpha = 0;
@@ -41,10 +41,10 @@ CarcassoneGame.splashScreen.prototype = {
     tween.onComplete.add(this.introTimer, this);
     game.input.onDown.add(this.goToZelda, this);
 
-    var lhl = game.add.sprite(20, 550, 'lhl-logo');
+    var lhl = game.add.sprite(25, game.height - 50, 'lhl-logo');
     lhl.scale.setTo(0.5, 0.5);
 
-    var node = game.add.sprite(575, 500, 'node-logo');
+    var node = game.add.sprite(game.width - 225, game.height - 100, 'node-logo');
     node.scale.setTo(0.5,0.5);
 
 
