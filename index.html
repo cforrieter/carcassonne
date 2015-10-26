@@ -13,6 +13,7 @@
       <script src="javascripts/city.js"></script>
       <script src="javascripts/meeples.js"></script>
       <script src="javascripts/monastery.js"></script>
+      <script src="javascripts/farms.js"></script>
       <script src='javascripts/splashScreen.js'></script>
       <script src='javascripts/zeldaSplash.js'></script>
       <script src='javascripts/mainMenuZelda.js'></script>
@@ -27,18 +28,14 @@
           float: left;
           margin-left: -100em;
           };
-        #gameWindow {
-          width: 100%;
-          height: 100%;
-        }
       </style>
       <h1>Carcassonne</h1>
-      <div id='gameWindow'>
+      <div>
         <script>
             (function() {
               // Initialize Phaser
-              var screenWidth = 1024;
-              var screenHeight = 768;
+              var screenWidth = 800;
+              var screenHeight = 600;
 
               var game = window.game = new Phaser.Game(screenWidth, screenHeight, Phaser.AUTO);
               // Add gamestates to Phaser
@@ -47,8 +44,8 @@
               game.state.add('zeldaSplash', CarcassoneGame.zeldaSplash);
               game.state.add('mainMenu', CarcassoneGame.mainMenu);
               game.state.add('mainGame', CarcassoneGame.mainGame);
-              // game.state.start('splashScreen');
-              game.state.start('mainGame');
+              game.state.start('splashScreen');
+              // game.state.start('mainGame');
             })();
         </script>
        </div> 

@@ -27,12 +27,19 @@ function updateEdgeCount(road, count){
 }
 
 function mergeRoads(road1, road2) {
-  var newRoad = new Road();
-  newRoad.tiles = road1.tiles.concat(road2.tiles);
-  newRoad.meeples = road1.meeples.concat(road2.meeples);
-  newRoad.meepleGroup.addMultiple(road1.meepleGroup.children.concat(road2.meepleGroup.children));
-  newRoad.edgeCount = road1.edgeCount + road2.edgeCount - 1;
-  return newRoad;
+  if(road1 == road2){
+    road1.edgeCount -= 1;
+    return road1;
+  }else if(road2){
+    var newRoad = new Road();
+    newRoad.tiles = road1.tiles.concat(road2.tiles);
+    newRoad.meeples = road1.meeples.concat(road2.meeples);
+    newRoad.meepleGroup.addMultiple(road1.meepleGroup.children.concat(road2.meepleGroup.children));
+    newRoad.edgeCount = road1.edgeCount + road2.edgeCount - 1;
+    return newRoad;
+  }else{
+    return road1;
+  }
 }
 
 function findRoad(searchTile, pos){
@@ -112,7 +119,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
                 //add newly merged road
                 roadsArray.push(originalRoad);
                 if(originalRoad.meeples.length === 0){
-                  validRoads.push({ pos: 'typeCenter', scoringObject: newRoad });
+                  validRoads.push({ pos: 'typeCenter', scoringObject: originalRoad });
                 }
                 added = true;
               }
