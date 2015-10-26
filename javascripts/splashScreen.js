@@ -1,9 +1,9 @@
 var CarcassoneGame = {};
 
 CarcassoneGame.splashScreen = function(game) {
-  this.phaserLogo;
-  this.stateSwapTimer;
+  this.addInput;
 };
+
 
 var stateSwapTimer;
 var slices;
@@ -11,6 +11,9 @@ var waveform;
 
 var xl;
 var cx = 0;
+
+var KONAMI_CODE = ['up','up','down','down','left','right','left','right', 'b', 'a'];
+var userInputs = [];
 
 
 CarcassoneGame.splashScreen.prototype = {
@@ -28,7 +31,7 @@ CarcassoneGame.splashScreen.prototype = {
   },
 
   create:  function() {
-    game.add.tileSprite(0,0,800,600,'space');
+    game.add.tileSprite(0,0, game.width, game.height,'space');
     var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'phaserLogo');
     logo.anchor.set(0.5);
     logo.alpha = 0;
@@ -38,12 +41,38 @@ CarcassoneGame.splashScreen.prototype = {
     tween.onComplete.add(this.introTimer, this);
     game.input.onDown.add(this.goToZelda, this);
 
-    var lhl = game.add.sprite(20, 550, 'lhl-logo');
+    var lhl = game.add.sprite(25, game.height - 50, 'lhl-logo');
     lhl.scale.setTo(0.5, 0.5);
 
-    var node = game.add.sprite(575, 500, 'node-logo');
+    var node = game.add.sprite(game.width - 225, game.height - 100, 'node-logo');
     node.scale.setTo(0.5,0.5);
 
+
+    upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    bKey = game.input.keyboard.addKey(Phaser.Keyboard.B);
+
+    upKey.onDown.add(function() {
+      userInputs.unshift('up')
+    }, this);
+    downKey.onDown.add(function() {
+      userInputs.unshift('down')
+    }, this);
+    leftKey.onDown.add(function() {
+      userInputs.unshift('left')
+    }, this);
+    rightKey.onDown.add(function() {
+      userInputs.unshift('right')
+    }, this);
+    aKey.onDown.add(function() {
+      userInputs.unshift('a')
+    }, this);
+    bKey.onDown.add(function() {
+      userInputs.unshift('b')
+    }, this);
   },
 
   goToZelda: function () {
@@ -65,5 +94,12 @@ CarcassoneGame.splashScreen.prototype = {
 
   goToZeldaSplash: function() {
     this.state.start('zeldaSplash');
+  },
+
+  update: function() {
+    if(KONAMI_CODE.join('') == userInputs.slice(0,10).reverse().join('')) {
+      this.goToZelda();
+      userInputs = [];
+    }
   }
 };

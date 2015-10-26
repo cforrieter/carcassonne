@@ -46,9 +46,6 @@ function Tile(game, x, y, type)
   }
 
   var kind = Tile.KINDS[type];
-  // if(!kind){
-  //   throw new Error('Invalid tile type: ' + type);
-  // }
 
   for(var k in kind){
     this[k] = kind[k];
@@ -58,9 +55,6 @@ function Tile(game, x, y, type)
 
 Tile.prototype = Object.create(Phaser.Sprite.prototype);
 
-// Tile.prototype.hasNeighbours = function hasNeighbours() { return !!(this.neighbours.left || this.neighbours.right || this.neighbours.top || this.neighbours.bottom); };
-
-// This function addes the tile placement box and confirmation dialog
 Tile.prototype.onClick = function onClick(draggable, pointer){
   this.currentPointer = pointer;
   tile.grabbed = true;
@@ -82,47 +76,33 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
       function addButtons() {
           confirmDrop(target, function(confirmed){
             if (confirmed) {
-              // var meepleEdges = [];
-              // if (tile.placementValid (tile, target.x, target.y)){
               tile.placeTile(tile, tile.x, tile.y);
 
               var roadEdges = (addToRoad(tile));
-              // console.log("Road edges: ", roadEdges)
-
-              //TODO: get cities uncommented and tested *********
 
               var cityEdges = (addToCity(tile));
               var farmerEdges = (addFarms(tile));
 
-              // console.log("Cities:");
-              // cities.forEach(function(city){
-              //   console.log(city);
-              // });
-              // console.log(cities);
-              // console.log("City edges: ", cityEdges)
-              // console.log("Valid meeples for cities are " + meepleEdges);
-              // console.log(cities);
-
-
-
-              //*********************
-              // console.log('Dropped at x: ' + tile.x + ' y: ' + tile.y);
               tile.inputEnabled = false;
               game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
               game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
 
               tile.showMeepleSpots(tile, roadEdges, cityEdges, farmerEdges);
-
-
-
-            // }
           }
         }, this);
       }
+    } else {
+      var invalidBox = game.add.sprite(target.x, target.y, 'tiles', Tile.FRAMES[tile.tileType])
+      invalidBox.anchor.setTo(0.5);
+      invalidBox.tint = "0xFF3300";
+      invalidBox.angle = tile.angle;
+      game.add.tween(invalidBox).to( { alpha: 0 }, 2000, "Linear", true).onComplete.add(deleteBox, invalidBox);
+
+      function deleteBox() {
+        this.destroy;
+      }
     }
   } else {
-    // Start dragged
-    // console.log("Grabbed", this);
     this.fixedToCamera = false;
     this.dragged = true;
   }
@@ -152,7 +132,6 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 Tile.prototype.update = function update() {
   if(this.dragged && this.currentPointer && !this.dropped)
   {
-    // console.log(this.currentPointer.worldX, this.currentPointer.worldY);
     this.x = this.currentPointer.worldX;
     this.y = this.currentPointer.worldY;
   }

@@ -27,6 +27,10 @@ function updateEdgeCount(city, count){
   // }
 }
 
+function updateEdgeCountMerged(city, count){
+  city.edgeCount += count;
+}
+
 function findCity(searchTile, pos){
   var cityToReturn;
   cities.forEach(function(city){
@@ -52,7 +56,6 @@ function findAdjacentCity(searchTile, pos){
 }
 
 function mergeCities(city1, city2){
-
   if(city1 == city2){
     city1.edgeCount -= 2;
     return city1;
@@ -74,6 +77,7 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
   var cityToAdd = '';
   var added = false;
   var counter;
+  var merged;
 
   if(placedTile[position] == "CITY"){
     cities.forEach(function(city, index, citiesArray){
@@ -105,6 +109,10 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
                   if(cityToMerge && cityToMerge != originalCity){
                     //remove city from array, since it's being merged into a new city
                     citiesArray.splice(citiesArray.indexOf(cityToMerge), 1);
+                  }else if(cityToMerge && cityToMerge == originalCity){
+                    counter = getEdges(placedTile, allPos);
+                    updateEdgeCountMerged(originalCity, counter);
+                    merged = true;
                   }
 
                 });
@@ -117,10 +125,13 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
                   validCities.push({ pos: 'typeCenter', scoringObject: originalCity });
                 }
                 added = true;
-                counter = getEdges(placedTile, allPos);
-                updateEdgeCount(originalCity, counter);
+                if(!merged){
+                  counter = getEdges(placedTile, allPos);
+                  updateEdgeCount(originalCity, counter);
+                }
                 // console.log("Newly merged city has edgecount = ", originalCity.edgeCount);
               }
+
               counter = getEdges(placedTile, allPos);
               updateEdgeCount(city, counter);
               allPos = allPos.join('');
@@ -254,13 +265,17 @@ function scoreCity(city){
     }
   }
   //award points to all the people with the max # of meeples
+  var scoringPlayers = [];
   for(var p in playerMeeples){
     if(playerMeeples[p] == max){
+      scoringPlayers.push(p);
       getPlayer(p).score += points;
       console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
     }
   }
-  city.meepleGroup.destroy();
+  // city.meepleGroup.destroy();
+  // scoreMeepAnimation(city.meepleGroup);
+  scoreTilesAnimation(city, points, scoringPlayers);
 }
 
 function checkFinishedCities(playerArray){
