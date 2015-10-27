@@ -16,6 +16,20 @@ CarcassoneGame.mainMenu.prototype = {
   },
 
   create: function() {
+    window.io = io();
+    io.on('newGame', function(msg){
+      console.log(msg);
+      var name = prompt('What is your name?');
+      io.emit('name', { name:name, gameID: msg.gameID, playerIndex: msg.playerIndex });
+    });
+
+    io.on('playersReady', function(msg){
+      game.state.start("mainGame");
+      console.log("Players ready message", msg);
+      gameID = msg.gameID;
+      globalPlayers = msg.players;
+    });
+
     openingTheme = this.game.add.audio('opening-theme');
     openingTheme.onDecoded.add(this.playTheme, this);
     var background = game.add.sprite(0,0,'normal-background');
@@ -23,13 +37,13 @@ CarcassoneGame.mainMenu.prototype = {
     var header = game.add.sprite(game.width/2, 32, 'header');
     header.anchor.set(0.5,0);
 
-    this.prepareForStateChange();
+    // this.prepareForStateChange();
 
     // Sprite for start button and animation
     // startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'carcassonne-coat-of-arms');
     // startGameButton.anchor.set(0.5);
     // startGameButton.inputEnabled = true;
-    
+
     // // Changes state from the start screen to the main game
     // startGameButton.events.onInputDown.addOnce(this.prepareForStateChange, this);
   },

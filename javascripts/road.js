@@ -1,4 +1,5 @@
 var roads = [];
+var roadCount = 0;
 
 var backwards = {
   typeTop: "typeBottom",
@@ -119,7 +120,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
                 //add newly merged road
                 roadsArray.push(originalRoad);
                 if(originalRoad.meeples.length === 0){
-                  validRoads.push({ pos: 'typeCenter', scoringObject: originalRoad });
+                  validRoads.push({ pos: 'typeCenter', scoringID: originalRoad.id });
                 }
                 added = true;
               }
@@ -129,9 +130,9 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
               road.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
               if(road.meeples.length === 0){
                 if(single){
-                  validRoads.push({ pos: "typeCenter", scoringObject: road });
+                  validRoads.push({ pos: "typeCenter", scoringID: road.id });
                 }else{
-                  validRoads.push({ pos: position, scoringObject: road });
+                  validRoads.push({ pos: position, scoringID: road.id });
                 }
               }
               added = true;
@@ -148,7 +149,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
         allPos = position;
         newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
         roads.push(newRoad);
-        validRoads.push({ pos: position, scoringObject: newRoad });
+        validRoads.push({ pos: position, scoringID: newRoad.id });
         added = true;
       }else{
         // console.log("new road to add at " + position + " road");
@@ -202,7 +203,7 @@ function addToRoad(placedTile){
     newRoad.edgeCount = 2;
     newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
     roads.push(newRoad);
-    validRoads.push({ pos: "typeCenter", scoringObject: newRoad});
+    validRoads.push({ pos: "typeCenter", scoringID: newRoad.id });
   }
 
   return validRoads;
@@ -277,6 +278,8 @@ function checkFinishedRoads(playersObject){
 }
 
 function Road(){
+  this.id = roadCount;
+  roadCount ++;
   this.tiles = [];
   this.meeples = [];
   this.edgeCount = 0;

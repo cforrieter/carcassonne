@@ -1,11 +1,13 @@
-
-var globalPlayers = [
-  {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
-  {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
-  {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
-  {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
-  {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
-];
+var globalPlayers = [];
+var gameID;
+//
+// var globalPlayers = [
+//   {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
+//   {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
+//   {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
+//   {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
+//   {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
+// ];
 
 function getCurrentPlayer(){
   for(var player in globalPlayers){
@@ -98,11 +100,14 @@ CarcassoneGame.mainGame.prototype = {
     addFarms(tile);
     // console.log(cities);
 
+    var tileGroup = game.add.group();
+    this.game.add.existing(tileGroup);
+
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
     // console.log(game.world.centerX, game.world.centerY)
-    createTile();
+    io.emit('gameReady', { gameID: gameID});
 
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
@@ -123,7 +128,7 @@ CarcassoneGame.mainGame.prototype = {
       gameState.hudDisplay.render = true;
       gameState.hudDisplay.z = 100;
 
-      var tilesLeftText = game.add.text(game.width - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
+      var tilesLeftText = game.add.text(game.width - 100, 10, "Tiles: " + (71 - playedTiles.length), { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
       //hud box draw
@@ -201,22 +206,103 @@ CarcassoneGame.mainGame.prototype = {
       tile.visible = true;
       zoomedOut = false;
     }
+
+    io.on('gameStart', function(msg){
+      console.log('recevied game start call:', msg);
+      var currentPlayer = getCurrentPlayer();
+      if(currentPlayer.id == io.io.engine.id){
+        console.log("It's your turn! Creating tile!");
+        createTile(msg.nextTileType);
+      }
+    });
+
+    io.on('newTurnCleanUp', function(msg){
+      console.log("New Turn!");
+      var currentPlayer = getCurrentPlayer();
+      if(!(currentPlayer.id == io.io.engine.id)){
+        console.log("Placing other player's tile")
+        window.createTile(msg.tileType);
+        var rotations = msg.rotations;
+        if(rotations < 0){
+          rotations += 4;
+        }
+        for(var x = 0; x < rotations; x++){
+          tile.rotateRight();
+        }
+        tile.fixedToCamera = false;
+        tile.x = msg.tileX;
+        tile.y = msg.tileY;
+        tile.placeTile(tile, msg.tileX, msg.tileY);
+        addToRoad(tile);
+        addToCity(tile);
+        if(msg.scoringObjectType == 'monastery'){
+          var monastery = new Monastery();
+          monastery.tile = tile;
+          // monastery.meeples = getCurrentPlayer();
+          monasteries.push(monastery);
+        }
+        tile.inputEnabled = false;
+        game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+        game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+
+        var scoringObject;
+
+        if(msg.scoringObjectType == 'road'){
+          scoringObject = findRoadById(msg.scoringObjectId);
+        }
+        if(msg.scoringObjectType == 'city'){
+          scoringObject = findCityById(msg.scoringObjectId);
+        }
+        if(msg.scoringObjectType == 'monastery'){
+          scoringObject = findMonasteryById(msg.scoringObjectId);
+        }
+
+        console.log('Adding meeple');
+        var meepObject = {};
+        meepObject.ghostCoords = msg.meepleCoords;
+        meepObject.scoringObject = scoringObject;
+        if(msg.scoringObjectType){
+          addMeeple(meepObject);
+        }else{
+          endTurn();
+        }
+      }
+      //{lastMove, tile}
+      //if(!mysocketid == currentPlayer socketid){
+      //  rotate tile{
+      //    if negative, add 4
+      //  }
+      //
+      //  currentTile.placeTile(currentTile, msg.tileX, msg.tileY);
+      //  center camera on tile
+      //}
+      //nextTurn()
+      //
+      //if(mysocketid == currentPlayer socketid){
+      // draw tile
+      //}
+    })
+
+    io.on('newTurnTile', function(msg){
+      nextTurn();
+      var currentPlayer = getCurrentPlayer();
+      if(currentPlayer.id == io.io.engine.id){
+        console.log("It's your turn! Creating tile!")
+        createTile(msg.nextTileType);
+      }
+    })
+
+    io.on('replaceTile', function(msg){
+      createTile(msg.nextTileType);
+    })
+
   },
 
-  randomizeGameTiles: function(gameTiles) {
-    for (var i = gameTiles.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = this.gameTiles[i];
-      this.gameTiles[i] = this.gameTiles[j];
-      this.gameTiles[j] = temp;
-    }
-    return gameTiles;
-  },
 
   update: function() {
 
     game.world.bringToTop(this.hudDisplay);
-    game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + gameTiles.length
+    game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + (71 - playedTiles.length);
 
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
@@ -286,59 +372,26 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
-    // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-  type = type || gameTiles.pop();
-  // console.log('Tile type: ',type);
-
-
-  // debugger;
-  // game.state.states.mainGame.tilesGroup.add(tile);
 
   tile = new Tile(game, game.width / 2, 120,  type);
   tile.alpha = 0;
   game.add.tween(tile).to( { alpha: 1 }, 600, "Linear", true);
 
   if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
-    if (gameTiles.length === 0){
-    //TODO -- handle this shit
-    alert("Game over.");
+    if (playedTiles.length === 0){
+      //TODO -- handle this shit
+      alert("Game over.");
+    }else{
+      io.emit('brokenTile', { type: type, gameID: gameID });
     }
-    swapTile(type);
+  }else{
+    this.game.add.existing(tile);
   }
-
-  this.game.add.existing(tile);
-  // console.log('Possible moves: ',tile.getValidMoves());
 }
 
-function randomizeGameTiles(gameTiles) {
-  for (var i = gameTiles.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = gameTiles[i];
-    gameTiles[i] = gameTiles[j];
-    gameTiles[j] = temp;
-  }
-  return gameTiles;
-}
 
-// console.log(gameTiles);
-
-function swapTile(type){
-  console.log("Broken tile! Swapping tile");
-  var tempArray = [];
-  tempArray.push(type);
-  gameTiles.forEach(function(currentTile){
-    tempArray.push(currentTile);
-  });
-  gameTiles = tempArray;
-  type = gameTiles.pop();
-  game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
-  game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-  tile = new Tile(game, game.width / 2, 120, type);
-}
 
 function endGame(){
   gameOver = true;
@@ -362,4 +415,33 @@ function getBoardCenter(){
   avgY = totalY / playedTiles.length;
 
   return([avgX, avgY]);
+}
+
+
+var scoringObjectType;
+
+function endTurnServer(meepObject){
+  var message = {tileType: tile.tileType, tileX: tile.x, tileY: tile.y, rotations: tile.numRotations};
+  if(meepObject){
+    scoringObjectType = getScoringObjectType(meepObject.scoringObject);
+    message.meepleCoords = meepObject.ghostCoords;
+    message.scoringObjectId = meepObject.scoringObject.id
+    message.scoringObjectType = scoringObjectType
+  }
+  console.log('Sending to server...')
+  //meeples need to be added to this object...
+  // console.log('object in endTurnServer function: ', meepObject.scoringObject)
+  io.emit('turnEnd', { message: message, gameID: gameID });
+}
+
+function getScoringObjectType(scoringObject){
+  if (scoringObject instanceof City){
+    return 'city';
+  }
+  if (scoringObject instanceof Road){
+    return 'road';
+  }
+  if (scoringObject instanceof Monastery){
+    return 'monastery';
+  }
 }
