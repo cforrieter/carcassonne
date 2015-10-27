@@ -27,9 +27,6 @@ function updateEdgeCount(city, count){
   // }
 }
 
-function updateEdgeCountMerged(city, count){
-  city.edgeCount += count;
-}
 
 function findCity(searchTile, pos){
   var cityToReturn;
@@ -57,7 +54,7 @@ function findAdjacentCity(searchTile, pos){
 
 function mergeCities(city1, city2){
   if(city1 == city2){
-    city1.edgeCount -= 2;
+    city1.edgeCount -= 1;
     return city1;
   }else if(city2){
     var newCity = new City();
@@ -109,10 +106,6 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
                   if(cityToMerge && cityToMerge != originalCity){
                     //remove city from array, since it's being merged into a new city
                     citiesArray.splice(citiesArray.indexOf(cityToMerge), 1);
-                  }else if(cityToMerge && cityToMerge == originalCity){
-                    counter = getEdges(placedTile, allPos);
-                    updateEdgeCountMerged(originalCity, counter);
-                    merged = true;
                   }
 
                 });
@@ -125,10 +118,9 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
                   validCities.push({ pos: 'typeCenter', scoringObject: originalCity });
                 }
                 added = true;
-                if(!merged){
-                  counter = getEdges(placedTile, allPos);
-                  updateEdgeCount(originalCity, counter);
-                }
+                counter = getEdges(placedTile, allPos);
+                updateEdgeCount(originalCity, counter);
+
                 // console.log("Newly merged city has edgecount = ", originalCity.edgeCount);
               }
 
