@@ -92,15 +92,15 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
         }, this);
       }
     } else {
-      var invalidBox = game.add.sprite(target.x, target.y, 'tiles', Tile.FRAMES[tile.tileType])
-      invalidBox.anchor.setTo(0.5);
-      invalidBox.tint = "0xFF3300";
-      invalidBox.angle = tile.angle;
-      game.add.tween(invalidBox).to( { alpha: 0 }, 2000, "Linear", true).onComplete.add(deleteBox, invalidBox);
+      // var invalidBox = game.add.sprite(target.x, target.y, 'tiles', Tile.FRAMES[tile.tileType])
+      // invalidBox.anchor.setTo(0.5);
+      // invalidBox.tint = "0xFF3300";
+      // invalidBox.angle = tile.angle;
+      // game.add.tween(invalidBox).to( { alpha: 0 }, 2000, "Linear", true).onComplete.add(deleteBox, invalidBox);
 
-      function deleteBox() {
-        this.destroy;
-      }
+      // function deleteBox() {
+      //   this.destroy;
+      // }
     }
   } else {
     this.fixedToCamera = false;
