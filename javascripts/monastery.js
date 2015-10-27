@@ -65,35 +65,35 @@ function endGameMonasteryCount(){
   monasteries.forEach(function(monastery, index){
     var neighbours = 1; //starts at one, because score includes monastery tile
     if(monastery.meeples.length > 0) {
-      monastery.tiles.push(monastery.tile);
+      monastery.tiles.push({ tile: monastery.tile });
       if (monastery.tile.neighbours.typeTop){
-        monastery.tiles.push(monastery.tile.neighbours.typeTop);
+        monastery.tiles.push({ tile: monastery.tile.neighbours.typeTop });
         neighbours += 1;
       }
       if (monastery.tile.neighbours.typeRight){
-        monastery.tiles.push(monastery.tile.neighbours.typeRight);
+        monastery.tiles.push({ tile: monastery.tile.neighbours.typeRight });
         neighbours += 1;
       } 
       if (monastery.tile.neighbours.typeBottom){
-        monastery.tiles.push(monastery.tile.neighbours.typeBottom);
+        monastery.tiles.push({ tile: monastery.tile.neighbours.typeBottom });
         neighbours += 1;
       } 
       if (monastery.tile.neighbours.typeLeft){
-        monastery.tiles.push(monastery.tile.neighbours.typeLeft)
+        monastery.tiles.push({ tile: monastery.tile.neighbours.typeLeft })
         neighbours += 1;
       }
       playedTiles.forEach(function(playedTile){
         if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y){
-          monastery.tiles.push(playedTile);
+          monastery.tiles.push({ tile: playedTile });
           neighbours += 1;
         } else if (monastery.tile.x + 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y) {
-          monastery.tiles.push(playedTile);
+          monastery.tiles.push({ tile: playedTile });
           neighbours += 1;
         } else if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y + 90 === playedTile.y) {
-          monastery.tiles.push(playedTile);
+          monastery.tiles.push({ tile: playedTile });
           neighbours += 1;
         } else if (monastery.tile.x - 90 === playedTile.x && monastery.tile.y - 90 === playedTile.y) {
-          monastery.tiles.push(playedTile);
+          monastery.tiles.push({ tile: playedTile });
           neighbours += 1;
         }
       })

@@ -287,7 +287,6 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-
 gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
@@ -344,9 +343,9 @@ function swapTile(type){
 function endGame(){
   gameOver = true;
   endGameMonasteryCount();
-  // checkFinishedCities();
-  // checkFinishedRoads();
-  // scoreFarms();
+  checkFinishedCities();
+  checkFinishedRoads();
+  scoreFarms();
   console.log("GAME OVER, MAN. GAME OVER.")
 }
 
