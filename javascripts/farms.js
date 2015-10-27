@@ -156,16 +156,20 @@ function addFarms(tile) {
 }
 
 function scoreFarms() {
+  var farmsToScore = [];
+  var farmsScores = [];
+  var scoringPlayers = [];
   completedCities.forEach(function(city) {
-    var farmsToScore = [];
     city.tiles.forEach(function(tilePiece) {
       tilePiece.tile.farms.forEach(function(farm){
         if (farm.hasCity && farmsToScore.indexOf(farm.parent) == -1) {
           farmsToScore.push(farm.parent)
+          farmsScores[farmsToScore.length -1] = 0;
         }
       })
     })
-    farmsToScore.forEach(function(farm) {
+    farmsToScore.forEach(function(farm, index) {
+      scoringPlayers[index] = [];
       var meepCount = [0, 0, 0, 0, 0];
       farm.meeples.forEach(function(meep) {
         meepCount[globalPlayers.indexOf(meep)] += 1;
@@ -173,9 +177,16 @@ function scoreFarms() {
       for(var i = 0; i < globalPlayers.length; i++){
         if(meepCount[i] == Math.max(meepCount[0], meepCount[1], meepCount[2], meepCount[3], meepCount[4]) && meepCount[i] > 0) {
           globalPlayers[i].score += 3;
+          scoringPlayers[index].push(globalPlayers[i].name);
+          farmsScores[index] += 3;
         }
       }
     })
+  })
+  farmsToScore.forEach(function(farm, index){
+    if(farmsScores[index] > 0){
+      scoreTilesAnimation(farm, farmsScores[index], scoringPlayers[index]);
+    }
   })
 }
 
