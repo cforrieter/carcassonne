@@ -171,25 +171,25 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     meepleButtons.destroy();
     confirm.destroy();
     if (this.farmer) {
-      var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
+      var shadow = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer', globalPlayers.indexOf(getCurrentPlayer()))
       shadow.anchor.setTo(0.5);
       shadow.x = shadow.x + 3
       shadow.y = shadow.y + 3
       shadow.tint = 0x000000;
       shadow.alpha = 0.6;
-      var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
+      var meeple = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer', globalPlayers.indexOf(getCurrentPlayer()))
       meeple.anchor.setTo(0.5);
-      meeple.tint = "0x" + getCurrentPlayer().color
+      // meeple.tint = "0x" + getCurrentPlayer().color
     } else {
-      var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meeple')
+      var shadow = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meeple', globalPlayers.indexOf(getCurrentPlayer()))
       shadow.anchor.setTo(0.5);
       shadow.x += 3;
       shadow.y += 3;
       shadow.tint = 0x000000;
       shadow.alpha = 0.6;
-      var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meeple')
+      var meeple = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meeple', globalPlayers.indexOf(getCurrentPlayer()))
       meeple.anchor.setTo(0.5);
-      meeple.tint = "0x" + getCurrentPlayer().color
+      // meeple.tint = "0x" + getCurrentPlayer().color
     }
 
     var currentPlayer = getCurrentPlayer();
@@ -247,9 +247,7 @@ function scoreTilesAnimation(scoringGroup, pointsScored){
       scoringGroup.meepleGroup.children[m].y - 70, 
       pointsScored, { 
         font: "42px Lindsay", 
-        fill: "#" + scoringGroup.meepleGroup.children[m].tint.substring(
-          2, scoringGroup.meepleGroup.children[m].tint.length
-          )
+        fill: "#" + scoringGroup.meeples[0].color
         }
       );
       game.add.tween(points).to( {alpha: 0}, 1400, "Linear", true);
@@ -260,7 +258,7 @@ function scoreTilesAnimation(scoringGroup, pointsScored){
   scoringGroup.tiles.forEach(function(t){
     var tween = game.add.tween(t.tile.scale).to({x: 1.05, y: 1.05}, 200, "Linear", true);
     tween.onComplete.add(function(){
-      var tweenB = game.add.tween(t.tile. scale).to({x: 1, y: 1}, 200, "Linear", true)
+      var tweenB = game.add.tween(t.tile.scale).to({x: 1, y: 1}, 200, "Linear", true)
       tweenB.onComplete.add(function(){
         scoreMeepAnimation(scoringGroup.meepleGroup);
       })

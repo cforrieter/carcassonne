@@ -15,10 +15,10 @@ CarcassoneGame.mainMenuZelda.prototype = {
     game.load.spritesheet('yellow-rupee', 'assets/zelda-yellow-rupee-spritesheet.png',8,14,3);
     game.load.spritesheet('orange-rupee', 'assets/zelda-orange-rupee-spritesheet.png',8,14,3);
     game.load.spritesheet('purple-rupee', 'assets/zelda-purple-rupee-spritesheet.png',8,14,3);
-    game.load.image('meeple-3d-blue', 'assets/meeple-3d-blue.png');
     game.load.image('header', 'assets/carcassone-header.png');
-    game.load.image('meeple-blue-flat', 'assets/meeple-blue-flat.png');
     game.load.image('background', 'assets/zelda-opening-background.png');
+    game.load.spritesheet('meeple', 'assets/link-meeples.png', 20, 27, 5);
+    game.load.spritesheet('meepleFarmer', 'assets/link-farmer.png', 30, 19, 5);
   },
 
   create: function() {
@@ -29,7 +29,6 @@ CarcassoneGame.mainMenuZelda.prototype = {
     zeldaTheme.onDecoded.add(this.playTheme, this);
     rupeeBurst = this.game.add.audio('rupee-gained');
     swordSpin = this.game.add.audio('sword-spin-complete');
-
 
     // Sprite for start button and animation
     startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'link-spin');
