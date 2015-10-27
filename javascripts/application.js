@@ -58,13 +58,15 @@ CarcassoneGame.mainGame.prototype = {
   preload: function() {
 
     game.load.image('background', './assets/background.png');
-    game.load.image('meeple', 'assets/MEEPLE.png')
-    game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
-    game.load.image('check', 'assets/check.png')
-    game.load.image('tileBorder', 'assets/border.png')
-    game.load.image('meeple', 'assets/MEEPLE.png')
-    game.load.image('meepleFarmer', 'assets/meepleFarmer.png')
-    game.load.image('meepleIcon', 'assets/meeple-flat.png')
+    game.load.image('meeple', 'assets/MEEPLE.png');
+    game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png');
+    game.load.image('check', 'assets/check.png');
+    game.load.image('tileBorder', 'assets/border.png');
+    game.load.image('meeple', 'assets/MEEPLE.png');
+    game.load.image('meepleFarmer', 'assets/meepleFarmer.png');
+    game.load.image('meepleIcon', 'assets/meeple-flat.png');
+    game.load.image('victory', 'assets/victory.png');
+    game.load.image('defeat', 'assets/defeat.png');
     game.load.audio('game-music', 'assets/game-music.mp3');
 
   },
@@ -213,6 +215,9 @@ CarcassoneGame.mainGame.prototype = {
     return gameTiles;
   },
 
+  // the following function displays the end of game screen
+
+
   update: function() {
 
     game.world.bringToTop(this.hudDisplay);
@@ -286,7 +291,9 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+
+var gameTiles = 'AABB'.split('');
 
 gameTiles = randomizeGameTiles(gameTiles);
 
@@ -325,6 +332,29 @@ function randomizeGameTiles(gameTiles) {
   return gameTiles;
 }
 
+function prepareEndGame() {
+  sortFinalScores();
+  displayFinalScores();
+}
+
+function sortFinalScores() {
+  globalPlayers.sort(function(a, b){
+    return b.points-a.points;
+  });
+}
+
+function displayFinalScores() {
+  if ((getCurrentPlayer()).id == io.io.engine.id) {
+    game.add.image(0,0,'victory');
+  } else {
+    game.add.image(0,0, 'defeat');
+  }
+  globalPlayers.forEach(function(player) {
+    var style = { font: "20px Lindsay", fill: '#fdfe00', tabs: 123};
+    text = game.add.text(140,180, player.name + "\t" + player.score + "\n", style);
+  });
+}
+
 // console.log(gameTiles);
 
 function swapTile(type){
@@ -347,6 +377,8 @@ function endGame(){
   // checkFinishedCities();
   // checkFinishedRoads();
   // scoreFarms();
+  console.log(this);
+  this.prepareEndGame();
   console.log("GAME OVER, MAN. GAME OVER.")
 }
 

@@ -15,9 +15,7 @@ CarcassoneGame.mainMenuZelda.prototype = {
     game.load.spritesheet('yellow-rupee', 'assets/zelda-yellow-rupee-spritesheet.png',8,14,3);
     game.load.spritesheet('orange-rupee', 'assets/zelda-orange-rupee-spritesheet.png',8,14,3);
     game.load.spritesheet('purple-rupee', 'assets/zelda-purple-rupee-spritesheet.png',8,14,3);
-    game.load.image('meeple-3d-blue', 'assets/meeple-3d-blue.png');
     game.load.image('header', 'assets/carcassone-header.png');
-    game.load.image('meeple-blue-flat', 'assets/meeple-blue-flat.png');
     game.load.image('background', 'assets/zelda-opening-background.png');
   },
 

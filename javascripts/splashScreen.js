@@ -39,7 +39,7 @@ CarcassoneGame.splashScreen.prototype = {
     tween.to( { alpha: 1 }, 2000, "Linear");
     tween.start();
     tween.onComplete.add(this.introTimer, this);
-    game.input.onDown.add(this.goToZelda, this);
+    // game.input.onDown.add(this.goToZelda, this);
 
     var lhl = game.add.sprite(25, game.height - 50, 'lhl-logo');
     lhl.scale.setTo(0.5, 0.5);
