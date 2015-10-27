@@ -165,8 +165,8 @@ CarcassoneGame.mainGame.prototype = {
       var center = getBoardCenter();
       // this.game.camera.x = game.world.centerX;
       // this.game.camera.y = game.world.centerY;
-      this.game.camera.x = center[0] - (screenWidth / 2);
-      this.game.camera.y = center[1] - (screenHeight / 2);
+      this.game.camera.x = center[0] - (game.width / 2);
+      this.game.camera.y = center[1] - (game.height / 2);
     }
   }
 
@@ -184,13 +184,13 @@ CarcassoneGame.mainGame.prototype = {
       savedY = this.game.camera.y;
 
       var center = getBoardCenter();
-      
+
       this.game.camera.x = (center[0] / 2.5) - (screenWidth / 2);
       this.game.camera.y = (center[1] / 2.5) - (screenHeight / 2);
       game.state.states.mainGame.hudDisplay.fixedToCamera = true;
 
       this.add.tween(this.game.world.scale).to({x: 0.4, y: 0.4}, 1, "Linear", true);
-      
+
     }
 
     function tabKeyUp(){
@@ -287,6 +287,7 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+
 gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
