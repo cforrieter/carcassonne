@@ -25,14 +25,15 @@ CarcassoneGame.mainMenu.prototype = {
     var header = game.add.sprite(game.width/2, 32, 'header');
     header.anchor.set(0.5,0);
 
+    this.prepareForStateChange();
 
     // Sprite for start button and animation
-    startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'carcassonne-coat-of-arms');
-    startGameButton.anchor.set(0.5);
-    startGameButton.inputEnabled = true;
+    // startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'carcassonne-coat-of-arms');
+    // startGameButton.anchor.set(0.5);
+    // startGameButton.inputEnabled = true;
     
-    // Changes state from the start screen to the main game
-    startGameButton.events.onInputDown.addOnce(this.prepareForStateChange, this);
+    // // Changes state from the start screen to the main game
+    // startGameButton.events.onInputDown.addOnce(this.prepareForStateChange, this);
   },
 
   prepareForStateChange: function() {
@@ -41,8 +42,8 @@ CarcassoneGame.mainMenu.prototype = {
   },
 
   fadeMusic: function() {
-    this.game.time.events.add(1900, this.stopTheme, this);
-    openingTheme.fadeOut(1900);
+    this.game.time.events.add(9000, this.stopTheme, this);
+    openingTheme.fadeOut(9000);
   },
 
   playTheme: function() {
@@ -56,7 +57,7 @@ CarcassoneGame.mainMenu.prototype = {
   addTimer: function() {
     // RESET this 0 delay to 1200 after development ****************
     //***********************-V-********
-    this.game.time.events.add(2000, this.stateChange, this);
+    this.game.time.events.add(10000, this.stateChange, this);
   },
 
   stateChange: function() {

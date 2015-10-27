@@ -24,7 +24,8 @@ CarcassoneGame.mainMenuZelda.prototype = {
   create: function() {
     
     var background = game.add.sprite(0,0, 'background');
-    var header = game.add.sprite(10, 32, 'header');
+    var header = game.add.sprite(game.width/2, 32, 'header');
+    header.anchor.set(0.5,0);
     zeldaTheme = this.game.add.audio('zelda-theme');
     zeldaTheme.onDecoded.add(this.playTheme, this);
     rupeeBurst = this.game.add.audio('rupee-gained');

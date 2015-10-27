@@ -190,6 +190,8 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
       var meeple = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meeple', globalPlayers.indexOf(getCurrentPlayer()))
       meeple.anchor.setTo(0.5);
       // meeple.tint = "0x" + getCurrentPlayer().color
+      shadow.playerName = getCurrentPlayer().name;
+      meeple.playerName = getCurrentPlayer().name;
     }
 
     var currentPlayer = getCurrentPlayer();
@@ -227,32 +229,56 @@ function endTurn(){
   }
 }
 
-function scoreMeepAnimation(meepleGroup){
+function scoreMeepAnimation(meepleGroup, scoringPlayers){
   game.world.bringToTop(meepleGroup);
 
   // embiggen and fade out meeple
   meepleGroup.children.forEach(function(meeple){
-    var tween = game.add.tween(meeple.scale).to({x: 2, y: 2}, 1000, "Linear", true);
-    game.add.tween(meeple).to( { alpha: 0 }, 1000, "Linear", true);
-    tween.onComplete.add(function(){meepleGroup.destroy()});
+    scoringPlayers.forEach(function(player){
+      if (player === meeple.playerName){
+        var tween = game.add.tween(meeple.scale).to({x: 2, y: 2}, 1000, "Linear", true);
+        game.add.tween(meeple).to( { alpha: 0 }, 1000, "Linear", true);
+      } else {
+        var tween = game.add.tween(meeple).to( { alpha: 0 }, 1000, "Linear", true);
+      }
+      tween.onComplete.add(function(){meepleGroup.destroy()});
+    })
   })
   
 }
 
-function scoreTilesAnimation(scoringGroup, pointsScored){
-  // draw points scoring over meeples
-  for (var m = 1; m < scoringGroup.meepleGroup.children.length; m+= 2){
-    var points = game.add.text(
-      scoringGroup.meepleGroup.children[m].x - 10,
-      scoringGroup.meepleGroup.children[m].y - 70, 
-      pointsScored, { 
+function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
+  // draw points scoring over last played tile
+  var alreadyDisplayedPlayers = [];
+  var yScoreOffset = 30;
+  for (var m = 1; m < scoringGroup.meepleGroup.children.length; m += 2){
+    scoringPlayers.forEach(function(player){
+      if (player === scoringGroup.meepleGroup.children[m].playerName && !(alreadyDisplayed(player))){
+        alreadyDisplayedPlayers.push(player);
+        var points = game.add.text(
+        // scoringGroup.meepleGroup.children[m].x - 15,
+        // scoringGroup.meepleGroup.children[m].y - 70, 
+        playedTiles[playedTiles.length - 1].x - 25, 
+        playedTiles[playedTiles.length - 1].y - yScoreOffset,
+        "+" + pointsScored, { 
         font: "42px Lindsay", 
         fill: "#" + scoringGroup.meeples[0].color
         }
       );
+      yScoreOffset += 35;
       game.add.tween(points).to( {alpha: 0}, 1400, "Linear", true);
-    }
+      }
+    })
+  }
 
+  function alreadyDisplayed(player){
+    for (var i = 0; i < alreadyDisplayedPlayers.length; i ++){
+      if (alreadyDisplayedPlayers[i] === player){
+        return true;
+      }
+    }
+    return false;
+  }
 
   // slightly expand tile group scoring
   scoringGroup.tiles.forEach(function(t){
@@ -260,7 +286,7 @@ function scoreTilesAnimation(scoringGroup, pointsScored){
     tween.onComplete.add(function(){
       var tweenB = game.add.tween(t.tile.scale).to({x: 1, y: 1}, 200, "Linear", true)
       tweenB.onComplete.add(function(){
-        scoreMeepAnimation(scoringGroup.meepleGroup);
+        scoreMeepAnimation(scoringGroup.meepleGroup, scoringPlayers);
       })
     });
   }) 
