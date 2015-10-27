@@ -75,7 +75,6 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
   var cityToAdd = '';
   var added = false;
   var counter;
-  var merged;
 
   if(placedTile[position] == "CITY"){
     cities.forEach(function(city, index, citiesArray){

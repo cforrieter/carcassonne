@@ -235,6 +235,7 @@ CarcassoneGame.mainGame.prototype = {
         tile.placeTile(tile, msg.tileX, msg.tileY);
         addToRoad(tile);
         addToCity(tile);
+        addFarms(tile);
         if(msg.scoringObjectType == 'monastery'){
           var monastery = new Monastery();
           monastery.tile = tile;

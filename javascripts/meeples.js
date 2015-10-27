@@ -226,7 +226,7 @@ function addMeeple(meepObject) {
     confirm.destroy();
   }
 
-  if (this.farmer) {
+  if (meepObject.farmer) {
     var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
     shadow.anchor.setTo(0.5);
     shadow.x = shadow.x + 3
@@ -235,6 +235,7 @@ function addMeeple(meepObject) {
     shadow.alpha = 0.6;
     var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
     meeple.anchor.setTo(0.5);
+    meeple.tint = "0x" + getCurrentPlayer().color
   } else {
     var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
     shadow.anchor.setTo(0.5);
