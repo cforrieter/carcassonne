@@ -150,7 +150,7 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     monasteries.push(monastery);
   }
 
-  var meepleButtons = game.add.group();
+   meepleButtons = game.add.group();
 
   checkPositions(roadCoords, roadEdges, false);
   checkPositions(cityCoords, cityEdges, false);
@@ -191,7 +191,7 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
   function confirmFunc() {
     confirm.destroy();
     if(meepleButtons){
-        meepleButtons.destroy();
+      meepleButtons.destroy();
     }
     endTurn();
   }
@@ -214,59 +214,59 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     return [x, y];
   }
 
-  function addMeeple(meepObject) {
-    if (meepObject instanceof Phaser.Button){
-      meepObject = this;
-    }
+};
 
-    if(newTile){
-      meepleButtons.destroy();
-      confirm.destroy();
-    }
-
-    if (this.farmer) {
-      var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
-      shadow.anchor.setTo(0.5);
-      shadow.x = shadow.x + 3
-      shadow.y = shadow.y + 3
-      shadow.tint = 0x000000;
-      shadow.alpha = 0.6;
-      var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
-      meeple.anchor.setTo(0.5);
-    } else {
-      var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
-      shadow.anchor.setTo(0.5);
-      shadow.x += 3;
-      shadow.y += 3;
-      shadow.tint = 0x000000;
-      shadow.alpha = 0.6;
-      var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
-      meeple.anchor.setTo(0.5);
-      meeple.tint = "0x" + getCurrentPlayer().color
-    }
-
-    var currentPlayer = getCurrentPlayer();
-    console.log(meepObject);
-    meepObject.scoringObject.meeples.push(currentPlayer);
-    currentPlayer.numMeeples -= 1;
-    // TODO: remove a meeple from the player when played and score points if points scored
-    // globalPlayers.player1.numMeeples -= 1;
-    // globalPlayers.player1.score += 50;
-    // ============================
-
-    // console.log("Scoring object: ",this.scoringObject)
-    meepObject.scoringObject.meepleGroup.add(shadow, false);
-    meepObject.scoringObject.meepleGroup.add(meeple, false);
-    // console.log("SCORING OBJECT'S MEEPLE GROUP: ", this.scoringObject.meepleGroup)
-    // var currentScoringObjectMeepGroup = this.scoringObject.meepleGroup
-    game.add.existing(meepObject.scoringObject.meepleGroup);
-    game.world.bringToTop(meepObject.scoringObject.meepleGroup);
-
-    // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
-    endTurn(meepObject)
+function addMeeple(meepObject) {
+  if (meepObject instanceof Phaser.Button){
+    meepObject = this;
   }
 
-};
+  if(newTile){
+    meepleButtons.destroy();
+    confirm.destroy();
+  }
+
+  if (this.farmer) {
+    var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
+    shadow.anchor.setTo(0.5);
+    shadow.x = shadow.x + 3
+    shadow.y = shadow.y + 3
+    shadow.tint = 0x000000;
+    shadow.alpha = 0.6;
+    var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
+    meeple.anchor.setTo(0.5);
+  } else {
+    var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
+    shadow.anchor.setTo(0.5);
+    shadow.x += 3;
+    shadow.y += 3;
+    shadow.tint = 0x000000;
+    shadow.alpha = 0.6;
+    var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
+    meeple.anchor.setTo(0.5);
+    meeple.tint = "0x" + getCurrentPlayer().color
+  }
+
+  var currentPlayer = getCurrentPlayer();
+  console.log(meepObject);
+  meepObject.scoringObject.meeples.push(currentPlayer);
+  currentPlayer.numMeeples -= 1;
+  // TODO: remove a meeple from the player when played and score points if points scored
+  // globalPlayers.player1.numMeeples -= 1;
+  // globalPlayers.player1.score += 50;
+  // ============================
+
+  // console.log("Scoring object: ",this.scoringObject)
+  meepObject.scoringObject.meepleGroup.add(shadow, false);
+  meepObject.scoringObject.meepleGroup.add(meeple, false);
+  // console.log("SCORING OBJECT'S MEEPLE GROUP: ", this.scoringObject.meepleGroup)
+  // var currentScoringObjectMeepGroup = this.scoringObject.meepleGroup
+  game.add.existing(meepObject.scoringObject.meepleGroup);
+  game.world.bringToTop(meepObject.scoringObject.meepleGroup);
+
+  // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
+  endTurn(meepObject)
+}
 
 function endTurn(meepObject){
   checkFinishedRoads();
