@@ -79,6 +79,7 @@ Tile.MONASTERYMEEPLECOORDS = {
   A: {p4: [0,0]}
 };
 
+var allMeeples;
 
 Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityEdges, farmerEdges) {
 
@@ -212,6 +213,10 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     game.add.existing(this.scoringObject.meepleGroup);
     game.world.bringToTop(this.scoringObject.meepleGroup);
 
+    // allMeeples.add(shadow);
+    // allMeeples.add(meeple);
+    
+
     // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
 
     endTurn();
@@ -233,7 +238,6 @@ function endTurn(){
 
 function scoreMeepAnimation(meepleGroup, scoringPlayers){
   game.world.bringToTop(meepleGroup);
-
   // embiggen and fade out meeple
   meepleGroup.children.forEach(function(meeple){
     scoringPlayers.forEach(function(player){
@@ -264,7 +268,6 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
         x = playedTiles[playedTiles.length - 1].x - 25;
         y = playedTiles[playedTiles.length - 1].y - yScoreOffset;
       }
-      debugger;
       if (player === scoringGroup.meepleGroup.children[m].playerName && alreadyDisplayedPlayers.indexOf(player) === -1){
         alreadyDisplayedPlayers.push(player);
         var points = game.add.text(
@@ -288,13 +291,13 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
   }
 
   // slightly expand tile group scoring
-  // scoringGroup.tiles.forEach(function(t){
-  //   var tween = game.add.tween(t.tile.scale).to({x: 1.05, y: 1.05}, 200, "Linear", true);
-  //   tween.onComplete.add(function(){
-  //     var tweenB = game.add.tween(t.tile. scale).to({x: 1, y: 1}, 200, "Linear", true)
-  //     tweenB.onComplete.add(function(){
+  scoringGroup.tiles.forEach(function(t){
+    var tween = game.add.tween(t.tile.scale).to({x: 1.05, y: 1.05}, 200, "Linear", true);
+    tween.onComplete.add(function(){
+      var tweenB = game.add.tween(t.tile. scale).to({x: 1, y: 1}, 200, "Linear", true)
+      tweenB.onComplete.add(function(){
         scoreMeepAnimation(scoringGroup.meepleGroup, scoringPlayers);
-  //     })
-  //   });
-  // }) 
+      })
+    });
+  }) 
 }

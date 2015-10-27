@@ -135,6 +135,7 @@ function addFarms(tile) {
       farmObject.meepleGroup = game.add.group();
       farm.parent = farmObject;
       farmObject.children = [farm];
+      farmObject.tiles = [];
     }
 
   // this array pre rotates the allowable sides to that when it is unrotated we end up at the original layout
@@ -184,6 +185,10 @@ function scoreFarms() {
     })
   })
   farmsToScore.forEach(function(farm, index){
+    farm.children.forEach(function(obj){
+      farm.tiles.push(obj);
+    })
+    console.log(farm);
     if(farmsScores[index] > 0){
       scoreTilesAnimation(farm, farmsScores[index], scoringPlayers[index]);
     }

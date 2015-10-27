@@ -72,7 +72,7 @@ CarcassoneGame.mainGame.prototype = {
   create: function() {
     gameMusic = this.game.add.audio('game-music');
     gameMusic.onDecoded.add(function(){
-      gameMusic.play(0, 'game-music', true), this});
+    gameMusic.play(0, 'game-music', true), this});
     gameMusic.play();
     gameMusic.loop = true;
 
@@ -82,6 +82,9 @@ CarcassoneGame.mainGame.prototype = {
     camera = new Phaser.Camera(game, 0 , 0, 0, game.width, game.height);
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
+
+    // allMeeples = game.add.group();
+    // game.add.existing(allMeeples);
 
     createTile('D');
 
@@ -185,8 +188,8 @@ CarcassoneGame.mainGame.prototype = {
 
       var center = getBoardCenter();
 
-      this.game.camera.x = (center[0] / 2.5) - (screenWidth / 2);
-      this.game.camera.y = (center[1] / 2.5) - (screenHeight / 2);
+      this.game.camera.x = (center[0] / 2.5) - (game.width / 2);
+      this.game.camera.y = (center[1] / 2.5) - (game.height / 2);
       game.state.states.mainGame.hudDisplay.fixedToCamera = true;
 
       this.add.tween(this.game.world.scale).to({x: 0.4, y: 0.4}, 1, "Linear", true);
@@ -286,8 +289,8 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-var gameTiles = 'DDD'.split('');
-// gameTiles = randomizeGameTiles(gameTiles);
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+gameTiles = randomizeGameTiles(gameTiles);
 
 function createTile(type) {
     // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
