@@ -257,12 +257,20 @@ CarcassoneGame.mainGame.prototype = {
         if(msg.scoringObjectType == 'monastery'){
           scoringObject = findMonasteryById(msg.scoringObjectId);
         }
+        if(msg.scoringObjectType == 'farm'){
+          scoringObject = findFarmById(msg.scoringObjectId);
+        }
 
         console.log('Adding meeple');
+        console.log("message: ", msg);
         var meepObject = {};
         meepObject.ghostCoords = msg.meepleCoords;
         meepObject.scoringObject = scoringObject;
+
         if(msg.scoringObjectType){
+          if(msg.scoringObjectType == 'farm'){
+            meepObject.farmer = true;
+          }
           addMeeple(meepObject);
         }else{
           endTurn();
@@ -445,4 +453,7 @@ function getScoringObjectType(scoringObject){
   if (scoringObject instanceof Monastery){
     return 'monastery';
   }
+
+  return 'farm';
+
 }

@@ -1,4 +1,5 @@
 var farms = [];
+var farmCount = 0;
 
 Tile.FARMS = {
   B: [{edges: 'ABCDEFGH', hasCity: false, position: 'typeCenter'}],
@@ -130,7 +131,8 @@ function addFarms(tile) {
       // console.log('creating new farm')
       var farmObject = {};
       farms.push(farmObject);
-      farmObject.name = Math.random();
+      farmObject.id = farmCount;
+      farmCount += 1;
       farmObject.meeples = [];
       farmObject.meepleGroup = game.add.group();
       farm.parent = farmObject;
@@ -146,7 +148,7 @@ function addFarms(tile) {
   };
 
   if (farm.parent.meeples.length == 0) {
-    farmEdges.push({pos: POSITION[tile.angle.toString()][farm.position], scoringObject: farm.parent});
+    farmEdges.push({pos: POSITION[tile.angle.toString()][farm.position], scoringID: farm.parent.id});
   }
 
   });
@@ -178,10 +180,3 @@ function scoreFarms() {
     })
   })
 }
-
-
-
-
-
-
-

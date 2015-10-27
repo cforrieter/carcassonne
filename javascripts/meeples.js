@@ -111,6 +111,15 @@ function findMonasteryById(id){
   }
 }
 
+function findFarmById(id){
+  for (var i = 0; i < farms.length; i++){
+    var farm = farms[i];
+    if(farm.id === id){
+      return farm;
+    }
+  }
+}
+
 
 Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityEdges, farmerEdges) {
   newTile = true;
@@ -126,6 +135,12 @@ Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityE
     city = findCityById(cityEdge.scoringID)
     cityEdge.scoringObject = city;
   });
+  var farm;
+  farmerEdges.forEach(function(farmerEdge){
+    farm = findFarmById(farmerEdge.scoringID)
+    farmerEdge.scoringObject = farm;
+  });
+
   console.log('Road edges: ', roadEdges);
   console.log('City edges: ', cityEdges);
 
