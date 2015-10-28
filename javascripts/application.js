@@ -298,8 +298,8 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-var gameTiles = 'GGGHHH'.split('');
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+// var gameTiles = 'GGGHHHX'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
 
