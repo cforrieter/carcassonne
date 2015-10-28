@@ -156,6 +156,8 @@ function addFarms(tile) {
 
 }
 
+var endGameFarms = [];
+
 function scoreFarms() {
   var farmsToScore = [];
   var farmsScores = [];
@@ -177,7 +179,7 @@ function scoreFarms() {
       })
       for(var i = 0; i < globalPlayers.length; i++){
         if(meepCount[i] == Math.max(meepCount[0], meepCount[1], meepCount[2], meepCount[3], meepCount[4]) && meepCount[i] > 0) {
-          globalPlayers[i].score += 3;
+          // globalPlayers[i].score += 3;
           scoringPlayers[index].push(globalPlayers[i].name);
           farmsScores[index] += 3;
         }
@@ -188,9 +190,8 @@ function scoreFarms() {
     farm.children.forEach(function(obj){
       farm.tiles.push(obj);
     })
-    console.log(farm);
     if(farmsScores[index] > 0){
-      scoreTilesAnimation(farm, farmsScores[index], scoringPlayers[index]);
+      endGameFarms.push([farm, farmsScores[index], scoringPlayers[index]]);
     }
   })
 }

@@ -254,12 +254,20 @@ function scoreRoad(road, playersObject){
   for(var p in playerMeeples){
     if(playerMeeples[p] == max){
       scoringPlayers.push(p);
-      getPlayer(p).score += points;
+      // getPlayer(p).score += points;
       console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
     }
-    scoreTilesAnimation(road, points, scoringPlayers);
+    if(scoringPlayers.length > 0){
+      if(!gameOver){
+       scoreTilesAnimation(road, points, scoringPlayers);
+      } else {
+        endGameRoads.push([road, points, scoringPlayers]);
+      }
+    }
   }
 }
+
+var endGameRoads = [];
 
 function checkFinishedRoads(playersObject){
   var roadsToRemove = [];

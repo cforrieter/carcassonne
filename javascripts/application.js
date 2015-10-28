@@ -7,6 +7,8 @@ var globalPlayers = [
   {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
 ];
 
+var gameOverText; 
+
 function getCurrentPlayer(){
   for(var player in globalPlayers){
     if(globalPlayers[player].turn){
@@ -41,6 +43,7 @@ function nextTurn(){
       }
       break;
     }
+    
   }
 }
 
@@ -70,6 +73,7 @@ CarcassoneGame.mainGame.prototype = {
   },
 
   create: function() {
+    console.log("THIS in create function", this);
     gameMusic = this.game.add.audio('game-music');
     gameMusic.onDecoded.add(function(){
     gameMusic.play(0, 'game-music', true), this});
@@ -135,6 +139,11 @@ CarcassoneGame.mainGame.prototype = {
       hudBox.beginFill(0x000000, 0.4);
       hudBox.drawRoundedRect(5, 5, 190, 255, 5);
       gameState.hudDisplay.add(hudBox);
+
+      gameOverText = game.add.text(game.width / 2, 35, 'GAME OVER!', { font: "42px Lindsay", fill: "#FFFFFF", align: "left"});
+      gameOverText.anchor.setTo(0.5);
+      gameOverText.alpha = 0;
+      gameState.hudDisplay.add(gameOverText);
 
       globalPlayers.forEach(function(player, index){
         player.turnText = game.add.text(game.width / 2, 35, player.name + '\'s turn!', { font: "42px Lindsay", fill: "#" + player.color, align: "left"});
@@ -289,8 +298,10 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+var gameTiles = 'G'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
+
 
 function createTile(type) {
     // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
@@ -344,13 +355,45 @@ function swapTile(type){
 }
 
 function endGame(){
+  
   gameOver = true;
+  scoreFarms();
   endGameMonasteryCount();
   checkFinishedCities();
   checkFinishedRoads();
-  scoreFarms();
+  endGameScoringObjects = endGameMonasteries.concat(endGameCities).concat(endGameRoads).concat(endGameFarms);
   console.log("GAME OVER, MAN. GAME OVER.")
+
+  for(var i = 0; i < globalPlayers.length; i++){
+    game.add.tween(globalPlayers[i].turnText).to( { alpha: 0 }, 100, "Linear", true);
+  }  
+  game.add.tween(gameOverText).to( { alpha: 1 }, 800, "Linear", true);
+  setTimeout(function(){
+    if(endGameScoringObjects.length > 0){
+      endScoring();
+    }
+  }, 1250);
 }
+
+var endGameScoringObjects = [];
+var scoringIndex = 0;
+
+function endScoring(){
+  console.log('calculating center for tile group...')
+  center = getTileGroupCenter(endGameScoringObjects[scoringIndex][0].tiles);
+  console.log('moving camera...')
+  var cameraMove = this.game.add.tween(this.game.camera).to( {x: center[0], y: center[1] }, 500 ).start()
+  cameraMove.onComplete.add(function(){
+      scoreTilesAnimation(endGameScoringObjects[scoringIndex][0],endGameScoringObjects[scoringIndex][1],endGameScoringObjects[scoringIndex][2])
+      setTimeout(function(){
+        if(scoringIndex < endGameScoringObjects.length - 1){
+          scoringIndex++;
+          endScoring();
+        }
+      }, 1400);
+    });
+}
+
 
 function getBoardCenter(){
   var totalX = 0;
@@ -363,6 +406,22 @@ function getBoardCenter(){
   })
   avgX = totalX / playedTiles.length;
   avgY = totalY / playedTiles.length;
+
+  return([avgX, avgY]);
+}
+
+
+function getTileGroupCenter(tiles){
+  var totalX = 0;
+  var totalY = 0;
+  var avgX;
+  var avgY;
+  tiles.forEach(function(tile){
+    totalX += tile.tile.x;
+    totalY += tile.tile.y;
+  })
+  avgX = (totalX / tiles.length) - (game.width / 2);
+  avgY = (totalY / tiles.length) - (game.height / 2);
 
   return([avgX, avgY]);
 }

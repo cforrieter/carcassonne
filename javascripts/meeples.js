@@ -247,7 +247,15 @@ function scoreMeepAnimation(meepleGroup, scoringPlayers){
       } else {
         var tween = game.add.tween(meeple).to( { alpha: 0 }, 1000, "Linear", true);
       }
-      tween.onComplete.add(function(){meepleGroup.destroy()});
+      tween.onComplete.add(function(){
+        console.log('completing meep animation')
+        meepleGroup.destroy();
+        if(gameOver){
+          // citiesIndex ++;
+          // console.log('calling endCities')
+          // endCities();
+        }
+      });
     })
   })
   
@@ -259,6 +267,8 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
   var yScoreOffset = 30;
   for (var m = 1; m < scoringGroup.meepleGroup.children.length; m += 2){
     scoringPlayers.forEach(function(player){
+      var playerOb = getPlayer(player);
+      playerOb.score += pointsScored;
       var x;
       var y;
       if(gameOver){
