@@ -50,14 +50,14 @@ CarcassoneGame.mainGame = function(game) {
   //This may not be necessary, and can possibly be removed
   // this.tilesGroup = new Phaser.Group(game);
   this.hudDisplay = new Phaser.Group(game)
-
+  this.endGameScreens = new Phaser.Group(game)
 };
 
 CarcassoneGame.mainGame.prototype = {
 
   preload: function() {
 
-    game.load.image('background', './assets/background.png');
+    game.load.image('background', './assets/purty_wood_2X.png');
     game.load.image('meeple', 'assets/MEEPLE.png');
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png');
     game.load.image('check', 'assets/check.png');
@@ -220,7 +220,9 @@ CarcassoneGame.mainGame.prototype = {
 
   update: function() {
 
-    game.world.bringToTop(this.hudDisplay);
+    if(gameOver == false) {
+      game.world.bringToTop(this.hudDisplay);
+    };
     game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + gameTiles.length
 
     // TODO: dry this out
@@ -332,6 +334,7 @@ function randomizeGameTiles(gameTiles) {
   return gameTiles;
 }
 
+// end of game displays function
 function prepareEndGame() {
   sortFinalScores();
   displayFinalScores();
@@ -339,19 +342,27 @@ function prepareEndGame() {
 
 function sortFinalScores() {
   globalPlayers.sort(function(a, b){
-    return b.points-a.points;
+    return b.score-a.score;
   });
 }
 
 function displayFinalScores() {
-  if ((getCurrentPlayer()).id == io.io.engine.id) {
-    game.add.image(0,0,'victory');
+  if ((getCurrentPlayer()).num == globalPlayers[0].num) {
+    var victoryImage = game.add.sprite(0,0,'victory');
+    victoryImage.fixedToCamera = true;
+
+    victoryImage.scale.set(game.camera.width/victoryImage.width, game.camera.height/victoryImage.height);
   } else {
-    game.add.image(0,0, 'defeat');
+    var defeatImage = game.add.sprite(0,0, 'defeat');
+    defeatImage.scale.set(game.camera.width/defeatImage.width, game.camera.height/defeatImage.height);
+    defeatImage.fixedToCamera = true;
   }
+  var offset = 180;
   globalPlayers.forEach(function(player) {
     var style = { font: "20px Lindsay", fill: '#fdfe00', tabs: 123};
-    text = game.add.text(140,180, player.name + "\t" + player.score + "\n", style);
+    text = game.add.text(140, 0 + offset, player.name + "\t" + player.score + "\n", style);
+    text.fixedToCamera = true;
+    offset += 45;
   });
 }
 
@@ -377,8 +388,7 @@ function endGame(){
   // checkFinishedCities();
   // checkFinishedRoads();
   // scoreFarms();
-  console.log(this);
-  this.prepareEndGame();
+  prepareEndGame();
   console.log("GAME OVER, MAN. GAME OVER.")
 }
 
