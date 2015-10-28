@@ -79,6 +79,7 @@ Tile.MONASTERYMEEPLECOORDS = {
   A: {p4: [0,0]}
 };
 
+var allMeeples;
 
 var newTile = false;
 var meepleButtons;
@@ -228,19 +229,21 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     var y = localX * Math.sin(Phaser.Math.degToRad(tile.angle)) + localY * Math.cos(Phaser.Math.degToRad(tile.angle)) + tile.y;
     return [x, y];
   }
-
 };
 
 function addMeeple(meepObject) {
   if (meepObject instanceof Phaser.Button){
     meepObject = this;
   }
-
   if(newTile){
     meepleButtons.destroy();
     confirm.destroy();
   }
+    // allMeeples.add(shadow);
+    // allMeeples.add(meeple);
+    
 
+    // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType
   if (meepObject.farmer) {
     var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
     shadow.anchor.setTo(0.5);
@@ -250,7 +253,8 @@ function addMeeple(meepObject) {
     shadow.alpha = 0.6;
     var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
     meeple.anchor.setTo(0.5);
-    meeple.tint = "0x" + getCurrentPlayer().color
+    meeple.tint = "0x" + getCurrentPlayer().color;
+    meeple.playerName = getCurrentPlayer().name;
   } else {
     var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
     shadow.anchor.setTo(0.5);
@@ -260,7 +264,8 @@ function addMeeple(meepObject) {
     shadow.alpha = 0.6;
     var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
     meeple.anchor.setTo(0.5);
-    meeple.tint = "0x" + getCurrentPlayer().color
+    meeple.tint = "0x" + getCurrentPlayer().color;
+    meeple.playerName = getCurrentPlayer().name;
   }
 
   var currentPlayer = getCurrentPlayer();
@@ -300,7 +305,6 @@ function endTurn(meepObject){
 
 function scoreMeepAnimation(meepleGroup, scoringPlayers){
   game.world.bringToTop(meepleGroup);
-
   // embiggen and fade out meeple
   meepleGroup.children.forEach(function(meeple){
     scoringPlayers.forEach(function(player){
@@ -310,7 +314,9 @@ function scoreMeepAnimation(meepleGroup, scoringPlayers){
       } else {
         var tween = game.add.tween(meeple).to( { alpha: 0 }, 1000, "Linear", true);
       }
-      tween.onComplete.add(function(){meepleGroup.destroy()});
+      tween.onComplete.add(function(){
+        meepleGroup.destroy();
+      });
     })
   })
 
@@ -322,15 +328,28 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
   var yScoreOffset = 30;
   for (var m = 1; m < scoringGroup.meepleGroup.children.length; m += 2){
     scoringPlayers.forEach(function(player){
-      if (player === scoringGroup.meepleGroup.children[m].playerName && !(alreadyDisplayed(player))){
+      var playerOb = getPlayer(player);
+      playerOb.score += pointsScored;
+      var x;
+      var y;
+      if(gameOver){
+        x = scoringGroup.meepleGroup.children[m].x - 15;
+        y = scoringGroup.meepleGroup.children[m].y - 70;
+      }else{
+        x = playedTiles[playedTiles.length - 1].x - 25;
+        y = playedTiles[playedTiles.length - 1].y - yScoreOffset;
+      }
+      if (player === scoringGroup.meepleGroup.children[m].playerName && alreadyDisplayedPlayers.indexOf(player) === -1){
         alreadyDisplayedPlayers.push(player);
         var points = game.add.text(
+        x,
+        y,
         // scoringGroup.meepleGroup.children[m].x - 15,
-        // scoringGroup.meepleGroup.children[m].y - 70,
-        playedTiles[playedTiles.length - 1].x - 25,
-        playedTiles[playedTiles.length - 1].y - yScoreOffset,
-        "+" + pointsScored, {
-        font: "42px Lindsay",
+        // scoringGroup.meepleGroup.children[m].y - 70, 
+        // // playedTiles[playedTiles.length - 1].x - 25, 
+        // // playedTiles[playedTiles.length - 1].y - yScoreOffset,
+        "+" + pointsScored, { 
+        font: "42px Lindsay", 
         fill: "#" + scoringGroup.meepleGroup.children[m].tint.substring(
           2, scoringGroup.meepleGroup.children[m].tint.length
           )
@@ -340,15 +359,6 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
       game.add.tween(points).to( {alpha: 0}, 1400, "Linear", true);
       }
     })
-  }
-
-  function alreadyDisplayed(player){
-    for (var i = 0; i < alreadyDisplayedPlayers.length; i ++){
-      if (alreadyDisplayedPlayers[i] === player){
-        return true;
-      }
-    }
-    return false;
   }
 
   // slightly expand tile group scoring
