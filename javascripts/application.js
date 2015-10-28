@@ -448,6 +448,10 @@ function endScoring(){
       if(scoringIndex < endGameScoringObjects.length - 1){
         scoringIndex++;
         endScoring();
+      } else {
+        farms.forEach(function(farm){
+          scoreMeepAnimation(farm.meepleGroup, ['']);
+        })
       }
     }, 1400);
   });
