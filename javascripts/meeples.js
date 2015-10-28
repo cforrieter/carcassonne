@@ -294,7 +294,8 @@ function endTurn(meepObject){
   checkFinishedCities();
   checkMonasteries();
   if (playedTiles.length === 72){
-    endGame();
+    io.emit('gameOver', { gameID: gameID });
+    // endGame();
   } else {
     if(newTile){
       newTile = false;

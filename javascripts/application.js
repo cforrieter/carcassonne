@@ -317,6 +317,10 @@ CarcassoneGame.mainGame.prototype = {
       createTile(msg.nextTileType);
     })
 
+    io.on('gameOver', function(){
+      endGame();
+    })
+
   },
 
 
