@@ -52,6 +52,13 @@ CarcassoneGame.mainGame.prototype = {
 
   preload: function() {
 
+    if(gameMode == "zelda") {
+      game.load.audio('game-music', 'assets/kakariko-theme.mp3');
+    } 
+    else {
+      game.load.audio('game-music', 'assets/game-music.mp3');
+    }
+
     game.load.image('background', './assets/background.png');
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
     game.load.image('check', 'assets/check.png')
@@ -59,14 +66,12 @@ CarcassoneGame.mainGame.prototype = {
     game.load.image('meepleIcon', 'assets/meeple-flat.png')
     game.load.image('victory', 'assets/victory.png');
     game.load.image('defeat', 'assets/defeat.png');
-    game.load.audio('game-music', 'assets/game-music.mp3');
-
   },
 
   create: function() {
     gameMusic = this.game.add.audio('game-music');
     gameMusic.onDecoded.add(function(){
-    gameMusic.play(0, 'game-music', true), this});
+      gameMusic.play(0, 'game-music', true), this});
     gameMusic.play();
     gameMusic.loop = true;
 

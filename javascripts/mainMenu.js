@@ -27,6 +27,8 @@ CarcassoneGame.mainMenu.prototype = {
 
     this.prepareForStateChange();
 
+    var waitingForPlayers = game.add.sprite(game.world.centerX, game.world.centerY - 50, 'waiting-for-players');
+    waitingForPlayers.anchor.set(0.5,0);
     // Sprite for start button and animation
     // startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'carcassonne-coat-of-arms');
     // startGameButton.anchor.set(0.5);

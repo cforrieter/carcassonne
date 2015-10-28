@@ -1,4 +1,5 @@
 var CarcassoneGame = {};
+var gameMode = "normal";
 
 CarcassoneGame.splashScreen = function(game) {
   this.addInput;
@@ -23,6 +24,7 @@ CarcassoneGame.splashScreen.prototype = {
     game.load.image('phaserLogo', 'assets/phaser2.png');
     game.load.image('lhl-logo', 'assets/lhl-logo.png');
     game.load.image('node-logo', 'assets/node-logo.png');
+    game.load.image('waiting-for-players', 'assets/waiting-for-players.png')
     game.load.audio('secret', 'assets/secret.mp3');
     game.load.audio('rupee-gained', 'assets/rupee-gained.mp3');
     game.load.audio('sword-spin-complete', 'assets/sword-spin-complete.mp3');
