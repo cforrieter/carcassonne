@@ -42,6 +42,7 @@ function Tile(game, x, y, type)
     farm.edges = farmEdges[f].edges.split('');
     farm.hasCity = farmEdges[f].hasCity;
     farm.position = farmEdges[f].position;
+    farm.tile = this;
     this.farms.push(farm);
   }
 

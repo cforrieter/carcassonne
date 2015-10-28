@@ -45,26 +45,18 @@ function nextTurn(){
 }
 
 CarcassoneGame.mainGame = function(game) {
-  // this.game.width = 800;
-  // this.game.height = 600;
-  //This may not be necessary, and can possibly be removed
-  // this.tilesGroup = new Phaser.Group(game);
   this.hudDisplay = new Phaser.Group(game)
-  this.endGameScreens = new Phaser.Group(game)
 };
 
 CarcassoneGame.mainGame.prototype = {
 
   preload: function() {
 
-    game.load.image('background', './assets/purty_wood_2X.png');
-    game.load.image('meeple', 'assets/MEEPLE.png');
-    game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png');
-    game.load.image('check', 'assets/check.png');
-    game.load.image('tileBorder', 'assets/border.png');
-    game.load.image('meeple', 'assets/MEEPLE.png');
-    game.load.image('meepleFarmer', 'assets/meepleFarmer.png');
-    game.load.image('meepleIcon', 'assets/meeple-flat.png');
+    game.load.image('background', './assets/background.png');
+    game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
+    game.load.image('check', 'assets/check.png')
+    game.load.image('tileBorder', 'assets/border.png')
+    game.load.image('meepleIcon', 'assets/meeple-flat.png')
     game.load.image('victory', 'assets/victory.png');
     game.load.image('defeat', 'assets/defeat.png');
     game.load.audio('game-music', 'assets/game-music.mp3');
@@ -74,7 +66,7 @@ CarcassoneGame.mainGame.prototype = {
   create: function() {
     gameMusic = this.game.add.audio('game-music');
     gameMusic.onDecoded.add(function(){
-      gameMusic.play(0, 'game-music', true), this});
+    gameMusic.play(0, 'game-music', true), this});
     gameMusic.play();
     gameMusic.loop = true;
 
@@ -293,9 +285,7 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-
-var gameTiles = 'AABB'.split('');
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
 
 gameTiles = randomizeGameTiles(gameTiles);
 
@@ -336,8 +326,8 @@ function randomizeGameTiles(gameTiles) {
 
 // end of game displays function
 function prepareEndGame() {
-  sortFinalScores();
-  displayFinalScores();
+  // sortFinalScores();
+  // displayFinalScores();
 }
 
 function sortFinalScores() {
@@ -385,9 +375,9 @@ function swapTile(type){
 function endGame(){
   gameOver = true;
   endGameMonasteryCount();
-  // checkFinishedCities();
-  // checkFinishedRoads();
-  // scoreFarms();
+  checkFinishedCities();
+  checkFinishedRoads();
+  scoreFarms();
   prepareEndGame();
   console.log("GAME OVER, MAN. GAME OVER.")
 }
