@@ -228,6 +228,7 @@ function endTurn(){
   checkFinishedRoads();
   checkFinishedCities();
   checkMonasteries();
+  yScoreOffset = 30;
   if (gameTiles.length === 0){ 
     endGame();
   } else {
@@ -255,10 +256,11 @@ function scoreMeepAnimation(meepleGroup, scoringPlayers){
   
 }
 
+var yScoreOffset = 30;
+
 function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
   // draw points scoring over last played tile
   var alreadyDisplayedPlayers = [];
-  var yScoreOffset = 30;
   for (var m = 1; m < scoringGroup.meepleGroup.children.length; m += 2){
     scoringPlayers.forEach(function(player){
       var playerOb = getPlayer(player);
