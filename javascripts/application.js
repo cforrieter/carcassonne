@@ -299,17 +299,15 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 // var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-var gameTiles = 'G'.split('');
+var gameTiles = 'GGGHHH'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
 
 function createTile(type) {
-    // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+  // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
   type = type || gameTiles.pop();
   // console.log('Tile type: ',type);
 
-
-  // debugger;
   // game.state.states.mainGame.tilesGroup.add(tile);
 
   tile = new Tile(game, game.width / 2, 120,  type);
@@ -337,8 +335,6 @@ function randomizeGameTiles(gameTiles) {
   }
   return gameTiles;
 }
-
-// console.log(gameTiles);
 
 function swapTile(type){
   console.log("Broken tile! Swapping tile");
@@ -379,21 +375,18 @@ var endGameScoringObjects = [];
 var scoringIndex = 0;
 
 function endScoring(){
-  console.log('calculating center for tile group...')
   center = getTileGroupCenter(endGameScoringObjects[scoringIndex][0].tiles);
-  console.log('moving camera...')
   var cameraMove = this.game.add.tween(this.game.camera).to( {x: center[0], y: center[1] }, 500 ).start()
   cameraMove.onComplete.add(function(){
-      scoreTilesAnimation(endGameScoringObjects[scoringIndex][0],endGameScoringObjects[scoringIndex][1],endGameScoringObjects[scoringIndex][2])
-      setTimeout(function(){
-        if(scoringIndex < endGameScoringObjects.length - 1){
-          scoringIndex++;
-          endScoring();
-        }
-      }, 1400);
-    });
+    scoreTilesAnimation(endGameScoringObjects[scoringIndex][0],endGameScoringObjects[scoringIndex][1],endGameScoringObjects[scoringIndex][2])
+    setTimeout(function(){
+      if(scoringIndex < endGameScoringObjects.length - 1){
+        scoringIndex++;
+        endScoring();
+      }
+    }, 1400);
+  });
 }
-
 
 function getBoardCenter(){
   var totalX = 0;
@@ -409,7 +402,6 @@ function getBoardCenter(){
 
   return([avgX, avgY]);
 }
-
 
 function getTileGroupCenter(tiles){
   var totalX = 0;

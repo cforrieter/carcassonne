@@ -248,13 +248,7 @@ function scoreMeepAnimation(meepleGroup, scoringPlayers){
         var tween = game.add.tween(meeple).to( { alpha: 0 }, 1000, "Linear", true);
       }
       tween.onComplete.add(function(){
-        console.log('completing meep animation')
         meepleGroup.destroy();
-        if(gameOver){
-          // citiesIndex ++;
-          // console.log('calling endCities')
-          // endCities();
-        }
       });
     })
   })
