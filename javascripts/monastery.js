@@ -1,4 +1,5 @@
 var monasteries = [];
+var monasteryCount = 0;
 var monasteryNeighbours = 0;
 var endGameMonasteries = [];  
 
@@ -105,6 +106,8 @@ function endGameMonasteryCount(){
 }
 
 function Monastery(){
+  this.id = monasteryCount;
+  monasteryCount++;
   this.tile;
   this.tiles = [];
   this.meeples = [];
