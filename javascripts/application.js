@@ -299,7 +299,7 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-// var gameTiles = 'GGGHHHX'.split('');
+// var gameTiles = 'GH'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
 
@@ -383,6 +383,10 @@ function endScoring(){
       if(scoringIndex < endGameScoringObjects.length - 1){
         scoringIndex++;
         endScoring();
+      } else {
+        farms.forEach(function(farm){
+          scoreMeepAnimation(farm.meepleGroup, ['']);
+        })
       }
     }, 1400);
   });
