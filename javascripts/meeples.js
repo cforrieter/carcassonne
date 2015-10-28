@@ -86,7 +86,7 @@ var confirm = tile.game.add.button(tile.x + 60, tile.y - 30, 'check', confirmFun
 confirm.scale.setTo(0.3);
 
 
-if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.length === 0 && !tile.centerMonastery)){
+if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.length === 0 && !tile.centerMonastery && farmerEdges.length === 0)){
 
   var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType];
   var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType];

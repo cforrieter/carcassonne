@@ -56,14 +56,14 @@ Tile.prototype.edgeConnection = function edgeConnection(side, tile, isNeighbour)
 };
 
 Tile.FARMConnections = {
-  A: ['B', 'F', 'C', 'H'],
+  A: ['B', 'F', 'D', 'H'],
   B: ['A', 'E', 'C', 'G'],
-  C: ['D', 'H', 'B', 'F'],
-  D: ['C', 'A', 'E', 'G'],
-  E: ['F', 'B', 'H', 'D'],
-  F: ['E', 'A', 'C', 'G'],
-  G: ['H', 'F', 'B', 'D'],
-  H: ['G', 'C', 'A', 'E']
+  C: ['B', 'F', 'D', 'H'],
+  D: ['A', 'E', 'C', 'G'],
+  E: ['B', 'F', 'D', 'H'],
+  F: ['A', 'E', 'C', 'G'],
+  G: ['B', 'F', 'D', 'H'],
+  H: ['A', 'E', 'C', 'G']
 };
 
 function addFarms(tile) {
@@ -150,7 +150,7 @@ function addFarms(tile) {
   }
 
   });
-
+  console.log('returning these', farmEdges, 'for:', tile.tileType)
   return farmEdges;
 
 }
