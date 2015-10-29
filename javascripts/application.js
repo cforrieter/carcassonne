@@ -73,7 +73,7 @@ CarcassoneGame.mainGame.prototype = {
     game.load.image('defeat', 'assets/defeat.png');
     game.load.audio('placeTileWav', 'assets/dropkick.wav');
     game.load.audio('placeMeepleWav', 'assets/drop.wav');
-    // game.load.audio('scoreWav', 'assets/score.wav');
+    game.load.audio('scoreWav', 'assets/score.wav');
 
   },
 

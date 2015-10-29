@@ -329,6 +329,7 @@ var yScoreOffset = 30;
 
 function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
   // draw points scoring over last played tile
+
   var alreadyDisplayedPlayers = [];
   var x;
   var y;
@@ -348,6 +349,8 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
         playerOb = getPlayer(player);
         playerOb.score += pointsScored;
 
+        tile.scoreSound.play();
+        
         alreadyDisplayedPlayers.push(player);
         var points = game.add.text(
         x,
