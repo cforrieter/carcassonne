@@ -31,6 +31,7 @@ CarcassoneGame.splashScreen.prototype = {
     game.load.audio('sword-spin-complete', 'assets/sword-spin-complete.mp3');
     game.load.audio('world-warp', 'assets/world-warp.mp3');
     game.load.audio('zelda-theme', 'assets/zelda-theme.mp3');
+    game.load.audio('opening-theme', 'assets/opening-theme.mp3');
   },
 
   create:  function() {
