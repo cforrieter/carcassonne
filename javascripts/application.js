@@ -73,7 +73,7 @@ CarcassoneGame.mainGame.prototype = {
     game.load.image('defeat', 'assets/defeat.png');
     game.load.audio('placeTileWav', 'assets/dropkick.wav');
     game.load.audio('placeMeepleWav', 'assets/drop.wav');
-    // game.load.audio('scoreWav', 'assets/score.wav');
+    game.load.audio('scoreWav', 'assets/score.wav');
 
   },
 
@@ -236,7 +236,7 @@ CarcassoneGame.mainGame.prototype = {
       tile.visible = true;
       zoomedOut = false;
     }
-  
+
 
     io.on('gameStart', function(msg){
       console.log('recevied game start call:', msg);
@@ -476,10 +476,9 @@ function sortFinalScores() {
 }
 
 function displayFinalScores() {
-  if (io.io.engine.id == globalPlayers[0].num) {
+  if (io.io.engine.id == globalPlayers[0].id) {
     var victoryImage = game.add.sprite(0,0,'victory');
     victoryImage.fixedToCamera = true;
-
     victoryImage.scale.set(game.camera.width/victoryImage.width, game.camera.height/victoryImage.height);
   } else {
     var defeatImage = game.add.sprite(0,0, 'defeat');
@@ -601,8 +600,8 @@ function endTurnServer(meepObject, gameOver){
   // console.log('object in endTurnServer function: ', meepObject.scoringObject)
   if(!(gameOver)){
     io.emit('turnEnd', { message: message, gameID: gameID });
-  } else { 
-    io.emit('gameOver', { message: message, gameID: gameID }); 
+  } else {
+    io.emit('gameOver', { message: message, gameID: gameID });
   }
 }
 
