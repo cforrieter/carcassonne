@@ -75,7 +75,6 @@ CarcassoneGame.mainGame.prototype = {
   },
 
   create: function() {
-    console.log("THIS in create function", this);
     gameMusic = this.game.add.audio('game-music');
     gameMusic.onDecoded.add(function(){
     gameMusic.play(0, 'game-music', true), this});
@@ -130,12 +129,19 @@ CarcassoneGame.mainGame.prototype = {
     game.add.existing(this.hudDisplay);
 
     function createHUD(gameState) {
+      function remainingTiles(){
+        if(71 - playedTiles.length > 0){
+          return (71 - playedTiles.length)
+        } else {
+          return 0;
+        }
+      }
 
       gameState.hudDisplay.fixedToCamera = true;
       gameState.hudDisplay.render = true;
       gameState.hudDisplay.z = 100;
 
-      var tilesLeftText = game.add.text(game.width - 100, 10, "Tiles: " + (71 - playedTiles.length), { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
+      var tilesLeftText = game.add.text(game.width - 100, 10, "Tiles: " + (remainingTiles()), { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
       //hud box draw
@@ -244,7 +250,13 @@ CarcassoneGame.mainGame.prototype = {
         tile.fixedToCamera = false;
         tile.x = msg.tileX;
         tile.y = msg.tileY;
+        
         tile.placeTile(tile, msg.tileX, msg.tileY);
+        
+        var x = (playedTiles[playedTiles.length - 1].x) - (game.width / 2);
+        var y = (playedTiles[playedTiles.length - 1].y) - (game.height / 2);
+        game.add.tween(game.camera).to( { x, y }, 300 ).start();
+
         addToRoad(tile);
         addToCity(tile);
         addFarms(tile);
@@ -306,6 +318,7 @@ CarcassoneGame.mainGame.prototype = {
 
     io.on('newTurnTile', function(msg){
       nextTurn();
+      console.log(game);
       var currentPlayer = getCurrentPlayer();
       if(currentPlayer.id == io.io.engine.id){
         console.log("It's your turn! Creating tile!")
