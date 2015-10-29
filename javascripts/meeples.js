@@ -294,7 +294,8 @@ function endTurn(meepObject){
   yScoreOffset = 30;
   if (playedTiles.length === 72){
     io.emit('gameOver', { gameID: gameID });
-    // endGame();
+    endTurnServer(meepObject, true);
+    endGame();
   } else {
     if(newTile){
       newTile = false;
@@ -333,9 +334,7 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
 
   for (var m = 1; m < scoringGroup.meepleGroup.children.length; m += 2){
     scoringPlayers.forEach(function(player){
-      playerOb = getPlayer(player);
-      playerOb.score += pointsScored;
-
+      
       if(gameOver){
         x = scoringGroup.meepleGroup.children[m].x - 15;
         y = scoringGroup.meepleGroup.children[m].y - 70;
@@ -344,6 +343,9 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
         y = playedTiles[playedTiles.length - 1].y - yScoreOffset;
       }
       if (player === scoringGroup.meepleGroup.children[m].playerName && alreadyDisplayedPlayers.indexOf(player) === -1){
+        playerOb = getPlayer(player);
+        playerOb.score += pointsScored;
+
         alreadyDisplayedPlayers.push(player);
         var points = game.add.text(
         x,

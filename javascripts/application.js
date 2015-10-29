@@ -579,7 +579,7 @@ function getTileGroupCenter(tiles){
 
 var scoringObjectType;
 
-function endTurnServer(meepObject){
+function endTurnServer(meepObject, gameOver){
   var message = {tileType: tile.tileType, tileX: tile.x, tileY: tile.y, rotations: tile.numRotations};
   if(meepObject){
     scoringObjectType = getScoringObjectType(meepObject.scoringObject);
@@ -590,7 +590,11 @@ function endTurnServer(meepObject){
   console.log('Sending to server...')
   //meeples need to be added to this object...
   // console.log('object in endTurnServer function: ', meepObject.scoringObject)
-  io.emit('turnEnd', { message: message, gameID: gameID });
+  if(!(gameOver)){
+    io.emit('turnEnd', { message: message, gameID: gameID });
+  } else { 
+    io.emit('gameOver', { message: message, gameID: gameID }); 
+  }
 }
 
 function getScoringObjectType(scoringObject){
