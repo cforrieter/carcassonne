@@ -269,14 +269,22 @@ function scoreCity(city){
   for(var p in playerMeeples){
     if(playerMeeples[p] == max){
       scoringPlayers.push(p);
-      getPlayer(p).score += points;
+      // getPlayer(p).score += points;
       console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
     }
   }
   // city.meepleGroup.destroy();
   // scoreMeepAnimation(city.meepleGroup);
-  scoreTilesAnimation(city, points, scoringPlayers);
+  if(scoringPlayers.length > 0){
+    if(!gameOver){
+      scoreTilesAnimation(city, points, scoringPlayers);
+    } else {
+      endGameCities.push([city, points, scoringPlayers]);
+    }
+  }
 }
+
+var endGameCities = [];
 
 function checkFinishedCities(playerArray){
   var citiesToRemove = [];
