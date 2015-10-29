@@ -302,8 +302,8 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-var gameTiles = 'GH'.split('');
+var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+// var gameTiles = 'GH'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
 
@@ -439,7 +439,7 @@ function endGameCleanupAndVictoryScreen(){
   setTimeout(function(){
     console.log('calling prepareEndGame...')
     prepareEndGame();
-  }, 1500);
+  }, 1400);
 }
 
 function getBoardCenter(){
