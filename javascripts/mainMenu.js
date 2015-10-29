@@ -18,6 +18,21 @@ CarcassoneGame.mainMenu.prototype = {
   },
 
   create: function() {
+    window.io = io();
+    io.on('newGame', function(msg){
+      console.log(msg);
+      var name = prompt('What is your name?');
+      io.emit('name', { name:name, gameID: msg.gameID, playerIndex: msg.playerIndex });
+    });
+
+    io.on('playersReady', function(msg){
+      // game.state.start("mainGame");
+      CarcassoneGame.mainMenu.prototype.prepareForStateChange();
+      console.log("Players ready message", msg);
+      gameID = msg.gameID;
+      globalPlayers = msg.players;
+    });
+
     openingTheme = this.game.add.audio('opening-theme');
     openingTheme.onDecoded.add(this.playTheme, this);
     var background = game.add.sprite(0,0,'normal-background');
@@ -29,6 +44,7 @@ CarcassoneGame.mainMenu.prototype = {
     waitingForPlayers = game.add.text(game.world.centerX, game.world.centerY - 50, 'WAITING FOR PLAYERS...', style);
     waitingForPlayers.anchor.set(0.5, 0);
 
+
     // Mute button
     muteButton = game.add.sprite(game.world.width - 50, game.world.height - 50, 'mute-button');
     muteButton.scale.set(0.25);
@@ -38,12 +54,12 @@ CarcassoneGame.mainMenu.prototype = {
     muteButton.events.onInputDown.add(this.muteMusic, this);
 
     this.prepareForStateChange();
-   
+
     // Sprite for start button and animation
     // startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'carcassonne-coat-of-arms');
     // startGameButton.anchor.set(0.5);
     // startGameButton.inputEnabled = true;
-    
+
     // // Changes state from the start screen to the main game
     // startGameButton.events.onInputDown.addOnce(this.prepareForStateChange, this);
   },
@@ -56,8 +72,8 @@ CarcassoneGame.mainMenu.prototype = {
   },
 
   fadeMusic: function() {
-    this.game.time.events.add(9000, this.stopTheme, this);
-    openingTheme.fadeOut(9000);
+    game.time.events.add(1000, this.stopTheme, this);
+    openingTheme.fadeOut(1000);
   },
 
   muteMusic: function() {
@@ -81,11 +97,11 @@ CarcassoneGame.mainMenu.prototype = {
   addTimer: function() {
     // RESET this 0 delay to 1200 after development ****************
     //***********************-V-********
-    this.game.time.events.add(10000, this.stateChange, this);
+    game.time.events.add(1500, this.stateChange, this);
   },
 
   stateChange: function() {
-    this.state.start('mainGame');
+    game.state.start('mainGame');
   },
 
   particleBurst: function(pointer) {

@@ -1,4 +1,5 @@
 var roads = [];
+var roadCount = 0;
 
 var backwards = {
   typeTop: "typeBottom",
@@ -119,7 +120,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
                 //add newly merged road
                 roadsArray.push(originalRoad);
                 if(originalRoad.meeples.length === 0){
-                  validRoads.push({ pos: 'typeCenter', scoringObject: originalRoad });
+                  validRoads.push({ pos: 'typeCenter', scoringID: originalRoad.id });
                 }
                 added = true;
               }
@@ -129,9 +130,9 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
               road.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus});
               if(road.meeples.length === 0){
                 if(single){
-                  validRoads.push({ pos: "typeCenter", scoringObject: road });
+                  validRoads.push({ pos: "typeCenter", scoringID: road.id });
                 }else{
-                  validRoads.push({ pos: position, scoringObject: road });
+                  validRoads.push({ pos: position, scoringID: road.id });
                 }
               }
               added = true;
@@ -148,7 +149,7 @@ function checkRoadPosition(placedTile, position, single, allPos, validRoads){
         allPos = position;
         newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
         roads.push(newRoad);
-        validRoads.push({ pos: position, scoringObject: newRoad });
+        validRoads.push({ pos: position, scoringID: newRoad.id });
         added = true;
       }else{
         // console.log("new road to add at " + position + " road");
@@ -202,7 +203,7 @@ function addToRoad(placedTile){
     newRoad.edgeCount = 2;
     newRoad.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
     roads.push(newRoad);
-    validRoads.push({ pos: "typeCenter", scoringObject: newRoad});
+    validRoads.push({ pos: "typeCenter", scoringID: newRoad.id });
   }
 
   return validRoads;
@@ -218,8 +219,8 @@ function getEdges(tile, allPos){
   return counter;
 }
 
-function scoreRoad(road, playersObject){
-
+function scoreRoad(road){
+  //remove duplicate tiles
   var o = {}, i, l = road.tiles.length, r = [];
   for(i=0; i<l;i+=1){
     o[road.tiles[i].tile.x + "," + road.tiles[i].tile.y] = road.tiles[i];
@@ -229,7 +230,7 @@ function scoreRoad(road, playersObject){
   }
 
   var points = r.length;
-  // console.log("Closing the road was worth " + points + " points.");
+
   var playerMeeples = {};
 
   road.meeples.forEach(function(meeple){
@@ -240,7 +241,6 @@ function scoreRoad(road, playersObject){
       playerMeeples[meeple.name] = 1;
     }
   });
-  // console.log(this.meepleGroup)
 
   //find the player with the most meeples
   var max = 0;
@@ -255,8 +255,8 @@ function scoreRoad(road, playersObject){
     if(playerMeeples[p] == max){
       scoringPlayers.push(p);
       // getPlayer(p).score += points;
-      console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
     }
+
     if(scoringPlayers.length > 0){
       if(!gameOver){
        scoreTilesAnimation(road, points, scoringPlayers);
@@ -269,11 +269,11 @@ function scoreRoad(road, playersObject){
 
 var endGameRoads = [];
 
-function checkFinishedRoads(playersObject){
+function checkFinishedRoads(){
   var roadsToRemove = [];
   roads.forEach(function(road, index){
     if(road.edgeCount === 0 || gameOver){
-      scoreRoad(road, playersObject);
+      scoreRoad(road);
       // console.log("Closed road!");
       roadsToRemove.push(road);
     }
@@ -285,6 +285,8 @@ function checkFinishedRoads(playersObject){
 }
 
 function Road(){
+  this.id = roadCount;
+  roadCount ++;
   this.tiles = [];
   this.meeples = [];
   this.edgeCount = 0;

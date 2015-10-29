@@ -1,13 +1,15 @@
+var globalPlayers = [];
+var gameID;
+//
+// var globalPlayers = [
+//   {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
+//   {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
+//   {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
+//   {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
+//   {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
+// ];
 
-var globalPlayers = [
-  {turn: true, name: "Warren", num: 0, color: "FF0000", score: 0, numMeeples: 7},
-  {turn: false, name: "Jason", num: 1, color: "00CCFF", score: 0, numMeeples: 7},
-  {turn: false, name: "Corey", num: 2, color: "FFFFCC", score: 0, numMeeples: 7},
-  {turn: false, name: "Matt", num: 3, color: "FF9900", score: 0, numMeeples: 7},
-  {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
-];
-
-var gameOverText; 
+var gameOverText;
 
 function getCurrentPlayer(){
   for(var player in globalPlayers){
@@ -43,7 +45,7 @@ function nextTurn(){
       }
       break;
     }
-    
+
   }
 }
 
@@ -57,7 +59,7 @@ CarcassoneGame.mainGame.prototype = {
 
     if(gameMode == "zelda") {
       game.load.audio('game-music', 'assets/kakariko-theme.mp3');
-    } 
+    }
     else {
       game.load.audio('game-music', 'assets/game-music.mp3');
     }
@@ -72,7 +74,6 @@ CarcassoneGame.mainGame.prototype = {
   },
 
   create: function() {
-    console.log("THIS in create function", this);
     gameMusic = this.game.add.audio('game-music');
     gameMusic.loop = true;
     gameMusic.play();
@@ -85,7 +86,6 @@ CarcassoneGame.mainGame.prototype = {
     muteButton.inputEnabled = true;
     muteButton.fixedToCamera = true;
     muteButton.events.onInputDown.add(this.muteMusic, this);
-    
 
     game.world.setBounds(0, 0, 13000, 13000);
     game.add.tileSprite(0,0, 13000, 13000, 'background');
@@ -112,11 +112,14 @@ CarcassoneGame.mainGame.prototype = {
     addFarms(tile);
     // console.log(cities);
 
+    var tileGroup = game.add.group();
+    this.game.add.existing(tileGroup);
+
     tile.inputEnabled = false;
     game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
     game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
     // console.log(game.world.centerX, game.world.centerY)
-    createTile();
+    io.emit('gameReady', { gameID: gameID});
 
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(spaceKeyDown, this, 0, tile);
@@ -132,12 +135,19 @@ CarcassoneGame.mainGame.prototype = {
     game.add.existing(this.hudDisplay);
 
     function createHUD(gameState) {
+      function remainingTiles(){
+        if(71 - playedTiles.length > 0){
+          return (71 - playedTiles.length)
+        } else {
+          return 0;
+        }
+      }
 
       gameState.hudDisplay.fixedToCamera = true;
       gameState.hudDisplay.render = true;
       gameState.hudDisplay.z = 100;
 
-      var tilesLeftText = game.add.text(game.width - 100, 10, "Tiles: " + gameTiles.length, { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
+      var tilesLeftText = game.add.text(game.width - 100, 10, "Tiles: " + (remainingTiles()), { font: "26px Lindsay", fill: "#FFFFCC", align: "right"});
       gameState.hudDisplay.add(tilesLeftText)
 
       //hud box draw
@@ -221,6 +231,7 @@ CarcassoneGame.mainGame.prototype = {
       zoomedOut = false;
     }
   },
+  
   muteMusic: function() {
     if (gameMusic.paused == false) {
       muteButton.tint = 0xED412C;
@@ -231,18 +242,116 @@ CarcassoneGame.mainGame.prototype = {
     }
   },
 
-  randomizeGameTiles: function(gameTiles) {
-    for (var i = gameTiles.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = this.gameTiles[i];
-      this.gameTiles[i] = this.gameTiles[j];
-      this.gameTiles[j] = temp;
-    }
-    return gameTiles;
+    io.on('gameStart', function(msg){
+      console.log('recevied game start call:', msg);
+      var currentPlayer = getCurrentPlayer();
+      if(currentPlayer.id == io.io.engine.id){
+        console.log("It's your turn! Creating tile!");
+        createTile(msg.nextTileType);
+      }
+    });
+
+    io.on('newTurnCleanUp', function(msg){
+      console.log("New Turn!");
+      var currentPlayer = getCurrentPlayer();
+      if(!(currentPlayer.id == io.io.engine.id)){
+        console.log("Placing other player's tile")
+        window.createTile(msg.tileType);
+        var rotations = msg.rotations;
+        if(rotations < 0){
+          rotations += 4;
+        }
+        for(var x = 0; x < rotations; x++){
+          tile.rotateRight();
+        }
+        tile.fixedToCamera = false;
+        tile.x = msg.tileX;
+        tile.y = msg.tileY;
+
+        tile.placeTile(tile, msg.tileX, msg.tileY);
+
+        var x = (playedTiles[playedTiles.length - 1].x) - (game.width / 2);
+        var y = (playedTiles[playedTiles.length - 1].y) - (game.height / 2);
+        game.add.tween(game.camera).to( { x, y }, 300 ).start();
+
+        addToRoad(tile);
+        addToCity(tile);
+        addFarms(tile);
+        if(msg.scoringObjectType == 'monastery'){
+          var monastery = new Monastery();
+          monastery.tile = tile;
+          // monastery.meeples = getCurrentPlayer();
+          monasteries.push(monastery);
+        }
+        tile.inputEnabled = false;
+        game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+        game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+
+        var scoringObject;
+
+        if(msg.scoringObjectType == 'road'){
+          scoringObject = findRoadById(msg.scoringObjectId);
+        }
+        if(msg.scoringObjectType == 'city'){
+          scoringObject = findCityById(msg.scoringObjectId);
+        }
+        if(msg.scoringObjectType == 'monastery'){
+          scoringObject = findMonasteryById(msg.scoringObjectId);
+        }
+        if(msg.scoringObjectType == 'farm'){
+          scoringObject = findFarmById(msg.scoringObjectId);
+        }
+
+        console.log('Adding meeple');
+        console.log("message: ", msg);
+        var meepObject = {};
+        meepObject.ghostCoords = msg.meepleCoords;
+        meepObject.scoringObject = scoringObject;
+
+        if(msg.scoringObjectType){
+          if(msg.scoringObjectType == 'farm'){
+            meepObject.farmer = true;
+          }
+          addMeeple(meepObject);
+        }else{
+          endTurn();
+        }
+      }
+      //{lastMove, tile}
+      //if(!mysocketid == currentPlayer socketid){
+      //  rotate tile{
+      //    if negative, add 4
+      //  }
+      //
+      //  currentTile.placeTile(currentTile, msg.tileX, msg.tileY);
+      //  center camera on tile
+      //}
+      //nextTurn()
+      //
+      //if(mysocketid == currentPlayer socketid){
+      // draw tile
+      //}
+    })
+
+    io.on('newTurnTile', function(msg){
+      nextTurn();
+      console.log(game);
+      var currentPlayer = getCurrentPlayer();
+      if(currentPlayer.id == io.io.engine.id){
+        console.log("It's your turn! Creating tile!")
+        createTile(msg.nextTileType);
+      }
+    })
+
+    io.on('replaceTile', function(msg){
+      createTile(msg.nextTileType);
+    })
+
+    io.on('gameOver', function(){
+      endGame();
+    })
+
   },
-
-  // the following function displays the end of game screen
-
 
   update: function() {
 
@@ -251,7 +360,7 @@ CarcassoneGame.mainGame.prototype = {
     if(gameOver == false) {
       game.world.bringToTop(this.hudDisplay);
     };
-    game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + gameTiles.length
+    game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + (71 - playedTiles.length);
 
     // TODO: dry this out
     if (this.game.input.activePointer.withinGame) {
@@ -321,42 +430,23 @@ CarcassoneGame.mainGame.prototype = {
   },
 };
 
-var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-// var gameTiles = 'GH'.split('');
-gameTiles = randomizeGameTiles(gameTiles);
 
 
 function createTile(type) {
-  // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
-  type = type || gameTiles.pop();
-  // console.log('Tile type: ',type);
-
-  // game.state.states.mainGame.tilesGroup.add(tile);
-
   tile = new Tile(game, game.width / 2, 120,  type);
   tile.alpha = 0;
   game.add.tween(tile).to( { alpha: 1 }, 600, "Linear", true);
 
   if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
-    if (gameTiles.length === 0){
-    //TODO -- handle this shit
-    alert("Game over.");
+    if (playedTiles.length === 0){
+      //TODO -- handle this shit
+      alert("Game over.");
+    }else{
+      io.emit('brokenTile', { type: type, gameID: gameID });
     }
-    swapTile(type);
+  }else{
+    this.game.add.existing(tile);
   }
-
-  this.game.add.existing(tile);
-  // console.log('Possible moves: ',tile.getValidMoves());
-}
-
-function randomizeGameTiles(gameTiles) {
-  for (var i = gameTiles.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = gameTiles[i];
-    gameTiles[i] = gameTiles[j];
-    gameTiles[j] = temp;
-  }
-  return gameTiles;
 }
 
 // end of game displays function
@@ -393,22 +483,8 @@ function displayFinalScores() {
 
 // console.log(gameTiles);
 
-function swapTile(type){
-  console.log("Broken tile! Swapping tile");
-  var tempArray = [];
-  tempArray.push(type);
-  gameTiles.forEach(function(currentTile){
-    tempArray.push(currentTile);
-  });
-  gameTiles = tempArray;
-  type = gameTiles.pop();
-  game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
-  game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
-  tile = new Tile(game, game.width / 2, 120, type);
-}
-
 function endGame(){
-  
+
   gameOver = true;
   scoreFarms();
   endGameMonasteryCount();
@@ -420,7 +496,7 @@ function endGame(){
 
   for(var i = 0; i < globalPlayers.length; i++){
     game.add.tween(globalPlayers[i].turnText).to( { alpha: 0 }, 100, "Linear", true);
-  }  
+  }
   game.add.tween(gameOverText).to( { alpha: 1 }, 800, "Linear", true);
   setTimeout(function(){
     if(endGameScoringObjects.length > 0){
@@ -445,6 +521,11 @@ function endScoring(){
         endScoring();
       } else {
         endGameCleanupAndVictoryScreen();
+
+        farms.forEach(function(farm){
+          scoreMeepAnimation(farm.meepleGroup, ['']);
+        })
+
       }
     }, 1400);
   });
@@ -489,4 +570,35 @@ function getTileGroupCenter(tiles){
   avgY = (totalY / tiles.length) - (game.height / 2);
 
   return([avgX, avgY]);
+}
+
+var scoringObjectType;
+
+function endTurnServer(meepObject){
+  var message = {tileType: tile.tileType, tileX: tile.x, tileY: tile.y, rotations: tile.numRotations};
+  if(meepObject){
+    scoringObjectType = getScoringObjectType(meepObject.scoringObject);
+    message.meepleCoords = meepObject.ghostCoords;
+    message.scoringObjectId = meepObject.scoringObject.id
+    message.scoringObjectType = scoringObjectType
+  }
+  console.log('Sending to server...')
+  //meeples need to be added to this object...
+  // console.log('object in endTurnServer function: ', meepObject.scoringObject)
+  io.emit('turnEnd', { message: message, gameID: gameID });
+}
+
+function getScoringObjectType(scoringObject){
+  if (scoringObject instanceof City){
+    return 'city';
+  }
+  if (scoringObject instanceof Road){
+    return 'road';
+  }
+  if (scoringObject instanceof Monastery){
+    return 'monastery';
+  }
+
+  return 'farm';
+
 }

@@ -22,7 +22,21 @@ CarcassoneGame.mainMenuZelda.prototype = {
   },
 
   create: function() {
-    
+    window.io = io();
+    io.on('newGame', function(msg){
+      console.log(msg);
+      var name = prompt('What is your name?');
+      io.emit('name', { name:name, gameID: msg.gameID, playerIndex: msg.playerIndex });
+    });
+
+    io.on('playersReady', function(msg){
+      // game.state.start("mainGame");
+      CarcassoneGame.mainMenuZelda.prototype.prepareForStateChange();
+      console.log("Players ready message", msg);
+      gameID = msg.gameID;
+      globalPlayers = msg.players;
+    });
+
     var background = game.add.sprite(0,0, 'background');
     var header = game.add.sprite(game.width/2, 32, 'header');
     header.anchor.set(0.5,0);
@@ -44,7 +58,7 @@ CarcassoneGame.mainMenuZelda.prototype = {
     waitingForPlayers.font = 'Prstart';
     waitingForPlayers.fontSize = 20;
     waitingForPlayers.fill = '#fdfe00';
-    
+
     // Used for rupee burst on click
     game.physics.startSystem(Phaser.Physics.ARCADE);
     emitter = game.add.emitter(0, 0, 1000);
@@ -68,9 +82,9 @@ CarcassoneGame.mainMenuZelda.prototype = {
     game.input.onDown.add(this.particleBurst, this);
     game.input.onDown.add(this.playRupeeSound, this);
     // startGameButton.scale.setTo(0.20,0.20);
-    
+
     // Changes state from the start screen to the main game
-    startGameButton.events.onInputDown.add(this.prepareForStateChange, this);
+    // startGameButton.events.onInputDown.add(this.prepareForStateChange, this);
   },
 
   muteMusic: function() {
@@ -90,11 +104,11 @@ CarcassoneGame.mainMenuZelda.prototype = {
   },
 
   fadeMusic: function() {
-    this.game.time.events.add(1900, this.stopTheme, this);
+    game.time.events.add(1900, this.stopTheme, this);
     zeldaTheme.fadeOut(1900);
   },
 
-  prepareRupeeSound: function() { 
+  prepareRupeeSound: function() {
     rupeeBurst.allowMultiple = false;
     rupeeBurst.addMarker('rupee-gained',0,1);
   },
@@ -130,11 +144,11 @@ CarcassoneGame.mainMenuZelda.prototype = {
   addTimer: function() {
     // RESET this 0 delay to 1200 after development ****************
     //***********************-V-********
-    this.game.time.events.add(3000, this.stateChange, this);
+    game.time.events.add(3000, this.stateChange, this);
   },
 
   stateChange: function() {
-    this.state.start('mainGame');
+    game.state.start('mainGame');
   },
 
   particleBurst: function(pointer) {

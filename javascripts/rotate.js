@@ -18,8 +18,9 @@ rotate = {
     if (tile.dropped) {
       if (!(tile.placementValid(tile, tile))) {
         rotate.right();
-      }      
+      }
     }
+   tile.numRotations = (tile.numRotations + 1) % 4;
   },
 
   left: function(){
@@ -43,6 +44,7 @@ rotate = {
         rotate.left();
       }
     }
+   tile.numRotations = (tile.numRotations - 1) % 4;
   }
 };
 
@@ -57,4 +59,3 @@ Tile.prototype.rightKeyDown = function rightKeyDown() {
 Tile.prototype.leftKeyDown = function leftKeyDown() {
   tile.rotateLeft();
 }
-

@@ -1,5 +1,6 @@
 var cities = [];
 var completedCities = [];
+var cityCount = 0;
 
 var backwards = {
   typeTop: "typeBottom",
@@ -27,9 +28,6 @@ function updateEdgeCount(city, count){
   // }
 }
 
-function updateEdgeCountMerged(city, count){
-  city.edgeCount += count;
-}
 
 function findCity(searchTile, pos){
   var cityToReturn;
@@ -57,7 +55,7 @@ function findAdjacentCity(searchTile, pos){
 
 function mergeCities(city1, city2){
   if(city1 == city2){
-    city1.edgeCount -= 2;
+    city1.edgeCount -= 1;
     return city1;
   }else if(city2){
     var newCity = new City();
@@ -77,7 +75,6 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
   var cityToAdd = '';
   var added = false;
   var counter;
-  var merged;
 
   if(placedTile[position] == "CITY"){
     cities.forEach(function(city, index, citiesArray){
@@ -109,10 +106,6 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
                   if(cityToMerge && cityToMerge != originalCity){
                     //remove city from array, since it's being merged into a new city
                     citiesArray.splice(citiesArray.indexOf(cityToMerge), 1);
-                  }else if(cityToMerge && cityToMerge == originalCity){
-                    counter = getEdges(placedTile, allPos);
-                    updateEdgeCountMerged(originalCity, counter);
-                    merged = true;
                   }
 
                 });
@@ -122,13 +115,12 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
                 //add newly merged city
                 citiesArray.push(originalCity);
                 if(originalCity.meeples.length === 0){
-                  validCities.push({ pos: 'typeCenter', scoringObject: originalCity });
+                  validCities.push({ pos: 'typeCenter', scoringID: originalCity.id });
                 }
                 added = true;
-                if(!merged){
-                  counter = getEdges(placedTile, allPos);
-                  updateEdgeCount(originalCity, counter);
-                }
+                counter = getEdges(placedTile, allPos);
+                updateEdgeCount(originalCity, counter);
+
                 // console.log("Newly merged city has edgecount = ", originalCity.edgeCount);
               }
 
@@ -143,9 +135,9 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
             //  console.log("city has edgecount = ", city.edgeCount);
             if(city.meeples.length === 0){
               if(single){
-                validCities.push({ pos: 'typeCenter', scoringObject: city });
+                validCities.push({ pos: 'typeCenter', scoringID: city.id });
               }else{
-                validCities.push({ pos: position, scoringObject: city });
+                validCities.push({ pos: position, scoringID: city.id });
               }
             }
           }
@@ -162,7 +154,7 @@ function checkCityPosition(placedTile, position, single, banner, allPos, validCi
         newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
         if(banner) { newCity.bannerCount += 1; }
         cities.push(newCity);
-        validCities.push({ pos: position, scoringObject: newCity });
+        validCities.push({ pos: position, scoringID: newCity.id });
         added = true;
         meeples = false;
       }else{
@@ -212,7 +204,7 @@ function addToCity(placedTile){
       newCity.tiles.push({ tile: placedTile, pos: allPos, terminus: placedTile.centerTerminus });
       if(banner) { newCity.bannerCount += 1; }
       cities.push(newCity);
-      validCities.push({ pos: 'typeCenter', scoringObject: newCity });
+      validCities.push({ pos: 'typeCenter', scoringID: newCity.id });
     }
   return validCities;
 }
@@ -305,6 +297,8 @@ function checkFinishedCities(playerArray){
 }
 
 function City(){
+  this.id = cityCount;
+  cityCount += 1;
   this.tiles = [];
   this.meeples = [];
   this.meepleGroup = game.add.group();

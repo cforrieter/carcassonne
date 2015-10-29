@@ -15,6 +15,7 @@ function Tile(game, x, y, type)
   this.dragged = false;
   this.dropped = false;
   this.grabbed = false;
+  this.numRotations = 0;
 
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -75,13 +76,13 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
         cities.forEach(function(city){
           game.world.bringToTop(city.meepleGroup);
-        })
+        });
         farms.forEach(function(farm){
           game.world.bringToTop(farm.meepleGroup);
-        })
+        });
         roads.forEach(function(road){
           game.world.bringToTop(road.meepleGroup);
-        })
+        });
 
         // game.world.bringToTop(allMeeples);
       }
