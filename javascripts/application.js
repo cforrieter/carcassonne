@@ -160,7 +160,7 @@ CarcassoneGame.mainGame.prototype = {
       var hudBox = game.add.graphics(0,0);
       hudBox.lineStyle(3, 0x000000, 1);
       hudBox.beginFill(0x000000, 0.4);
-      hudBox.drawRoundedRect(5, 5, 190, 255, 5);
+      hudBox.drawRoundedRect(5, 5, 190, 10 + globalPlayers.length * 50, 5);
       gameState.hudDisplay.add(hudBox);
 
       gameOverText = game.add.text(game.width / 2, 35, 'GAME OVER!', { font: "42px Lindsay", fill: "#FFFFFF", align: "left"});

@@ -18,6 +18,7 @@ function Tile(game, x, y, type)
   this.numRotations = 0;
   this.placeTileSound = game.add.audio('placeTileWav');
   this.placeMeepleSound = game.add.audio('placeMeepleWav');
+  this.scoreSound = game.add.audio('scoreWav');
   this.placeMeepleSound.addMarker('x', 0.4, 1.3)
 
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
