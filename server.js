@@ -118,9 +118,7 @@ http.listen(port, function(){
 });
 
 function GameTiles(){
-  // this.tiles = randomizeGameTiles('AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split(''));
-    this.tiles = ('AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWXVVVVU'.split(''));
-
+  this.tiles = randomizeGameTiles('AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split(''));
 }
 
 function randomizeGameTiles(gameTiles) {
