@@ -39,8 +39,11 @@ CarcassoneGame.mainMenuZelda.prototype = {
     startGameButton.inputEnabled = true;
 
     // Waiting for players
-    var waitingForPlayers = game.add.sprite(game.world.centerX, game.world.centerY + 45, 'waiting-for-players');
-    waitingForPlayers.anchor.set(0.5,0);
+    var waitingForPlayers = game.add.text(game.world.centerX, game.world.centerY + 50, 'WAITING FOR PLAYERS...');
+    waitingForPlayers.anchor.set(0.5, 0);
+    waitingForPlayers.font = 'Prstart';
+    waitingForPlayers.fontSize = 20;
+    waitingForPlayers.fill = '#fdfe00';
     
     // Used for rupee burst on click
     game.physics.startSystem(Phaser.Physics.ARCADE);

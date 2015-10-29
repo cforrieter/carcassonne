@@ -70,10 +70,9 @@ CarcassoneGame.mainGame.prototype = {
 
   create: function() {
     gameMusic = this.game.add.audio('game-music');
-    gameMusic.onDecoded.add(function(){
-      gameMusic.play(0, 'game-music', true), this});
-    gameMusic.play();
     gameMusic.loop = true;
+    gameMusic.play();
+    
 
     game.world.setBounds(0, 0, 13000, 13000);
     game.add.tileSprite(0,0, 13000, 13000, 'background');

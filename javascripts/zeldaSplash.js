@@ -15,7 +15,7 @@ var cx = 0;
 CarcassoneGame.zeldaSplash.prototype = {
 
   preload: function() {
-    gameMode = "zelda";
+    gameMode = "zelda"; 
   },
 
   create:  function() {

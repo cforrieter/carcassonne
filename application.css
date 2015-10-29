@@ -14,6 +14,10 @@ nav {
   font-family: Lindsay; src: url('assets/lindsay-ef.ttf'); 
 }
 
+@font-face {
+  font-family: Prstart; src: url('assets/prstartk.ttf');
+}
+
 h1 { 
     font-family: Lindsay;
     color: #FFD633;

@@ -49,7 +49,6 @@ CarcassoneGame.splashScreen.prototype = {
     var node = game.add.sprite(game.width - 225, game.height - 100, 'node-logo');
     node.scale.setTo(0.5,0.5);
 
-
     upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
     downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
@@ -87,7 +86,7 @@ CarcassoneGame.splashScreen.prototype = {
   },
 
   introTimer: function() {
-    stateSwapTimer = this.game.time.events.add(1000, this.goToMainMenu, this);
+    stateSwapTimer = this.game.time.events.add(5000, this.goToMainMenu, this);
   },
 
   goToMainMenu: function() {

@@ -25,10 +25,12 @@ CarcassoneGame.mainMenu.prototype = {
     var header = game.add.sprite(game.width/2, 32, 'header');
     header.anchor.set(0.5,0);
 
-    this.prepareForStateChange();
+    var style = { font: "20px Prstart", fill: "#FDFE00"}
+    waitingForPlayers = game.add.text(game.world.centerX, game.world.centerY - 50, 'WAITING FOR PLAYERS...', style);
+    waitingForPlayers.anchor.set(0.5, 0);
 
-    var waitingForPlayers = game.add.sprite(game.world.centerX, game.world.centerY - 50, 'waiting-for-players');
-    waitingForPlayers.anchor.set(0.5,0);
+    this.prepareForStateChange();
+   
     // Sprite for start button and animation
     // startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'carcassonne-coat-of-arms');
     // startGameButton.anchor.set(0.5);
@@ -39,8 +41,8 @@ CarcassoneGame.mainMenu.prototype = {
   },
 
   prepareForStateChange: function() {
-    this.addTimer();
     this.fadeMusic();
+    this.addTimer();
   },
 
   fadeMusic: function() {
