@@ -81,10 +81,72 @@ Tile.MONASTERYMEEPLECOORDS = {
 
 var allMeeples;
 
-Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityEdges, farmerEdges) {
+var newTile = false;
+var meepleButtons;
+var confirm;
 
-var confirm = tile.game.add.button(tile.x + 60, tile.y - 30, 'check', confirmFunc, this, 23, 23, 23);
-confirm.scale.setTo(0.3);
+function findRoadById(id){
+  for (var i = 0; i < roads.length; i++){
+    var road = roads[i];
+    if(road.id === id){
+      return road;
+    }
+  }
+}
+
+function findCityById(id){
+ for (var i = 0; i < cities.length; i++){
+    var city = cities[i];
+    if(city.id === id){
+      return city;
+    }
+  }
+}
+
+function findMonasteryById(id){
+  for (var i = 0; i < monasteries.length; i++){
+    var monastery = monasteries[i];
+    if(monastery.id === id){
+      return monastery;
+    }
+  }
+}
+
+function findFarmById(id){
+  for (var i = 0; i < farms.length; i++){
+    var farm = farms[i];
+    if(farm.id === id){
+      return farm;
+    }
+  }
+}
+
+
+Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityEdges, farmerEdges) {
+  newTile = true;
+
+  var road;
+  roadEdges.forEach(function(roadEdge){
+    road = findRoadById(roadEdge.scoringID)
+    roadEdge.scoringObject = road;
+  });
+  var city;
+  console.log("City edges: ", cityEdges)
+  cityEdges.forEach(function(cityEdge){
+    city = findCityById(cityEdge.scoringID)
+    cityEdge.scoringObject = city;
+  });
+  var farm;
+  farmerEdges.forEach(function(farmerEdge){
+    farm = findFarmById(farmerEdge.scoringID)
+    farmerEdge.scoringObject = farm;
+  });
+
+  console.log('Road edges: ', roadEdges);
+  console.log('City edges: ', cityEdges);
+
+ confirm = tile.game.add.button(tile.x + 60, tile.y - 30, 'check', confirmFunc, this, 23, 23, 23);
+ confirm.scale.setTo(0.3);
 
 
 if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.length === 0 && !tile.centerMonastery && farmerEdges.length === 0)){
@@ -104,7 +166,7 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     monasteries.push(monastery);
   }
 
-  var meepleButtons = game.add.group();
+   meepleButtons = game.add.group();
 
   checkPositions(roadCoords, roadEdges, false);
   checkPositions(cityCoords, cityEdges, false);
@@ -145,7 +207,7 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
   function confirmFunc() {
     confirm.destroy();
     if(meepleButtons){
-        meepleButtons.destroy();
+      meepleButtons.destroy();
     }
     endTurn();
   }
@@ -167,74 +229,79 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     var y = localX * Math.sin(Phaser.Math.degToRad(tile.angle)) + localY * Math.cos(Phaser.Math.degToRad(tile.angle)) + tile.y;
     return [x, y];
   }
+};
 
-  function addMeeple() {
+function addMeeple(meepObject) {
+  if (meepObject instanceof Phaser.Button){
+    meepObject = this;
+  }
+  if(newTile){
     meepleButtons.destroy();
     confirm.destroy();
-    if (this.farmer) {
-      var shadow = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer', globalPlayers.indexOf(getCurrentPlayer()))
-      shadow.anchor.setTo(0.5);
-      shadow.x = shadow.x + 3
-      shadow.y = shadow.y + 3
-      shadow.tint = 0x000000;
-      shadow.alpha = 0.6;
-      var meeple = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer', globalPlayers.indexOf(getCurrentPlayer()))
-      meeple.anchor.setTo(0.5);
-      meeple.anchor.setTo(0.5);
-      meeple.tint = "0x" + getCurrentPlayer().color
-      shadow.playerName = getCurrentPlayer().name;
-      meeple.playerName = getCurrentPlayer().name;
-    } else {
-      var shadow = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meeple', globalPlayers.indexOf(getCurrentPlayer()))
-      shadow.anchor.setTo(0.5);
-      shadow.x += 3;
-      shadow.y += 3;
-      shadow.tint = 0x000000;
-      shadow.alpha = 0.6;
-      var meeple = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meeple', globalPlayers.indexOf(getCurrentPlayer()))
-      meeple.anchor.setTo(0.5);
-      meeple.tint = "0x" + getCurrentPlayer().color
-      shadow.playerName = getCurrentPlayer().name;
-      meeple.playerName = getCurrentPlayer().name;
-    }
-
-    var currentPlayer = getCurrentPlayer();
-    this.scoringObject.meeples.push(currentPlayer);
-    currentPlayer.numMeeples -= 1;
-    // TODO: remove a meeple from the player when played and score points if points scored
-    // globalPlayers.player1.numMeeples -= 1;
-    // globalPlayers.player1.score += 50;
-    // ============================
-
-    // console.log("Scoring object: ",this.scoringObject)
-    this.scoringObject.meepleGroup.add(shadow, false);
-    this.scoringObject.meepleGroup.add(meeple, false);
-    // console.log("SCORING OBJECT'S MEEPLE GROUP: ", this.scoringObject.meepleGroup)
-    // var currentScoringObjectMeepGroup = this.scoringObject.meepleGroup
-    game.add.existing(this.scoringObject.meepleGroup);
-    game.world.bringToTop(this.scoringObject.meepleGroup);
-
+  }
     // allMeeples.add(shadow);
     // allMeeples.add(meeple);
-    
 
-    // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
 
-    endTurn();
+    // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType
+  if (meepObject.farmer) {
+    var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
+    shadow.anchor.setTo(0.5);
+    shadow.x = shadow.x + 3
+    shadow.y = shadow.y + 3
+    shadow.tint = 0x000000;
+    shadow.alpha = 0.6;
+    var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
+    meeple.anchor.setTo(0.5);
+    meeple.tint = "0x" + getCurrentPlayer().color;
+    meeple.playerName = getCurrentPlayer().name;
+  } else {
+    var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
+    shadow.anchor.setTo(0.5);
+    shadow.x += 3;
+    shadow.y += 3;
+    shadow.tint = 0x000000;
+    shadow.alpha = 0.6;
+    var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
+    meeple.anchor.setTo(0.5);
+    meeple.tint = "0x" + getCurrentPlayer().color;
+    meeple.playerName = getCurrentPlayer().name;
   }
 
+  var currentPlayer = getCurrentPlayer();
+  console.log(meepObject);
+  meepObject.scoringObject.meeples.push(currentPlayer);
+  currentPlayer.numMeeples -= 1;
+  // TODO: remove a meeple from the player when played and score points if points scored
+  // globalPlayers.player1.numMeeples -= 1;
+  // globalPlayers.player1.score += 50;
+  // ============================
+
+  // console.log("Scoring object: ",this.scoringObject)
+  meepObject.scoringObject.meepleGroup.add(shadow, false);
+  meepObject.scoringObject.meepleGroup.add(meeple, false);
+  // console.log("SCORING OBJECT'S MEEPLE GROUP: ", this.scoringObject.meepleGroup)
+  // var currentScoringObjectMeepGroup = this.scoringObject.meepleGroup
+  game.add.existing(meepObject.scoringObject.meepleGroup);
+  game.world.bringToTop(meepObject.scoringObject.meepleGroup);
+
+  // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
+  endTurn(meepObject)
 }
 
-function endTurn(){
+function endTurn(meepObject){
   checkFinishedRoads();
   checkFinishedCities();
   checkMonasteries();
   yScoreOffset = 30;
-  if (gameTiles.length === 0){ 
-    endGame();
+  if (playedTiles.length === 72){
+    io.emit('gameOver', { gameID: gameID });
+    // endGame();
   } else {
-    window.createTile();
-    nextTurn();
+    if(newTile){
+      newTile = false;
+      endTurnServer(meepObject);
+    }
   }
 }
 
@@ -254,7 +321,7 @@ function scoreMeepAnimation(meepleGroup, scoringPlayers){
       });
     })
   })
-  
+
 }
 
 var yScoreOffset = 30;
@@ -262,6 +329,7 @@ var yScoreOffset = 30;
 function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
   // draw points scoring over last played tile
   var alreadyDisplayedPlayers = [];
+
   for (var m = 1; m < scoringGroup.meepleGroup.children.length; m += 2){
     scoringPlayers.forEach(function(player){
       var playerOb = getPlayer(player);
@@ -281,11 +349,11 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
         x,
         y,
         // scoringGroup.meepleGroup.children[m].x - 15,
-        // scoringGroup.meepleGroup.children[m].y - 70, 
-        // // playedTiles[playedTiles.length - 1].x - 25, 
+        // scoringGroup.meepleGroup.children[m].y - 70,
+        // // playedTiles[playedTiles.length - 1].x - 25,
         // // playedTiles[playedTiles.length - 1].y - yScoreOffset,
-        "+" + pointsScored, { 
-        font: "42px Lindsay", 
+        "+" + pointsScored, {
+        font: "42px Lindsay",
         fill: "#" + scoringGroup.meeples[0].color
         }
       );
@@ -304,5 +372,5 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
         scoreMeepAnimation(scoringGroup.meepleGroup, scoringPlayers);
       })
     });
-  }) 
+  })
 }
