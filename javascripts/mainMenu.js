@@ -53,8 +53,6 @@ CarcassoneGame.mainMenu.prototype = {
     muteButton.inputEnabled = true;
     muteButton.events.onInputDown.add(this.muteMusic, this);
 
-    this.prepareForStateChange();
-
     // Sprite for start button and animation
     // startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'carcassonne-coat-of-arms');
     // startGameButton.anchor.set(0.5);
@@ -64,7 +62,7 @@ CarcassoneGame.mainMenu.prototype = {
     // startGameButton.events.onInputDown.addOnce(this.prepareForStateChange, this);
   },
 
-  
+
 
   prepareForStateChange: function() {
     this.fadeMusic();
