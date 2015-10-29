@@ -12,7 +12,7 @@ CarcassoneGame.mainMenu.prototype = {
     game.load.image('carcassonne-coat-of-arms', 'assets/carcassonne-coat-of-arms.png');
     // game.load.image('meeple-blue-flat', 'assets/meeple-blue-flat.png');
     game.load.image('normal-background', 'assets/normal-background.png');
-    game.load.audio('opening-theme', 'assets/opening-theme.mp3');
+    // game.load.audio('opening-theme', 'assets/opening-theme.mp3');
     game.load.spritesheet('meeple', 'assets/MEEPLE.png', 33, 36, 5);
     game.load.spritesheet('meepleFarmer', 'assets/meepleFarmer.png', 33, 32, 5);
   },
