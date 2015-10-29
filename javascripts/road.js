@@ -219,8 +219,8 @@ function getEdges(tile, allPos){
   return counter;
 }
 
-function scoreRoad(road, playersObject){
-
+function scoreRoad(road){
+  //remove duplicate tiles
   var o = {}, i, l = road.tiles.length, r = [];
   for(i=0; i<l;i+=1){
     o[road.tiles[i].tile.x + "," + road.tiles[i].tile.y] = road.tiles[i];
@@ -230,7 +230,7 @@ function scoreRoad(road, playersObject){
   }
 
   var points = r.length;
-  // console.log("Closing the road was worth " + points + " points.");
+
   var playerMeeples = {};
 
   road.meeples.forEach(function(meeple){
@@ -241,7 +241,6 @@ function scoreRoad(road, playersObject){
       playerMeeples[meeple.name] = 1;
     }
   });
-  // console.log(this.meepleGroup)
 
   //find the player with the most meeples
   var max = 0;
@@ -256,8 +255,8 @@ function scoreRoad(road, playersObject){
     if(playerMeeples[p] == max){
       scoringPlayers.push(p);
       // getPlayer(p).score += points;
-      console.log("Player " + getPlayer(p).name +" score: " + getPlayer(p).score);
     }
+
     if(scoringPlayers.length > 0){
       if(!gameOver){
        scoreTilesAnimation(road, points, scoringPlayers);
@@ -270,11 +269,11 @@ function scoreRoad(road, playersObject){
 
 var endGameRoads = [];
 
-function checkFinishedRoads(playersObject){
+function checkFinishedRoads(){
   var roadsToRemove = [];
   roads.forEach(function(road, index){
     if(road.edgeCount === 0 || gameOver){
-      scoreRoad(road, playersObject);
+      scoreRoad(road);
       // console.log("Closed road!");
       roadsToRemove.push(road);
     }

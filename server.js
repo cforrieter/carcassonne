@@ -116,12 +116,7 @@ http.listen(port, function(){
 
 function GameTiles(){
   this.tiles = randomizeGameTiles('AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split(''));
-    // this.tiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWXLLMM'.split('');
-
 }
-
-// var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
-// gameTiles = randomizeGameTiles(gameTiles);
 
 function randomizeGameTiles(gameTiles) {
   for (var i = gameTiles.length - 1; i > 0; i--) {

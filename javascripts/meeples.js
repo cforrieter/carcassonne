@@ -329,13 +329,15 @@ var yScoreOffset = 30;
 function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
   // draw points scoring over last played tile
   var alreadyDisplayedPlayers = [];
+  var x;
+  var y;
+  var playerOb;
 
   for (var m = 1; m < scoringGroup.meepleGroup.children.length; m += 2){
     scoringPlayers.forEach(function(player){
-      var playerOb = getPlayer(player);
+      playerOb = getPlayer(player);
       playerOb.score += pointsScored;
-      var x;
-      var y;
+
       if(gameOver){
         x = scoringGroup.meepleGroup.children[m].x - 15;
         y = scoringGroup.meepleGroup.children[m].y - 70;
