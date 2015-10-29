@@ -256,13 +256,12 @@ function scoreRoad(road){
       scoringPlayers.push(p);
       // getPlayer(p).score += points;
     }
-
-    if(scoringPlayers.length > 0){
-      if(!gameOver){
-       scoreTilesAnimation(road, points, scoringPlayers);
-      } else {
-        endGameRoads.push([road, points, scoringPlayers]);
-      }
+  }
+  if(scoringPlayers.length > 0){
+    if(!gameOver){
+     scoreTilesAnimation(road, points, scoringPlayers);
+    } else {
+      endGameRoads.push([road, points, scoringPlayers]);
     }
   }
 }

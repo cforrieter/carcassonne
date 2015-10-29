@@ -104,7 +104,7 @@ io.on('connection', function(socket){
 
   socket.on('brokenTile', function(msg){
     var tileType = swapTile(msg.type, games[msg.gameID].deck.tiles);
-    socket.in('game' + msg.gameID).emit('replaceTile', {nextTileType: tileType});
+    io.sockets.in('game' + msg.gameID).emit('replaceTile', {nextTileType: tileType});
   });
 
   socket.on('gameOver', function(msg){
@@ -118,7 +118,9 @@ http.listen(port, function(){
 });
 
 function GameTiles(){
-  this.tiles = randomizeGameTiles('AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split(''));
+  // this.tiles = randomizeGameTiles('AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split(''));
+    this.tiles = ('AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWXVVVVU'.split(''));
+
 }
 
 function randomizeGameTiles(gameTiles) {

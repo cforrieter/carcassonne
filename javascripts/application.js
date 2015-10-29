@@ -338,7 +338,12 @@ CarcassoneGame.mainGame.prototype = {
     })
 
     io.on('replaceTile', function(msg){
-      createTile(msg.nextTileType);
+      var currentPlayer = getCurrentPlayer();
+      if(currentPlayer.id == io.io.engine.id){
+        game.input.keyboard.removeKey(Phaser.Keyboard.LEFT);
+        game.input.keyboard.removeKey(Phaser.Keyboard.RIGHT);
+        createTile(msg.nextTileType);
+      }
     })
 
     io.on('gameOver', function(){
