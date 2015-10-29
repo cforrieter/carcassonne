@@ -245,26 +245,24 @@ function addMeeple(meepObject) {
 
     // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType
   if (meepObject.farmer) {
-    var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
+    var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer', globalPlayers.indexOf(getCurrentPlayer()))
     shadow.anchor.setTo(0.5);
     shadow.x = shadow.x + 3
     shadow.y = shadow.y + 3
     shadow.tint = 0x000000;
     shadow.alpha = 0.6;
-    var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer')
+    var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meepleFarmer', globalPlayers.indexOf(getCurrentPlayer()))
     meeple.anchor.setTo(0.5);
-    meeple.tint = "0x" + getCurrentPlayer().color;
     meeple.playerName = getCurrentPlayer().name;
   } else {
-    var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
+    var shadow = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple', globalPlayers.indexOf(getCurrentPlayer()))
     shadow.anchor.setTo(0.5);
     shadow.x += 3;
     shadow.y += 3;
     shadow.tint = 0x000000;
     shadow.alpha = 0.6;
-    var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple')
+    var meeple = game.add.sprite(meepObject.ghostCoords[0], meepObject.ghostCoords[1], 'meeple', globalPlayers.indexOf(getCurrentPlayer()))
     meeple.anchor.setTo(0.5);
-    meeple.tint = "0x" + getCurrentPlayer().color;
     meeple.playerName = getCurrentPlayer().name;
   }
 

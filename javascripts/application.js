@@ -36,11 +36,11 @@ function nextTurn(){
       globalPlayers[i].tileBox.alpha = 0;
       if(globalPlayers[i+1]){
         globalPlayers[i+1].turn = true;
-        game.add.tween(globalPlayers[i + 1].tileBox).to( { alpha: 1 }, 600, "Linear", true);
+        // game.add.tween(globalPlayers[i + 1].tileBox).to( { alpha: 1 }, 600, "Linear", true);
         game.add.tween(globalPlayers[i + 1].turnText).to( { alpha: 1 }, 400, "Linear", true);
       }else{
         globalPlayers[0].turn = true;
-        game.add.tween(globalPlayers[0].tileBox).to( { alpha: 1 }, 600, "Linear", true);
+        // game.add.tween(globalPlayers[0].tileBox).to( { alpha: 1 }, 600, "Linear", true);
         game.add.tween(globalPlayers[0].turnText).to( { alpha: 1 }, 400, "Linear", true);
       }
       break;
@@ -126,6 +126,7 @@ CarcassoneGame.mainGame.prototype = {
     createHUD(this);
     game.add.existing(this.hudDisplay);
 
+
     function createHUD(gameState) {
       function remainingTiles(){
         if(71 - playedTiles.length > 0){
@@ -163,8 +164,8 @@ CarcassoneGame.mainGame.prototype = {
         player.tileBox = game.add.graphics(0, 0);
         gameState.hudDisplay.add(player.tileBox);
         player.tileBox.lineStyle(3, "0x" + player.color, 1);
-        player.tileBox.drawRoundedRect(tile.x - 45, tile.y - 45, 88, 88, 5);
-        player.tileBox.alpha = player.turn ? 1 : 0;
+        player.tileBox.drawRoundedRect(game.width / 2 - 45, 120 - 45, 88, 88, 5);
+        player.tileBox.alpha = 0;
 
         player.meeples = game.add.group();
         gameState.hudDisplay.add(player.meeples);
@@ -229,6 +230,7 @@ CarcassoneGame.mainGame.prototype = {
       if(currentPlayer.id == io.io.engine.id){
         console.log("It's your turn! Creating tile!");
         createTile(msg.nextTileType);
+        game.add.tween(currentPlayer.tileBox).to( { alpha: 1 }, 600, "Linear", true);
       }
     });
 
@@ -316,11 +318,12 @@ CarcassoneGame.mainGame.prototype = {
 
     io.on('newTurnTile', function(msg){
       nextTurn();
-      console.log(game);
+      // console.log(game);
       var currentPlayer = getCurrentPlayer();
       if(currentPlayer.id == io.io.engine.id){
         console.log("It's your turn! Creating tile!")
         createTile(msg.nextTileType);
+        game.add.tween(currentPlayer.tileBox).to( { alpha: 1 }, 600, "Linear", true);
       }
     })
 
@@ -415,6 +418,7 @@ function createTile(type) {
   tile = new Tile(game, game.width / 2, 120,  type);
   tile.alpha = 0;
   game.add.tween(tile).to( { alpha: 1 }, 600, "Linear", true);
+
 
   if ((tile.getValidMoves().length === 0 ) && (playedTiles.length > 0)){
     if (playedTiles.length === 0){
