@@ -30,7 +30,8 @@ CarcassoneGame.mainMenuZelda.prototype = {
     });
 
     io.on('playersReady', function(msg){
-      game.state.start("mainGame");
+      // game.state.start("mainGame");
+      CarcassoneGame.mainMenuZelda.prototype.prepareForStateChange();
       console.log("Players ready message", msg);
       gameID = msg.gameID;
       globalPlayers = msg.players;
@@ -75,7 +76,7 @@ CarcassoneGame.mainMenuZelda.prototype = {
     // startGameButton.scale.setTo(0.20,0.20);
 
     // Changes state from the start screen to the main game
-    startGameButton.events.onInputDown.add(this.prepareForStateChange, this);
+    // startGameButton.events.onInputDown.add(this.prepareForStateChange, this);
   },
 
   prepareForStateChange: function() {
@@ -85,7 +86,7 @@ CarcassoneGame.mainMenuZelda.prototype = {
   },
 
   fadeMusic: function() {
-    this.game.time.events.add(1900, this.stopTheme, this);
+    game.time.events.add(1900, this.stopTheme, this);
     zeldaTheme.fadeOut(1900);
   },
 
@@ -125,11 +126,11 @@ CarcassoneGame.mainMenuZelda.prototype = {
   addTimer: function() {
     // RESET this 0 delay to 1200 after development ****************
     //***********************-V-********
-    this.game.time.events.add(3000, this.stateChange, this);
+    game.time.events.add(3000, this.stateChange, this);
   },
 
   stateChange: function() {
-    this.state.start('mainGame');
+    game.state.start('mainGame');
   },
 
   particleBurst: function(pointer) {
