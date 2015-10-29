@@ -16,6 +16,9 @@ function Tile(game, x, y, type)
   this.dropped = false;
   this.grabbed = false;
   this.numRotations = 0;
+  this.placeTileSound = game.add.audio('placeTileWav');
+  this.placeMeepleSound = game.add.audio('placeMeepleWav');
+  this.placeMeepleSound.addMarker('x', 0.4, 1.3)
 
   leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
   rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -72,6 +75,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
 
       if (!tile.dropped) {
         tile.dropped = true;
+        
         this.game.add.tween(this).to(target, 250).start().onComplete.add(addButtons, this);
 
         cities.forEach(function(city){
@@ -88,6 +92,7 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
       }
 
       function addButtons() {
+        tile.placeTileSound.play();
           confirmDrop(target, function(confirmed){
             if (confirmed) {
               tile.placeTile(tile, tile.x, tile.y);
