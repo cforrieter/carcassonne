@@ -19,6 +19,9 @@ CarcassoneGame.mainMenuZelda.prototype = {
     game.load.image('background', 'assets/zelda-opening-background.png');
     game.load.spritesheet('meeple', 'assets/link-meeples.png', 20, 27, 5);
     game.load.spritesheet('meepleFarmer', 'assets/link-farmer.png', 30, 19, 5);
+    game.load.audio('placeMeepleWav', 'assets/drop.wav');
+    game.load.audio('scoreWav', 'assets/score.wav');
+    
   },
 
   create: function() {

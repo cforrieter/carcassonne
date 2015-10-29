@@ -15,6 +15,8 @@ CarcassoneGame.mainMenu.prototype = {
     // game.load.audio('opening-theme', 'assets/opening-theme.mp3');
     game.load.spritesheet('meeple', 'assets/MEEPLE.png', 33, 36, 5);
     game.load.spritesheet('meepleFarmer', 'assets/meepleFarmer.png', 33, 32, 5);
+    game.load.audio('placeMeepleWav', 'assets/drop.wav');
+    game.load.audio('scoreWav', 'assets/score.wav');
   },
 
   create: function() {

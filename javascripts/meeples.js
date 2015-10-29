@@ -232,6 +232,8 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
 };
 
 function addMeeple(meepObject) {
+  tile.placeMeepleSound.addMarker('x', 0.4, 1.3)
+  tile.placeMeepleSound.play('x');
   if (meepObject instanceof Phaser.Button){
     meepObject = this;
   }

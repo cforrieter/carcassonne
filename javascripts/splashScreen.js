@@ -25,7 +25,8 @@ CarcassoneGame.splashScreen.prototype = {
     game.load.image('lhl-logo', 'assets/lhl-logo.png');
     game.load.image('node-logo', 'assets/node-logo.png');
     game.load.image('waiting-for-players', 'assets/waiting-for-players.png');
-    game.load.image('mute-button', 'assets/mute-button.png')
+    game.load.image('mute-button', 'assets/mute-button.png');
+    game.load.audio('pewpew', 'assets/pewpew.mp3')
     game.load.audio('secret', 'assets/secret.mp3');
     game.load.audio('rupee-gained', 'assets/rupee-gained.mp3');
     game.load.audio('sword-spin-complete', 'assets/sword-spin-complete.mp3');
@@ -44,6 +45,9 @@ CarcassoneGame.splashScreen.prototype = {
     tween.start();
     tween.onComplete.add(this.introTimer, this);
     // game.input.onDown.add(this.goToZelda, this);
+
+    var pewpew = this.game.add.audio('pewpew');
+    pewpew.play();
 
     var lhl = game.add.sprite(25, game.height - 50, 'lhl-logo');
     lhl.scale.setTo(0.5, 0.5);
