@@ -1,4 +1,5 @@
 var CarcassoneGame = {};
+var gameMode = "normal";
 
 CarcassoneGame.splashScreen = function(game) {
   this.addInput;
@@ -23,6 +24,7 @@ CarcassoneGame.splashScreen.prototype = {
     game.load.image('phaserLogo', 'assets/phaser2.png');
     game.load.image('lhl-logo', 'assets/lhl-logo.png');
     game.load.image('node-logo', 'assets/node-logo.png');
+    game.load.image('waiting-for-players', 'assets/waiting-for-players.png')
     game.load.audio('secret', 'assets/secret.mp3');
     game.load.audio('rupee-gained', 'assets/rupee-gained.mp3');
     game.load.audio('sword-spin-complete', 'assets/sword-spin-complete.mp3');
@@ -39,14 +41,13 @@ CarcassoneGame.splashScreen.prototype = {
     tween.to( { alpha: 1 }, 2000, "Linear");
     tween.start();
     tween.onComplete.add(this.introTimer, this);
-    game.input.onDown.add(this.goToZelda, this);
+    // game.input.onDown.add(this.goToZelda, this);
 
     var lhl = game.add.sprite(25, game.height - 50, 'lhl-logo');
     lhl.scale.setTo(0.5, 0.5);
 
     var node = game.add.sprite(game.width - 225, game.height - 100, 'node-logo');
     node.scale.setTo(0.5,0.5);
-
 
     upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
     downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
@@ -85,7 +86,7 @@ CarcassoneGame.splashScreen.prototype = {
   },
 
   introTimer: function() {
-    stateSwapTimer = this.game.time.events.add(1000, this.goToMainMenu, this);
+    stateSwapTimer = this.game.time.events.add(5000, this.goToMainMenu, this);
   },
 
   goToMainMenu: function() {

@@ -1,5 +1,6 @@
 var monasteries = [];
 var monasteryNeighbours = 0;
+var endGameMonasteries = [];  
 
 function checkMonasteries(){
   monasteries.forEach(function(monastery){
@@ -54,7 +55,7 @@ function scoreAndRemoveMonastery(monasteryToRemove){
       ); 
       scoreTilesAnimation(monasteries[index], 9, [monasteries[index].meeples[0].name]);
       // monasteries[index].meepleGroup.destroy();
-      monasteries[index].meeples[0].score += 9; 
+      // monasteries[index].meeples[0].score += 9; 
       monasteries[index].meeples[0].numMeeples += 1;
       monasteries.splice(index, 1);
     }
@@ -97,8 +98,8 @@ function endGameMonasteryCount(){
           neighbours += 1;
         }
       })
-      scoreTilesAnimation(monasteries[index], neighbours, [monasteries[index].meeples[0].name]);
-      monastery.meeples[0].score += neighbours; 
+      endGameMonasteries.push([monasteries[index], neighbours, [monasteries[index].meeples[0].name]]);
+      // monastery.meeples[0].score += neighbours; 
     }
   })
 }

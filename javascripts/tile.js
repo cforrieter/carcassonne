@@ -42,6 +42,7 @@ function Tile(game, x, y, type)
     farm.edges = farmEdges[f].edges.split('');
     farm.hasCity = farmEdges[f].hasCity;
     farm.position = farmEdges[f].position;
+    farm.tile = this;
     this.farms.push(farm);
   }
 
@@ -71,6 +72,18 @@ Tile.prototype.onClick = function onClick(draggable, pointer){
       if (!tile.dropped) {
         tile.dropped = true;
         this.game.add.tween(this).to(target, 250).start().onComplete.add(addButtons, this);
+
+        cities.forEach(function(city){
+          game.world.bringToTop(city.meepleGroup);
+        })
+        farms.forEach(function(farm){
+          game.world.bringToTop(farm.meepleGroup);
+        })
+        roads.forEach(function(road){
+          game.world.bringToTop(road.meepleGroup);
+        })
+
+        // game.world.bringToTop(allMeeples);
       }
 
       function addButtons() {

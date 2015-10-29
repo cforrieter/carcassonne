@@ -10,9 +10,11 @@ CarcassoneGame.mainMenu.prototype = {
     game.load.spritesheet('tiles', 'assets/tiles_sprite.png', 88, 88, 24);
     game.load.image('header', 'assets/carcassone-header.png');
     game.load.image('carcassonne-coat-of-arms', 'assets/carcassonne-coat-of-arms.png');
-    game.load.image('meeple-blue-flat', 'assets/meeple-blue-flat.png');
+    // game.load.image('meeple-blue-flat', 'assets/meeple-blue-flat.png');
     game.load.image('normal-background', 'assets/normal-background.png');
     game.load.audio('opening-theme', 'assets/opening-theme.mp3');
+    game.load.spritesheet('meeple', 'assets/MEEPLE.png', 33, 36, 5);
+    game.load.spritesheet('meepleFarmer', 'assets/meepleFarmer.png', 33, 32, 5);
   },
 
   create: function() {
@@ -23,8 +25,12 @@ CarcassoneGame.mainMenu.prototype = {
     var header = game.add.sprite(game.width/2, 32, 'header');
     header.anchor.set(0.5,0);
 
-    this.prepareForStateChange();
+    var style = { font: "20px Prstart", fill: "#FDFE00"}
+    waitingForPlayers = game.add.text(game.world.centerX, game.world.centerY - 50, 'WAITING FOR PLAYERS...', style);
+    waitingForPlayers.anchor.set(0.5, 0);
 
+    this.prepareForStateChange();
+   
     // Sprite for start button and animation
     // startGameButton = game.add.sprite(game.world.centerX, game.world.centerY, 'carcassonne-coat-of-arms');
     // startGameButton.anchor.set(0.5);
@@ -35,8 +41,8 @@ CarcassoneGame.mainMenu.prototype = {
   },
 
   prepareForStateChange: function() {
-    this.addTimer();
     this.fadeMusic();
+    this.addTimer();
   },
 
   fadeMusic: function() {

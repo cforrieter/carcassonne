@@ -1,4 +1,5 @@
 // var CarcassoneGame = {};
+
 CarcassoneGame.zeldaSplash = function(game) {
 
 };
@@ -14,9 +15,11 @@ var cx = 0;
 CarcassoneGame.zeldaSplash.prototype = {
 
   preload: function() {
+    gameMode = "zelda"; 
   },
 
   create:  function() {
+
     this.playWarpSound;
     game.add.tileSprite(0,0,game.width,game.height,'space');
     var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'phaserLogo');

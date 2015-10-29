@@ -7,6 +7,8 @@ var globalPlayers = [
   {turn: false, name: "Link", num: 4, color: "CC0099", score: 0, numMeeples: 7}
 ];
 
+var gameOverText; 
+
 function getCurrentPlayer(){
   for(var player in globalPlayers){
     if(globalPlayers[player].turn){
@@ -41,40 +43,40 @@ function nextTurn(){
       }
       break;
     }
+    
   }
 }
 
 CarcassoneGame.mainGame = function(game) {
-  // this.game.width = 800;
-  // this.game.height = 600;
-  //This may not be necessary, and can possibly be removed
-  // this.tilesGroup = new Phaser.Group(game);
   this.hudDisplay = new Phaser.Group(game)
-
 };
 
 CarcassoneGame.mainGame.prototype = {
 
   preload: function() {
 
+    if(gameMode == "zelda") {
+      game.load.audio('game-music', 'assets/kakariko-theme.mp3');
+    } 
+    else {
+      game.load.audio('game-music', 'assets/game-music.mp3');
+    }
+
     game.load.image('background', './assets/background.png');
-    game.load.image('meeple', 'assets/MEEPLE.png')
     game.load.image('meepleGhost', 'assets/MEEPLE_ghost.png')
     game.load.image('check', 'assets/check.png')
     game.load.image('tileBorder', 'assets/border.png')
-    game.load.image('meeple', 'assets/MEEPLE.png')
-    game.load.image('meepleFarmer', 'assets/meepleFarmer.png')
     game.load.image('meepleIcon', 'assets/meeple-flat.png')
-    game.load.audio('game-music', 'assets/game-music.mp3');
-
+    game.load.image('victory', 'assets/victory.png');
+    game.load.image('defeat', 'assets/defeat.png');
   },
 
   create: function() {
+    console.log("THIS in create function", this);
     gameMusic = this.game.add.audio('game-music');
-    gameMusic.onDecoded.add(function(){
-      gameMusic.play(0, 'game-music', true), this});
-    gameMusic.play();
     gameMusic.loop = true;
+    gameMusic.play();
+    
 
     game.world.setBounds(0, 0, 13000, 13000);
     game.add.tileSprite(0,0, 13000, 13000, 'background');
@@ -82,6 +84,9 @@ CarcassoneGame.mainGame.prototype = {
     camera = new Phaser.Camera(game, 0 , 0, 0, game.width, game.height);
     this.game.camera.x = game.world.centerX;
     this.game.camera.y = game.world.centerY;
+
+    // allMeeples = game.add.group();
+    // game.add.existing(allMeeples);
 
     createTile('D');
 
@@ -132,6 +137,11 @@ CarcassoneGame.mainGame.prototype = {
       hudBox.beginFill(0x000000, 0.4);
       hudBox.drawRoundedRect(5, 5, 190, 255, 5);
       gameState.hudDisplay.add(hudBox);
+
+      gameOverText = game.add.text(game.width / 2, 35, 'GAME OVER!', { font: "42px Lindsay", fill: "#FFFFFF", align: "left"});
+      gameOverText.anchor.setTo(0.5);
+      gameOverText.alpha = 0;
+      gameState.hudDisplay.add(gameOverText);
 
       globalPlayers.forEach(function(player, index){
         player.turnText = game.add.text(game.width / 2, 35, player.name + '\'s turn!', { font: "42px Lindsay", fill: "#" + player.color, align: "left"});
@@ -185,8 +195,8 @@ CarcassoneGame.mainGame.prototype = {
 
       var center = getBoardCenter();
 
-      this.game.camera.x = (center[0] / 2.5) - (screenWidth / 2);
-      this.game.camera.y = (center[1] / 2.5) - (screenHeight / 2);
+      this.game.camera.x = (center[0] / 2.5) - (game.width / 2);
+      this.game.camera.y = (center[1] / 2.5) - (game.height / 2);
       game.state.states.mainGame.hudDisplay.fixedToCamera = true;
 
       this.add.tween(this.game.world.scale).to({x: 0.4, y: 0.4}, 1, "Linear", true);
@@ -213,9 +223,14 @@ CarcassoneGame.mainGame.prototype = {
     return gameTiles;
   },
 
+  // the following function displays the end of game screen
+
+
   update: function() {
 
-    game.world.bringToTop(this.hudDisplay);
+    if(gameOver == false) {
+      game.world.bringToTop(this.hudDisplay);
+    };
     game.state.states.mainGame.hudDisplay.children[0].text = "Tiles: " + gameTiles.length
 
     // TODO: dry this out
@@ -287,15 +302,15 @@ CarcassoneGame.mainGame.prototype = {
 };
 
 var gameTiles = 'AABBBBCDDDEEEEEFFGHHHIIJJJKKKLLLMMNNNOOPPPQRRRSSTUUUUUUUUVVVVVVVVVWWWWX'.split('');
+// var gameTiles = 'GH'.split('');
 gameTiles = randomizeGameTiles(gameTiles);
 
+
 function createTile(type) {
-    // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
+  // var type = this.game.rnd.pick(('ABCDEFGHIJKLMNOPQRSTUVWX').split(''));
   type = type || gameTiles.pop();
   // console.log('Tile type: ',type);
 
-
-  // debugger;
   // game.state.states.mainGame.tilesGroup.add(tile);
 
   tile = new Tile(game, game.width / 2, 120,  type);
@@ -324,6 +339,38 @@ function randomizeGameTiles(gameTiles) {
   return gameTiles;
 }
 
+// end of game displays function
+function prepareEndGame() {
+  sortFinalScores();
+  displayFinalScores();
+}
+
+function sortFinalScores() {
+  globalPlayers.sort(function(a, b){
+    return b.score-a.score;
+  });
+}
+
+function displayFinalScores() {
+  if ((getCurrentPlayer()).num == globalPlayers[0].num) {
+    var victoryImage = game.add.sprite(0,0,'victory');
+    victoryImage.fixedToCamera = true;
+
+    victoryImage.scale.set(game.camera.width/victoryImage.width, game.camera.height/victoryImage.height);
+  } else {
+    var defeatImage = game.add.sprite(0,0, 'defeat');
+    defeatImage.scale.set(game.camera.width/defeatImage.width, game.camera.height/defeatImage.height);
+    defeatImage.fixedToCamera = true;
+  }
+  var offset = 180;
+  globalPlayers.forEach(function(player) {
+    var style = { font: "20px Lindsay", fill: '#fdfe00', tabs: 123};
+    text = game.add.text(140, 0 + offset, player.name + "\t" + player.score + "\n", style);
+    text.fixedToCamera = true;
+    offset += 45;
+  });
+}
+
 // console.log(gameTiles);
 
 function swapTile(type){
@@ -341,12 +388,57 @@ function swapTile(type){
 }
 
 function endGame(){
+  
   gameOver = true;
+  scoreFarms();
   endGameMonasteryCount();
   checkFinishedCities();
   checkFinishedRoads();
-  scoreFarms();
+  // prepareEndGame();
+  endGameScoringObjects = endGameMonasteries.concat(endGameCities).concat(endGameRoads).concat(endGameFarms);
   console.log("GAME OVER, MAN. GAME OVER.")
+
+  for(var i = 0; i < globalPlayers.length; i++){
+    game.add.tween(globalPlayers[i].turnText).to( { alpha: 0 }, 100, "Linear", true);
+  }  
+  game.add.tween(gameOverText).to( { alpha: 1 }, 800, "Linear", true);
+  setTimeout(function(){
+    if(endGameScoringObjects.length > 0){
+      endScoring();
+    } else {
+      endGameCleanupAndVictoryScreen();
+    }
+  }, 1250);
+}
+
+var endGameScoringObjects = [];
+var scoringIndex = 0;
+
+function endScoring(){
+  center = getTileGroupCenter(endGameScoringObjects[scoringIndex][0].tiles);
+  var cameraMove = this.game.add.tween(this.game.camera).to( {x: center[0], y: center[1] }, 500 ).start()
+  cameraMove.onComplete.add(function(){
+    scoreTilesAnimation(endGameScoringObjects[scoringIndex][0],endGameScoringObjects[scoringIndex][1],endGameScoringObjects[scoringIndex][2])
+    setTimeout(function(){
+      if(scoringIndex < endGameScoringObjects.length - 1){
+        scoringIndex++;
+        endScoring();
+      } else {
+        endGameCleanupAndVictoryScreen();
+      }
+    }, 1400);
+  });
+}
+
+function endGameCleanupAndVictoryScreen(){
+  console.log('clearing remaining farmers...')
+  farms.forEach(function(farm){
+    scoreMeepAnimation(farm.meepleGroup, ['']);
+  })
+  setTimeout(function(){
+    console.log('calling prepareEndGame...')
+    prepareEndGame();
+  }, 1400);
 }
 
 function getBoardCenter(){
@@ -360,6 +452,21 @@ function getBoardCenter(){
   })
   avgX = totalX / playedTiles.length;
   avgY = totalY / playedTiles.length;
+
+  return([avgX, avgY]);
+}
+
+function getTileGroupCenter(tiles){
+  var totalX = 0;
+  var totalY = 0;
+  var avgX;
+  var avgY;
+  tiles.forEach(function(tile){
+    totalX += tile.tile.x;
+    totalY += tile.tile.y;
+  })
+  avgX = (totalX / tiles.length) - (game.width / 2);
+  avgY = (totalY / tiles.length) - (game.height / 2);
 
   return([avgX, avgY]);
 }

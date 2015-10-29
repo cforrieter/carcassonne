@@ -79,6 +79,7 @@ Tile.MONASTERYMEEPLECOORDS = {
   A: {p4: [0,0]}
 };
 
+var allMeeples;
 
 Tile.prototype.showMeepleSpots = function showMeepleSpots(tile, roadEdges, cityEdges, farmerEdges) {
 
@@ -86,7 +87,7 @@ var confirm = tile.game.add.button(tile.x + 60, tile.y - 30, 'check', confirmFun
 confirm.scale.setTo(0.3);
 
 
-if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.length === 0 && !tile.centerMonastery)){
+if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.length === 0 && !tile.centerMonastery && farmerEdges.length === 0)){
 
   var roadCoords = Tile.ROADMEEPLECOORDS[tile.tileType];
   var cityCoords = Tile.CITYMEEPLECOORDS[tile.tileType];
@@ -171,26 +172,29 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     meepleButtons.destroy();
     confirm.destroy();
     if (this.farmer) {
-      var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
+      var shadow = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer', globalPlayers.indexOf(getCurrentPlayer()))
       shadow.anchor.setTo(0.5);
       shadow.x = shadow.x + 3
       shadow.y = shadow.y + 3
       shadow.tint = 0x000000;
       shadow.alpha = 0.6;
-      var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer')
+      var meeple = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meepleFarmer', globalPlayers.indexOf(getCurrentPlayer()))
+      meeple.anchor.setTo(0.5);
       meeple.anchor.setTo(0.5);
       meeple.tint = "0x" + getCurrentPlayer().color
+      shadow.playerName = getCurrentPlayer().name;
+      meeple.playerName = getCurrentPlayer().name;
     } else {
-      var shadow = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meeple')
+      var shadow = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meeple', globalPlayers.indexOf(getCurrentPlayer()))
       shadow.anchor.setTo(0.5);
       shadow.x += 3;
       shadow.y += 3;
       shadow.tint = 0x000000;
       shadow.alpha = 0.6;
-      shadow.playerName = getCurrentPlayer().name;
-      var meeple = game.add.sprite(this.ghostCoords[0], this.ghostCoords[1], 'meeple')
+      var meeple = new Phaser.Sprite(game, this.ghostCoords[0], this.ghostCoords[1], 'meeple', globalPlayers.indexOf(getCurrentPlayer()))
       meeple.anchor.setTo(0.5);
-      meeple.tint = "0x" + getCurrentPlayer().color;
+      meeple.tint = "0x" + getCurrentPlayer().color
+      shadow.playerName = getCurrentPlayer().name;
       meeple.playerName = getCurrentPlayer().name;
     }
 
@@ -210,17 +214,22 @@ if(getCurrentPlayer().numMeeples > 0 && !(roadEdges.length === 0 && cityEdges.le
     game.add.existing(this.scoringObject.meepleGroup);
     game.world.bringToTop(this.scoringObject.meepleGroup);
 
+    // allMeeples.add(shadow);
+    // allMeeples.add(meeple);
+    
+
     // console.log('You clicked on ' + this.positionKey + ',' + this.scoringObjectType)
 
     endTurn();
   }
 
-};
+}
 
 function endTurn(){
   checkFinishedRoads();
   checkFinishedCities();
   checkMonasteries();
+  yScoreOffset = 30;
   if (gameTiles.length === 0){ 
     endGame();
   } else {
@@ -231,7 +240,6 @@ function endTurn(){
 
 function scoreMeepAnimation(meepleGroup, scoringPlayers){
   game.world.bringToTop(meepleGroup);
-
   // embiggen and fade out meeple
   meepleGroup.children.forEach(function(meeple){
     scoringPlayers.forEach(function(player){
@@ -241,30 +249,44 @@ function scoreMeepAnimation(meepleGroup, scoringPlayers){
       } else {
         var tween = game.add.tween(meeple).to( { alpha: 0 }, 1000, "Linear", true);
       }
-      tween.onComplete.add(function(){meepleGroup.destroy()});
+      tween.onComplete.add(function(){
+        meepleGroup.destroy();
+      });
     })
   })
   
 }
 
+var yScoreOffset = 30;
+
 function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
   // draw points scoring over last played tile
   var alreadyDisplayedPlayers = [];
-  var yScoreOffset = 30;
   for (var m = 1; m < scoringGroup.meepleGroup.children.length; m += 2){
     scoringPlayers.forEach(function(player){
-      if (player === scoringGroup.meepleGroup.children[m].playerName && !(alreadyDisplayed(player))){
+      var playerOb = getPlayer(player);
+      playerOb.score += pointsScored;
+      var x;
+      var y;
+      if(gameOver){
+        x = scoringGroup.meepleGroup.children[m].x - 15;
+        y = scoringGroup.meepleGroup.children[m].y - 70;
+      }else{
+        x = playedTiles[playedTiles.length - 1].x - 25;
+        y = playedTiles[playedTiles.length - 1].y - yScoreOffset;
+      }
+      if (player === scoringGroup.meepleGroup.children[m].playerName && alreadyDisplayedPlayers.indexOf(player) === -1){
         alreadyDisplayedPlayers.push(player);
         var points = game.add.text(
+        x,
+        y,
         // scoringGroup.meepleGroup.children[m].x - 15,
         // scoringGroup.meepleGroup.children[m].y - 70, 
-        playedTiles[playedTiles.length - 1].x - 25, 
-        playedTiles[playedTiles.length - 1].y - yScoreOffset,
+        // // playedTiles[playedTiles.length - 1].x - 25, 
+        // // playedTiles[playedTiles.length - 1].y - yScoreOffset,
         "+" + pointsScored, { 
         font: "42px Lindsay", 
-        fill: "#" + scoringGroup.meepleGroup.children[m].tint.substring(
-          2, scoringGroup.meepleGroup.children[m].tint.length
-          )
+        fill: "#" + scoringGroup.meeples[0].color
         }
       );
       yScoreOffset += 35;
@@ -273,20 +295,11 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
     })
   }
 
-  function alreadyDisplayed(player){
-    for (var i = 0; i < alreadyDisplayedPlayers.length; i ++){
-      if (alreadyDisplayedPlayers[i] === player){
-        return true;
-      }
-    }
-    return false;
-  }
-
   // slightly expand tile group scoring
   scoringGroup.tiles.forEach(function(t){
     var tween = game.add.tween(t.tile.scale).to({x: 1.05, y: 1.05}, 200, "Linear", true);
     tween.onComplete.add(function(){
-      var tweenB = game.add.tween(t.tile. scale).to({x: 1, y: 1}, 200, "Linear", true)
+      var tweenB = game.add.tween(t.tile.scale).to({x: 1, y: 1}, 200, "Linear", true)
       tweenB.onComplete.add(function(){
         scoreMeepAnimation(scoringGroup.meepleGroup, scoringPlayers);
       })
