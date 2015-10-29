@@ -108,7 +108,8 @@ io.on('connection', function(socket){
   });
 
   socket.on('gameOver', function(msg){
-    io.sockets.in('game' + msg.gameID).emit('gameOver');
+    // io.sockets.in('game' + msg.gameID).emit('gameOver');
+    io.sockets.in('game' + msg.gameID).emit('newTurnCleanUp', msg.message);
   })
 });
 
