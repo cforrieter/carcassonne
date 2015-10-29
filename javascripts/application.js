@@ -467,7 +467,7 @@ function sortFinalScores() {
 }
 
 function displayFinalScores() {
-  if ((getCurrentPlayer()).num == globalPlayers[0].num) {
+  if ((io.io.engine.id == globalPlayers[0].num) {
     var victoryImage = game.add.sprite(0,0,'victory');
     victoryImage.fixedToCamera = true;
 
