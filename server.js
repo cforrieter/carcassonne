@@ -72,7 +72,9 @@ io.on('connection', function(socket){
     player.score = 0;
     player.numMeeples = 7;
     console.log(players);
+    console.log(players.length);
     if(players.length == 2){
+      console.log("Players length = 2?  ", players.length);
       io.sockets.in('game' + msg.gameID).emit('playersReady', { players: players, gameID: msg.gameID })
       games.push( { players:players, deck: new GameTiles() });
       players = [];
