@@ -135,6 +135,7 @@ function addFarms(tile) {
       farmObject.meepleGroup = game.add.group();
       farm.parent = farmObject;
       farmObject.children = [farm];
+      farmObject.tiles = [];
     }
 
   // this array pre rotates the allowable sides to that when it is unrotated we end up at the original layout
@@ -155,27 +156,43 @@ function addFarms(tile) {
 
 }
 
+var endGameFarms = [];
+
 function scoreFarms() {
+  var farmsToScore = [];
+  var farmsScores = [];
+  var scoringPlayers = [];
   completedCities.forEach(function(city) {
-    var farmsToScore = [];
     city.tiles.forEach(function(tilePiece) {
       tilePiece.tile.farms.forEach(function(farm){
         if (farm.hasCity && farmsToScore.indexOf(farm.parent) == -1) {
           farmsToScore.push(farm.parent)
+          farmsScores[farmsToScore.length -1] = 0;
         }
       })
     })
-    farmsToScore.forEach(function(farm) {
+    farmsToScore.forEach(function(farm, index) {
+      scoringPlayers[index] = [];
       var meepCount = [0, 0, 0, 0, 0];
       farm.meeples.forEach(function(meep) {
         meepCount[globalPlayers.indexOf(meep)] += 1;
       })
       for(var i = 0; i < globalPlayers.length; i++){
         if(meepCount[i] == Math.max(meepCount[0], meepCount[1], meepCount[2], meepCount[3], meepCount[4]) && meepCount[i] > 0) {
-          globalPlayers[i].score += 3;
+          // globalPlayers[i].score += 3;
+          scoringPlayers[index].push(globalPlayers[i].name);
+          farmsScores[index] += 3;
         }
       }
     })
+  })
+  farmsToScore.forEach(function(farm, index){
+    farm.children.forEach(function(obj){
+      farm.tiles.push(obj);
+    })
+    if(farmsScores[index] > 0){
+      endGameFarms.push([farm, farmsScores[index], scoringPlayers[index]]);
+    }
   })
 }
 
