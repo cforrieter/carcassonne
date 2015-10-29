@@ -356,7 +356,7 @@ function scoreTilesAnimation(scoringGroup, pointsScored, scoringPlayers){
         // // playedTiles[playedTiles.length - 1].y - yScoreOffset,
         "+" + pointsScored, {
         font: "42px Lindsay",
-        fill: "#" + scoringGroup.meeples[0].color
+        fill: "#" + playerOb.color
         }
       );
       yScoreOffset += 35;
