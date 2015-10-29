@@ -53,7 +53,7 @@ CarcassoneGame.zeldaSplash.prototype = {
 
     for (var y = 0; y < Math.floor(picHeight/ys); y++)
     {
-        var star = game.add.sprite(game.world.centerX, game.world.centerY - 150 + (y * ys), 'phaserLogo');
+        var star = game.add.sprite(game.world.centerX, game.world.centerY - 153 + (y * ys), 'phaserLogo');
 
         star.crop(new Phaser.Rectangle(0, y * ys, picWidth, ys));
 
