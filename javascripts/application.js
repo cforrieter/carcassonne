@@ -76,6 +76,15 @@ CarcassoneGame.mainGame.prototype = {
     gameMusic = this.game.add.audio('game-music');
     gameMusic.loop = true;
     gameMusic.play();
+
+    // Mute button
+    muteButton = game.add.sprite(game.camera.width - 75, game.camera.height - 75, 'mute-button');
+    muteButton.scale.set(0.25);
+    muteButton.anchor.set(0.5);
+    muteButton.tint = 0x2CA94F;
+    muteButton.inputEnabled = true;
+    muteButton.fixedToCamera = true;
+    muteButton.events.onInputDown.add(this.muteMusic, this);
     
 
     game.world.setBounds(0, 0, 13000, 13000);
@@ -212,6 +221,15 @@ CarcassoneGame.mainGame.prototype = {
       zoomedOut = false;
     }
   },
+  muteMusic: function() {
+    if (gameMusic.paused == false) {
+      muteButton.tint = 0xED412C;
+      gameMusic.pause();
+    } else {
+      muteButton.tint = 0x2CA94F;
+      gameMusic.resume();
+    }
+  },
 
   randomizeGameTiles: function(gameTiles) {
     for (var i = gameTiles.length - 1; i > 0; i--) {
@@ -227,6 +245,8 @@ CarcassoneGame.mainGame.prototype = {
 
 
   update: function() {
+
+    game.world.bringToTop(muteButton);
 
     if(gameOver == false) {
       game.world.bringToTop(this.hudDisplay);

@@ -47,13 +47,21 @@ CarcassoneGame.mainMenuZelda.prototype = {
     
     // Used for rupee burst on click
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    emitter = game.add.emitter(0, 0, 100);
+    emitter = game.add.emitter(0, 0, 1000);
     emitter.makeParticles(['green-rupee', 'blue-rupee', 'red-rupee', 'yellow-rupee', 'orange-rupee', 'purple-rupee']);
     emitter.forEach(function(singleParticle) {
     singleParticle.animations.add('particleAnim');
     singleParticle.animations.play('particleAnim', 4, true);
     });
     emitter.gravity = 200;
+
+    // Mute button
+    muteButton = game.add.sprite(game.world.width - 50, game.world.height - 50, 'mute-button');
+    muteButton.scale.set(0.25);
+    muteButton.anchor.set(0.5);
+    muteButton.tint = 0x2CA94F;
+    muteButton.inputEnabled = true;
+    muteButton.events.onInputDown.add(this.muteMusic, this);
 
     this.prepareRupeeSound();
     this.prepareSwordSpin();
@@ -63,6 +71,16 @@ CarcassoneGame.mainMenuZelda.prototype = {
     
     // Changes state from the start screen to the main game
     startGameButton.events.onInputDown.add(this.prepareForStateChange, this);
+  },
+
+  muteMusic: function() {
+    if (zeldaTheme.paused == false) {
+      muteButton.tint = 0xED412C;
+      zeldaTheme.pause();
+    } else {
+      muteButton.tint = 0x2CA94F;
+      zeldaTheme.resume();
+    }
   },
 
   prepareForStateChange: function() {

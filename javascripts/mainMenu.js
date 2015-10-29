@@ -1,7 +1,7 @@
 var startGameButton;
 
 CarcassoneGame.mainMenu = function(game) {
-
+  this.muteButton;
 };
 
 CarcassoneGame.mainMenu.prototype = {
@@ -29,6 +29,14 @@ CarcassoneGame.mainMenu.prototype = {
     waitingForPlayers = game.add.text(game.world.centerX, game.world.centerY - 50, 'WAITING FOR PLAYERS...', style);
     waitingForPlayers.anchor.set(0.5, 0);
 
+    // Mute button
+    muteButton = game.add.sprite(game.world.width - 50, game.world.height - 50, 'mute-button');
+    muteButton.scale.set(0.25);
+    muteButton.anchor.set(0.5);
+    muteButton.tint = 0x2CA94F;
+    muteButton.inputEnabled = true;
+    muteButton.events.onInputDown.add(this.muteMusic, this);
+
     this.prepareForStateChange();
    
     // Sprite for start button and animation
@@ -40,6 +48,8 @@ CarcassoneGame.mainMenu.prototype = {
     // startGameButton.events.onInputDown.addOnce(this.prepareForStateChange, this);
   },
 
+  
+
   prepareForStateChange: function() {
     this.fadeMusic();
     this.addTimer();
@@ -48,6 +58,16 @@ CarcassoneGame.mainMenu.prototype = {
   fadeMusic: function() {
     this.game.time.events.add(9000, this.stopTheme, this);
     openingTheme.fadeOut(9000);
+  },
+
+  muteMusic: function() {
+    if (openingTheme.paused == false) {
+      muteButton.tint = 0xED412C;
+      openingTheme.pause();
+    } else {
+      muteButton.tint = 0x2CA94F;
+      openingTheme.resume();
+    }
   },
 
   playTheme: function() {
